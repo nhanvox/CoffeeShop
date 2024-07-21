@@ -11,7 +11,3 @@ const getAllProductsNew = '${url}productsnew';
 const getProductsByCategory = '${url}productsbycategory/';
 //Categories
 const getAllCategories = '${url}getallcategory';
-//app test
-const addtodo = '${url}storeTodo';
-const getToDoList = '${url}getUserTodoList';
-const deleteTodo = '${url}deleteTodo';
