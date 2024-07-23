@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:coffeeshop/page/home/view/drawer_tile.dart';
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 import 'config/config.dart';
@@ -149,15 +151,12 @@ class _MainPageState extends State<MainPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          const TextQuicksand(
                             'Xin chào!',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontFamily: 'Quicksand',
-                              fontWeight: FontWeight.w400,
-                              height: 2,
-                            ),
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            height: 2,
                           ),
                           Text(
                             LoginStatus.instance.loggedIn
@@ -165,10 +164,10 @@ class _MainPageState extends State<MainPage> {
                                 : 'Đăng nhập/ Đăng ký',
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
+                            style: GoogleFonts.getFont(
+                              'Quicksand',
                               color: Colors.white,
                               fontSize: 16,
-                              fontFamily: 'Quicksand',
                               fontWeight: FontWeight.w700,
                             ),
                           ),

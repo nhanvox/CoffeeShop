@@ -1,3 +1,4 @@
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
 
 class DrawerTile extends StatelessWidget {
@@ -33,7 +34,11 @@ class DrawerTile extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(icon, size: 30),
-            title: Text(title),
+            title: TextQuicksand(
+              title,
+              fontSize: 16.5,
+              fontWeight: FontWeight.w600,
+            ),
             onTap: press,
           ),
         ],

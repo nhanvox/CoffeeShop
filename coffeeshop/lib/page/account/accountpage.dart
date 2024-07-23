@@ -1,7 +1,14 @@
+import 'dart:convert';
+
+import 'package:coffeeshop/config/config.dart';
+import 'package:coffeeshop/config/login_status.dart';
 import 'package:coffeeshop/page/account/updateaccountpage.dart';
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/login/view/loginscreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 import '../order/orderhistorypage.dart';
 
@@ -13,6 +20,43 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
+  String? userName;
+  Map<String, dynamic>? user;
+  @override
+  void initState() {
+    super.initState();
+    _loadUserInfo();
+  }
+
+  void _loadUserInfo() async {
+    if (LoginStatus.instance.loggedIn) {
+      final userId = LoginStatus.instance.userID;
+
+      if (userId != null) {
+        final url = '$getUserInfoById$userId';
+        final response = await http.get(
+          Uri.parse(url),
+          headers: {"Content-Type": "application/json"},
+        );
+
+        if (response.statusCode == 200) {
+          final jsonResponse = jsonDecode(response.body);
+          if (jsonResponse['status'] == true) {
+            setState(() {
+              user = jsonResponse['userInfo'];
+              userName = user!['email'];
+            });
+          } else {
+            print('Failed to load user name');
+          }
+        } else {
+          print(
+              'Failed to load user info with status code: ${response.statusCode}');
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -84,29 +128,25 @@ class _AccountPageState extends State<AccountPage> {
                               ),
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 15),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const TextQuicksand(
                                   'Nhân Võ',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 22,
-                                    fontFamily: 'Quicksand',
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                                  color: Colors.black,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w700,
                                 ),
-                                Text(
-                                  'nhanvo.654@gmail.com',
-                                  style: TextStyle(
-                                    color: Color(0x991B1B1B),
-                                    fontSize: 17,
-                                    fontFamily: 'Quicksand',
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                                TextQuicksand(
+                                  LoginStatus.instance.loggedIn
+                                      ? userName ?? 'Người dùng'
+                                      : 'Đăng nhập/ Đăng ký',
+                                  color: const Color(0x991B1B1B),
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ],
                             ),
@@ -126,15 +166,12 @@ class _AccountPageState extends State<AccountPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  const TextQuicksand(
                     'Tài khoản',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 22,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w700,
-                    ),
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
                   ),
                   Container(
                     height: 228,
@@ -323,11 +360,11 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   TextStyle _textStyle() {
-    return const TextStyle(
+    return GoogleFonts.getFont(
+      'Quicksand',
       color: Colors.black,
       fontSize: 19,
-      fontFamily: 'Quicksand',
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w700,
       height: 0.07,
     );
   }

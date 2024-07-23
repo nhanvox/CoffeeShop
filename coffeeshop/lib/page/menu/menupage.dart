@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/product/cartpage.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 import '../../config/config.dart';
@@ -161,13 +163,13 @@ class _MenuPageState extends State<MenuPage> {
               ),
             ),
             centerTitle: true,
-            title: const Text(
-              'Menu',
-              style: TextStyle(
+            title: Text(
+              'MENU',
+              style: GoogleFonts.getFont(
+                'Quicksand',
                 color: Colors.black,
                 fontSize: 24,
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w700,
               ),
             ),
             floating: true,
@@ -184,15 +186,12 @@ class _MenuPageState extends State<MenuPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        TextQuicksand(
                           'Danh mục sản phẩm',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w600,
-                            height: 0,
-                          ),
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          height: 0,
                         ),
                       ],
                     ),
@@ -267,11 +266,11 @@ class ItemsMN extends StatelessWidget {
         child: Text(
           category['name'],
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: GoogleFonts.getFont(
+            'Quicksand',
             color: isSelected ? Colors.white : Colors.black,
             fontSize: 16,
-            fontFamily: 'Quicksand',
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
             height: 0,
           ),
         ),
