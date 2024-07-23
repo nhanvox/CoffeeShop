@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:coffeeshop/page/search/searchpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SearchView extends StatefulWidget {
   const SearchView({super.key});
@@ -47,20 +48,20 @@ class _SearchViewState extends State<SearchView> {
                 repeatForever: true,
                 animatedTexts: [
                   TyperAnimatedText('Bạn muốn ăn gì nói luôn!',
-                      textStyle: const TextStyle(
-                        color: Color(0xFFADB5BD),
+                      textStyle: GoogleFonts.getFont(
+                        'Quicksand',
+                        color: const Color(0xFFADB5BD),
                         fontSize: 18,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         height: 0,
                       ),
                       speed: const Duration(milliseconds: 50)),
                   TyperAnimatedText('Lẹ lên!',
-                      textStyle: const TextStyle(
-                        color: Color(0xFFADB5BD),
+                      textStyle: GoogleFonts.getFont(
+                        'Quicksand',
+                        color: const Color(0xFFADB5BD),
                         fontSize: 18,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         height: 0,
                       ),
                       speed: const Duration(milliseconds: 50))
