@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:coffeeshop/mainpage.dart';
 import 'package:coffeeshop/page/login/view/components/montserrat.dart';
 import 'package:coffeeshop/page/login/view/loginscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../config/config.dart';
 
 class Signup extends StatefulWidget {
@@ -17,43 +19,84 @@ class Signup extends StatefulWidget {
 class _SignupState extends State<Signup> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  bool _isNotValidate = false;
+  TextEditingController confirmPasswordController = TextEditingController();
+  final bool _isNotValidate = false;
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+  late SharedPreferences prefs;
+  bool? isChecked = true;
+  String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    initSharedPref();
+  }
+
+  bool isValidEmail(String email) {
+    final RegExp emailRegExp =
+        RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    return emailRegExp.hasMatch(email);
+  }
 
   void registerUser() async {
-    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+    print('Email: ${emailController.text}');
+    print('Password: ${passwordController.text}');
+    print('Confirm Password: ${confirmPasswordController.text}');
+
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      setState(() {
+        _errorMessage = "Vui lòng nhập đầy đủ thông tin.";
+      });
+      print('Error: Vui lòng nhập đầy đủ thông tin.');
+    } else if (!isValidEmail(emailController.text)) {
+      setState(() {
+        _errorMessage =
+            "Email không đúng định dạng. Vui lòng nhập email hợp lệ.";
+      });
+      print('Error: Email không đúng định dạng.');
+    } else if (passwordController.text != confirmPasswordController.text) {
+      setState(() {
+        _errorMessage = "Mật khẩu và xác nhận mật khẩu không khớp.";
+      });
+      print('Error: Mật khẩu và xác nhận mật khẩu không khớp.');
+    } else {
+      // Tạo đối tượng JSON chứa email và password từ textfield
       var regBody = {
         "email": emailController.text,
         "password": passwordController.text
       };
-
+      // Đoạn này gửi một yêu cầu HTTP POST tới URL registration với nội dung là regBody
+      // được mã hóa thành JSON và tiêu đề Content-Type là application/json.
       try {
         var response = await http.post(Uri.parse(registration),
             headers: {"Content-Type": "application/json"},
             body: jsonEncode(regBody));
 
         if (response.statusCode == 200) {
-          var jsonResponse = jsonDecode(response.body);
-
-          if (jsonResponse['status']) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const Loginscreen()));
-          } else {
-            // ignore: avoid_print
-            print("Something went wrong");
-          }
+          print("Ngon");
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const MainPage()));
         } else {
           // ignore: avoid_print
           print("Server error: ${response.statusCode}");
+          setState(() {
+            _errorMessage = "Email đã được sử dụng.";
+          });
+          print('Error: Email đã được sử dụng.');
         }
       } catch (e) {
         // ignore: avoid_print
         print('Error: $e');
       }
-    } else {
-      setState(() {
-        _isNotValidate = true;
-      });
     }
+  }
+
+  void initSharedPref() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isChecked = prefs.getBool('isChecked') ?? true;
+    });
   }
 
   @override
@@ -118,7 +161,12 @@ class _SignupState extends State<Signup> {
                                   fontWeight: FontWeight.w500,
                                 ),
                                 decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.email),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  prefixIcon: const Icon(
+                                    Icons.email,
+                                    color: Color(0xFFFF725E),
+                                  ),
                                   errorStyle:
                                       const TextStyle(color: Colors.red),
                                   errorText: _isNotValidate
@@ -148,6 +196,8 @@ class _SignupState extends State<Signup> {
                               const SizedBox(height: 10),
                               TextField(
                                 controller: passwordController,
+                                obscureText:
+                                    _obscurePassword, // Sử dụng biến trạng thái
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'Quicksand',
@@ -155,7 +205,12 @@ class _SignupState extends State<Signup> {
                                   fontWeight: FontWeight.w500,
                                 ),
                                 decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.lock),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  prefixIcon: const Icon(
+                                    Icons.lock,
+                                    color: Color(0xFFFF725E),
+                                  ),
                                   errorStyle:
                                       const TextStyle(color: Colors.red),
                                   errorText: _isNotValidate
@@ -166,11 +221,24 @@ class _SignupState extends State<Signup> {
                                     fontSize: 18,
                                     fontWeight: FontWeight.w400,
                                   ),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _obscurePassword
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _obscurePassword = !_obscurePassword;
+                                      });
+                                    },
+                                  ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
                                 ),
                               ),
+
                               const SizedBox(height: 10),
                               // Confirm Password field
                               const Text(
@@ -184,6 +252,9 @@ class _SignupState extends State<Signup> {
                               ),
                               const SizedBox(height: 10),
                               TextField(
+                                controller: confirmPasswordController,
+                                obscureText:
+                                    _obscureConfirmPassword, // Sử dụng biến trạng thái
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'Quicksand',
@@ -191,7 +262,12 @@ class _SignupState extends State<Signup> {
                                   fontWeight: FontWeight.w500,
                                 ),
                                 decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.lock),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  prefixIcon: const Icon(
+                                    Icons.lock,
+                                    color: Color(0xFFFF725E),
+                                  ),
                                   errorStyle:
                                       const TextStyle(color: Colors.red),
                                   errorText: _isNotValidate
@@ -202,12 +278,39 @@ class _SignupState extends State<Signup> {
                                     fontSize: 18,
                                     fontWeight: FontWeight.w400,
                                   ),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _obscureConfirmPassword
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _obscureConfirmPassword =
+                                            !_obscureConfirmPassword;
+                                      });
+                                    },
+                                  ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 35),
+
+                              const SizedBox(height: 5),
+                              if (_errorMessage != null) ...[
+                                const SizedBox(height: 10),
+                                Text(
+                                  _errorMessage!,
+                                  style: const TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                              const SizedBox(
+                                height: 30,
+                              ),
                               // Next button
                               SizedBox(
                                 width: double.infinity,
@@ -223,12 +326,13 @@ class _SignupState extends State<Signup> {
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
                                   ),
-                                  child: const Text(
+                                  child: Text(
                                     'TIẾP THEO',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontFamily: 'Quicksand',
+                                    style: GoogleFonts.getFont(
+                                      'Montserrat',
                                       color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),

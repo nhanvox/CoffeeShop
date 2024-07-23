@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:coffeeshop/page/login/view/fogotpasswork.dart';
 import 'package:coffeeshop/page/login/view/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,9 +21,11 @@ class Loginscreen extends StatefulWidget {
 class _LoginscreenState extends State<Loginscreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  // bool _isNotValidate = false;
   late SharedPreferences prefs;
   bool? isChecked = true;
+  bool _obscureText =
+      true; // Biến trạng thái để theo dõi trạng thái của obscureText
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -32,10 +35,28 @@ class _LoginscreenState extends State<Loginscreen> {
 
   void initSharedPref() async {
     prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isChecked = prefs.getBool('isChecked') ?? true;
+    });
+  }
+
+  bool isValidEmail(String email) {
+    final RegExp emailRegExp =
+        RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    return emailRegExp.hasMatch(email);
   }
 
   void loginUser() async {
-    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      setState(() {
+        _errorMessage = "Vui lòng nhập đầy đủ thông tin.";
+      });
+    } else if (!isValidEmail(emailController.text)) {
+      setState(() {
+        _errorMessage =
+            "Email không đúng định dạng. Vui lòng nhập email hợp lệ.";
+      });
+    } else {
       var reqBody = {
         "email": emailController.text,
         "password": passwordController.text
@@ -44,11 +65,13 @@ class _LoginscreenState extends State<Loginscreen> {
       var response = await http.post(Uri.parse(login),
           headers: {"Content-Type": "application/json"},
           body: jsonEncode(reqBody));
-
-      var jsonResponse = jsonDecode(response.body);
-      if (jsonResponse['status']) {
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
         String token = jsonResponse['token'];
         prefs.setString('token', token);
+
+        // Lưu trạng thái isChecked
+        prefs.setBool('isChecked', isChecked!);
 
         Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
         String? userID = decodedToken['_id'];
@@ -56,15 +79,12 @@ class _LoginscreenState extends State<Loginscreen> {
         LoginStatus.instance.loggedIn = true;
         LoginStatus.instance.userID = userID;
 
-        print('userID: $userID');
-        print(
-            'LoginStatus.instance.loggedIn: ${LoginStatus.instance.loggedIn}');
-        print('LoginStatus.instance.userID: ${LoginStatus.instance.userID}');
-
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const MainPage()));
       } else {
-        print('Something went wrong');
+        setState(() {
+          _errorMessage = "Email hoặc mật khẩu của bạn không đúng.";
+        });
       }
     }
   }
@@ -157,7 +177,10 @@ class _LoginscreenState extends State<Loginscreen> {
                                     height: 1.5,
                                     fontWeight: FontWeight.w500),
                                 decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.email),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  prefixIcon: const Icon(Icons.email,
+                                      color: Color(0xFFFF725E)),
                                   hintText: 'Nhập email',
                                   hintStyle: const TextStyle(
                                     fontSize: 18,
@@ -181,21 +204,41 @@ class _LoginscreenState extends State<Loginscreen> {
                               const SizedBox(height: 10),
                               TextField(
                                 controller: passwordController,
+                                obscureText:
+                                    _obscureText, // Sử dụng biến trạng thái
                                 style: const TextStyle(
                                     fontSize: 20,
                                     fontFamily: 'Quicksand',
                                     height: 1.5,
                                     fontWeight: FontWeight.w500),
                                 decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.lock),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  prefixIcon: const Icon(Icons.lock,
+                                      color: Color(0xFFFF725E)),
                                   hintText: 'Nhập mật khẩu',
                                   hintStyle: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w400,
                                   ),
-                                  suffixIcon: const Icon(Icons.visibility),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _obscureText
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _obscureText = !_obscureText;
+                                      });
+                                    },
+                                  ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12.0),
+                                    borderSide: const BorderSide(
+                                      color: Colors.black, // Màu viền đen
+                                      width: 1.0,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -230,7 +273,14 @@ class _LoginscreenState extends State<Loginscreen> {
                                     ),
                                   ),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ForgotPasswordDialog();
+                                        },
+                                      );
+                                    },
                                     child: const Text(
                                       'Quên mật khẩu',
                                       style: TextStyle(
@@ -243,6 +293,16 @@ class _LoginscreenState extends State<Loginscreen> {
                                   )
                                 ],
                               ),
+                              if (_errorMessage != null) ...[
+                                const SizedBox(height: 10),
+                                Text(
+                                  _errorMessage!,
+                                  style: const TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
                               const SizedBox(height: 16),
                               SizedBox(
                                 width: double.infinity,
@@ -258,13 +318,12 @@ class _LoginscreenState extends State<Loginscreen> {
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
                                   ),
-                                  child: const Text(
+                                  child: Text(
                                     'ĐĂNG NHẬP',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontFamily: 'Quicksand',
-                                      color: Colors.white,
-                                    ),
+                                    style: GoogleFonts.montserrat(
+                                        fontSize: 21,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ),
                               ),

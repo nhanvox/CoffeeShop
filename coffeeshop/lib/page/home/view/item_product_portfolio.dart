@@ -1,11 +1,13 @@
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
 
 class ItemsPP extends StatelessWidget {
   final Map category;
-   final Function(String) onCategorySelected;
+  final Function(String) onCategorySelected;
   const ItemsPP({
     super.key,
-    required this.category, required this.onCategorySelected,
+    required this.category,
+    required this.onCategorySelected,
   });
 
   @override
@@ -23,16 +25,13 @@ class ItemsPP extends StatelessWidget {
         onPressed: () {
           onCategorySelected(category['_id']);
         },
-        child: Text(
+        child: TextQuicksand(
           category['name'],
           textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontFamily: 'Quicksand',
-            fontWeight: FontWeight.w500,
-            height: 0,
-          ),
+          color: Colors.black,
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          height: 0,
         ),
       ),
     );
