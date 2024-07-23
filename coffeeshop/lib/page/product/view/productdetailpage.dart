@@ -82,68 +82,76 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     };
 
     try {
-      // Fetch the user's current cart
-      Uri fetchCartUrl = Uri.parse(getCartsByUser + userID);
-      var fetchCartResponse = await http
-          .get(fetchCartUrl, headers: {"Content-Type": "application/json"});
-      if (fetchCartResponse.statusCode == 200) {
-        var fetchCartJsonResponse = jsonDecode(fetchCartResponse.body);
-        if (fetchCartJsonResponse['success'] == true &&
-            fetchCartJsonResponse.containsKey('carts')) {
-          List carts = fetchCartJsonResponse['carts'];
-          var existingCartItem = carts.firstWhere(
-              (cartItem) =>
-                  cartItem['productid']['_id'] == widget.product['_id'] &&
-                  cartItem['size'] == cartData['size'] &&
-                  cartItem['sugar'] == cartData['sugar'] &&
-                  cartItem['ice'] == cartData['ice'],
-              orElse: () => null);
+      // Add the product to the cart first
+      Uri addCartUrl = Uri.parse(addCarts);
+      var addCartResponse = await http.post(addCartUrl,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(cartData));
 
-          if (existingCartItem != null) {
-            // Update the existing cart item quantity
-            Uri updateCartUrl = Uri.parse(updateCart + existingCartItem['_id']);
-            var updateCartData = {
-              'quantity': existingCartItem['quantity'] + quantity,
-              'total': widget.product['price'] *
-                  (existingCartItem['quantity'] + quantity),
-            };
-            var updateCartResponse = await http.put(updateCartUrl,
-                headers: {"Content-Type": "application/json"},
-                body: jsonEncode(updateCartData));
-            if (updateCartResponse.statusCode == 200) {
-              var updateCartJsonResponse = jsonDecode(updateCartResponse.body);
-              if (updateCartJsonResponse['success'] == true) {
-                print('Product updated in cart successfully.');
+      if (addCartResponse.statusCode == 200) {
+        var addCartJsonResponse = jsonDecode(addCartResponse.body);
+        if (addCartJsonResponse['success'] == true) {
+          print('Product added to cart successfully.');
+
+          // Fetch the user's current cart to check for duplicates
+          Uri fetchCartUrl = Uri.parse(getCartsByUser + userID);
+          var fetchCartResponse = await http
+              .get(fetchCartUrl, headers: {"Content-Type": "application/json"});
+
+          if (fetchCartResponse.statusCode == 200) {
+            var fetchCartJsonResponse = jsonDecode(fetchCartResponse.body);
+            if (fetchCartJsonResponse['success'] == true &&
+                fetchCartJsonResponse.containsKey('carts')) {
+              List carts = fetchCartJsonResponse['carts'];
+              var existingCartItem = carts.firstWhere(
+                  (cartItem) =>
+                      cartItem['productid']['_id'] == widget.product['_id'] &&
+                      cartItem['size'] == cartData['size'] &&
+                      cartItem['sugar'] == cartData['sugar'] &&
+                      cartItem['ice'] == cartData['ice'],
+                  orElse: () => null);
+
+              if (existingCartItem != null) {
+                // Update the existing cart item quantity
+                Uri updateCartUrl =
+                    Uri.parse(updateCart + existingCartItem['_id']);
+                var updateCartData = {
+                  'quantity': existingCartItem['quantity'] + quantity,
+                  'total': widget.product['price'] *
+                      (existingCartItem['quantity'] + quantity),
+                };
+                var updateCartResponse = await http.put(updateCartUrl,
+                    headers: {"Content-Type": "application/json"},
+                    body: jsonEncode(updateCartData));
+
+                if (updateCartResponse.statusCode == 200) {
+                  var updateCartJsonResponse =
+                      jsonDecode(updateCartResponse.body);
+                  if (updateCartJsonResponse['success'] == true) {
+                    print('Product updated in cart successfully.');
+                  } else {
+                    print('Failed to update product in cart.');
+                  }
+                } else {
+                  print(
+                      'Failed to update product in cart with status code: ${updateCartResponse.statusCode}');
+                }
               } else {
-                print('Failed to update product in cart.');
+                print('Product added to cart as a new item.');
               }
             } else {
-              print(
-                  'Failed to update product in cart with status code: ${updateCartResponse.statusCode}');
+              print('Failed to fetch cart or cart is empty.');
             }
           } else {
-            Uri addCartUrl = Uri.parse(addCarts);
-            var addCartResponse = await http.post(addCartUrl,
-                headers: {"Content-Type": "application/json"},
-                body: jsonEncode(cartData));
-            if (addCartResponse.statusCode == 200) {
-              var addCartJsonResponse = jsonDecode(addCartResponse.body);
-              if (addCartJsonResponse['success'] == true) {
-                print('Product added to cart successfully.');
-              } else {
-                print('Failed to add product to cart.');
-              }
-            } else {
-              print(
-                  'Failed to add product to cart with status code: ${addCartResponse.statusCode}');
-            }
+            print(
+                'Failed to fetch cart with status code: ${fetchCartResponse.statusCode}');
           }
         } else {
-          print('Failed to fetch cart or cart is empty.');
+          print('Failed to add product to cart.');
         }
       } else {
         print(
-            'Failed to fetch cart with status code: ${fetchCartResponse.statusCode}');
+            'Failed to add product to cart with status code: ${addCartResponse.statusCode}');
       }
     } catch (e) {
       print('An error occurred while adding/updating product in cart: $e');
