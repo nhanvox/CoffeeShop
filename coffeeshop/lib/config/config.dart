@@ -1,4 +1,4 @@
-const url = 'http://192.168.1.17:3000/';
+const url = 'http://192.168.138.111:3000/';
 //Authencation
 const registration = "${url}register";
 const login = '${url}login';
@@ -11,3 +11,9 @@ const getAllProductsNew = '${url}productsnew';
 const getProductsByCategory = '${url}productsbycategory/';
 //Categories
 const getAllCategories = '${url}getallcategory';
+//Carts
+const getCarts = '${url}carts';
+const addCarts = '${url}carts';
+const getCartsByUser = '${url}cartsbyuser/';
+const deleteCart = '${url}cart/';
+const updateCart = '${url}cart/';

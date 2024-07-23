@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:coffeeshop/page/payment/paymentpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../../config/login_status.dart';
 import 'view/card_order_product.dart';
+import '../../config/config.dart';
+import 'package:http/http.dart' as http;
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -11,8 +17,61 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  List? cartsList;
+  @override
+  void initState() {
+    super.initState();
+    _getCartsByUser();
+  }
+
+  void _getCartsByUser() async {
+    String? userID = LoginStatus.instance.userID;
+    if (userID == null) {
+      print('User is not logged in');
+      return;
+    }
+
+    Uri url = Uri.parse(getCartsByUser + userID);
+
+    try {
+      var response =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        print('Response JSON: $jsonResponse'); // Log the entire response
+
+        if (jsonResponse['success'] == true &&
+            jsonResponse.containsKey('carts')) {
+          setState(() {
+            cartsList = jsonResponse['carts'];
+          });
+        } else {
+          setState(() {
+            cartsList = [];
+          });
+          print('No products found for this user.');
+        }
+      } else {
+        print(
+            'Failed to load products with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('An error occurred while fetching products: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    int totalQuantity = 0;
+    num totalPrice = 0;
+
+    if (cartsList != null) {
+      for (var cart in cartsList!) {
+        totalQuantity += cart['quantity'] as int;
+        totalPrice += cart['total'] as num;
+      }
+    }
     return Scaffold(
       backgroundColor: const Color(0xFFFFFEF2),
       body: CustomScrollView(
@@ -40,10 +99,21 @@ class _CartPageState extends State<CartPage> {
             floating: true,
             pinned: true,
           ),
-          const SliverToBoxAdapter(
-              child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: CardOrderProduct())),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              child: Column(
+                children: cartsList != null
+                    ? cartsList!
+                        .map((cart) => CardOrderProduct(
+                              cart: cart,
+                              onUpdate: _getCartsByUser, // Pass the callback
+                            ))
+                        .toList()
+                    : [const Text('Không có sản phẩm trong giỏ hàng')],
+              ),
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: Container(
@@ -58,12 +128,12 @@ class _CartPageState extends State<CartPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Tổng: 2 sản phẩm',
-                  style: TextStyle(
+                  'Tổng: $totalQuantity sản phẩm',
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 18,
                     fontFamily: 'Quicksand',
@@ -71,8 +141,9 @@ class _CartPageState extends State<CartPage> {
                   ),
                 ),
                 Text(
-                  '110,000đ',
-                  style: TextStyle(
+                  NumberFormat.simpleCurrency(locale: 'vi_VN', name: 'VND')
+                      .format(totalPrice),
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 18,
                     fontFamily: 'Quicksand',

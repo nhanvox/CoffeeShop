@@ -1,29 +1,115 @@
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:coffeeshop/page/product/cartpage.dart';
 import 'package:coffeeshop/page/product/view/sizeoption.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:coffeeshop/config/config.dart';
+import 'package:coffeeshop/config/login_status.dart';
 
-import '../../../config/config.dart';
-import '../../../config/login_status.dart';
-import 'package:http/http.dart' as http;
-
-class ProductDetailPage extends StatefulWidget {
-  final Map product;
-  const ProductDetailPage({super.key, required this.product});
+class UpdateCartPage extends StatefulWidget {
+  final Map cart;
+  const UpdateCartPage({super.key, required this.cart});
 
   @override
-  State<ProductDetailPage> createState() => _ProductDetailPageState();
+  State<UpdateCartPage> createState() => _UpdateCartPage();
 }
 
-class _ProductDetailPageState extends State<ProductDetailPage> {
+class _UpdateCartPage extends State<UpdateCartPage> {
   int selectedSize = 1;
   int quantity = 1;
-
   int productsugarselected = 2;
   int producticeselected = 2;
   bool productisfavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize state with values from the cart
+    selectedSize = getSizeIndex(widget.cart['size']);
+    quantity = widget.cart['quantity'];
+    productsugarselected = getSugarIndex(widget.cart['sugar']);
+    producticeselected = getIceIndex(widget.cart['ice']);
+  }
+
+  int getSizeIndex(String size) {
+    switch (size) {
+      case 'Nhỏ':
+        return 0;
+      case 'Vừa':
+        return 1;
+      case 'Lớn':
+        return 2;
+      default:
+        return 1;
+    }
+  }
+
+  int getSugarIndex(String sugar) {
+    switch (sugar) {
+      case '30%':
+        return 1;
+      case '50%':
+        return 2;
+      case '100%':
+        return 3;
+      default:
+        return 2;
+    }
+  }
+
+  int getIceIndex(String ice) {
+    switch (ice) {
+      case '30%':
+        return 1;
+      case '50%':
+        return 2;
+      case '100%':
+        return 3;
+      default:
+        return 2;
+    }
+  }
+
+  Future<void> _updateCart() async {
+    String? userID = LoginStatus.instance.userID;
+    if (userID == null) {
+      print('User is not logged in');
+      return;
+    }
+
+    final cartData = {
+      'productid': widget.cart['productid'],
+      'userid': userID,
+      'size': getSizeText(selectedSize),
+      'total': widget.cart['total'],
+      'quantity': quantity,
+      'sugar': getSugarText(productsugarselected),
+      'ice': getIceText(producticeselected),
+    };
+
+    Uri url = Uri.parse(updateCart + widget.cart['_id']);
+
+    try {
+      var response = await http.put(url,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(cartData));
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        print('Response JSON: $jsonResponse');
+        if (jsonResponse['success'] == true) {
+          print('Cart updated successfully.');
+        } else {
+          print('Failed to update cart.');
+        }
+      } else {
+        print('Failed to update cart with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('An error occurred while updating the cart: $e');
+    }
+  }
 
   String getSizeText(int size) {
     switch (size) {
@@ -64,97 +150,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
   }
 
-  Future<void> _addToCart() async {
-    String? userID = LoginStatus.instance.userID;
-    if (userID == null) {
-      print('User is not logged in');
-      return;
-    }
-
-    final cartData = {
-      'productid': widget.product['_id'],
-      'userid': userID,
-      'size': getSizeText(selectedSize),
-      'total': widget.product['price'] * quantity,
-      'quantity': quantity,
-      'sugar': getSugarText(productsugarselected),
-      'ice': getIceText(producticeselected),
-    };
-
-    try {
-      // Fetch the user's current cart
-      Uri fetchCartUrl = Uri.parse(getCartsByUser + userID);
-      var fetchCartResponse = await http
-          .get(fetchCartUrl, headers: {"Content-Type": "application/json"});
-      if (fetchCartResponse.statusCode == 200) {
-        var fetchCartJsonResponse = jsonDecode(fetchCartResponse.body);
-        if (fetchCartJsonResponse['success'] == true &&
-            fetchCartJsonResponse.containsKey('carts')) {
-          List carts = fetchCartJsonResponse['carts'];
-          var existingCartItem = carts.firstWhere(
-              (cartItem) =>
-                  cartItem['productid']['_id'] == widget.product['_id'] &&
-                  cartItem['size'] == cartData['size'] &&
-                  cartItem['sugar'] == cartData['sugar'] &&
-                  cartItem['ice'] == cartData['ice'],
-              orElse: () => null);
-
-          if (existingCartItem != null) {
-            // Update the existing cart item quantity
-            Uri updateCartUrl = Uri.parse(updateCart + existingCartItem['_id']);
-            var updateCartData = {
-              'quantity': existingCartItem['quantity'] + quantity,
-              'total': widget.product['price'] *
-                  (existingCartItem['quantity'] + quantity),
-            };
-            var updateCartResponse = await http.put(updateCartUrl,
-                headers: {"Content-Type": "application/json"},
-                body: jsonEncode(updateCartData));
-            if (updateCartResponse.statusCode == 200) {
-              var updateCartJsonResponse = jsonDecode(updateCartResponse.body);
-              if (updateCartJsonResponse['success'] == true) {
-                print('Product updated in cart successfully.');
-              } else {
-                print('Failed to update product in cart.');
-              }
-            } else {
-              print(
-                  'Failed to update product in cart with status code: ${updateCartResponse.statusCode}');
-            }
-          } else {
-            Uri addCartUrl = Uri.parse(addCarts);
-            var addCartResponse = await http.post(addCartUrl,
-                headers: {"Content-Type": "application/json"},
-                body: jsonEncode(cartData));
-            if (addCartResponse.statusCode == 200) {
-              var addCartJsonResponse = jsonDecode(addCartResponse.body);
-              if (addCartJsonResponse['success'] == true) {
-                print('Product added to cart successfully.');
-              } else {
-                print('Failed to add product to cart.');
-              }
-            } else {
-              print(
-                  'Failed to add product to cart with status code: ${addCartResponse.statusCode}');
-            }
-          }
-        } else {
-          print('Failed to fetch cart or cart is empty.');
-        }
-      } else {
-        print(
-            'Failed to fetch cart with status code: ${fetchCartResponse.statusCode}');
-      }
-    } catch (e) {
-      print('An error occurred while adding/updating product in cart: $e');
-    }
-  }
+  final formatCurrency =
+      NumberFormat.simpleCurrency(locale: 'vi_VN', name: 'VND');
 
   @override
   Widget build(BuildContext context) {
-    final formatCurrency =
-        NumberFormat.simpleCurrency(locale: 'vi_VN', name: 'VND');
-
     return Scaffold(
       backgroundColor: const Color(0xFFFFFEF2),
       body: CustomScrollView(
@@ -172,7 +172,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
             centerTitle: true,
             title: Text(
-              widget.product['name'],
+              widget.cart['productid']['name'],
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 24,
@@ -220,7 +220,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     decoration: ShapeDecoration(
                       image: DecorationImage(
                         image: NetworkImage(
-                          widget.product['image'],
+                          widget.cart['productid']['image'],
                         ),
                         fit: BoxFit.cover,
                       ),
@@ -274,7 +274,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               children: [
                 Expanded(
                   child: Text(
-                    widget.product['description'],
+                    widget.cart['productid']['description'],
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 18,
@@ -457,96 +457,83 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ],
             ),
           ),
-        ],
-      ),
-      bottomNavigationBar: SizedBox(
-        height: 100,
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
+
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (quantity > 1) {
-                          quantity--;
-                        }
-                      });
-                    },
-                    child: Container(
-                      decoration: const ShapeDecoration(
-                          color: Color.fromARGB(255, 89, 119, 159),
-                          shape: CircleBorder()),
-                      child: const Icon(
-                        Icons.remove,
-                        color: Colors.white,
-                        size: 40,
-                      ),
+                  const Text(
+                    'Số lượng',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontFamily: 'Quicksand',
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Text(quantity.toString(),
-                      style: const TextStyle(fontSize: 34)),
-                  const SizedBox(width: 12),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        quantity++;
-                      });
-                    },
-                    child: Container(
-                      decoration: const ShapeDecoration(
-                          color: Color.fromARGB(255, 89, 119, 159),
-                          shape: CircleBorder()),
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 40,
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.remove),
+                        onPressed: () {
+                          setState(() {
+                            if (quantity > 1) quantity--;
+                          });
+                        },
                       ),
-                    ),
-                  )
+                      Text(
+                        quantity.toString(),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontFamily: 'Quicksand',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          setState(() {
+                            quantity++;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 30),
-                height: 60,
-                decoration: ShapeDecoration(
-                  color: const Color(0xFFFF725E),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                child: InkWell(
-                  onTap: () async {
-                    await _addToCart();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CartPage(),
-                      ),
-                    );
-                  },
-                  child: Center(
-                    child: Text(
-                      formatCurrency.format(widget.product['price'] * quantity),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w400,
-                      ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              child: ElevatedButton(
+                onPressed: () async {
+                  await _updateCart();
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CartPage(),
                     ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFF725E),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  textStyle: const TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'Quicksand',
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
+                child: const Text('Cập nhật giỏ hàng'),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
