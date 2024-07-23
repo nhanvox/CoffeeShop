@@ -11,3 +11,9 @@ const getAllProductsNew = '${url}productsnew';
 const getProductsByCategory = '${url}productsbycategory/';
 //Categories
 const getAllCategories = '${url}getallcategory';
+//Carts
+const getCarts = '${url}carts';
+const addCarts = '${url}carts';
+const getCartsByUser = '${url}cartsbyuser/';
+const deleteCart = '${url}cart/';
+const updateCart = '${url}cart/';
