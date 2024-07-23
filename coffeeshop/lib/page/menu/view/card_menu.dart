@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../product/view/productdetailpage.dart';
@@ -65,11 +66,11 @@ class _CardMenuState extends State<CardMenu> {
                     widget.product['name'],
                     maxLines: 1, // Chỉ hiển thị một dòng
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: GoogleFonts.getFont(
+                      'Quicksand',
                       color: Colors.black,
                       fontSize: 16,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w700,
                       letterSpacing: 0.60,
                     ),
                   ),
@@ -80,11 +81,11 @@ class _CardMenuState extends State<CardMenu> {
                       Text(
                         formatCurrency.format(widget.product['price']),
                         maxLines: 1,
-                        style: const TextStyle(
+                        style: GoogleFonts.getFont(
+                          'Quicksand',
                           color: Colors.black,
-                          fontSize: 14,
-                          fontFamily: 'Quicksand',
-                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: 0.52,
                         ),
                       ),

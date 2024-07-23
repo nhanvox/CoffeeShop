@@ -195,7 +195,7 @@ class _HomePageState extends State<HomePage> {
                           style: GoogleFonts.getFont(
                             'Quicksand',
                             color: Colors.black,
-                            fontSize: 16,
+                            fontSize: 18,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -278,6 +278,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       SingleChildScrollView(
+                        // padding: const EdgeInsets.all(20),
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: [
@@ -302,24 +303,18 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        TextQuicksand(
                           'Sản phẩm mới',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w600,
-                          ),
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
                         ),
-                        Text(
+                        TextQuicksand(
                           'Xem tất cả',
                           textAlign: TextAlign.right,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w400,
-                          ),
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                         ),
                       ],
                     ),
@@ -347,24 +342,18 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        TextQuicksand(
                           'Tin tức - sự kiện',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w600,
-                          ),
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
                         ),
-                        Text(
+                        TextQuicksand(
                           'Xem tất cả',
                           textAlign: TextAlign.right,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w400,
-                          ),
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                         ),
                       ],
                     ),
@@ -372,8 +361,8 @@ class _HomePageState extends State<HomePage> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(width: 30),
                         CardNews(
                           image: 'assets/images/news/news_1.png',
                         ),

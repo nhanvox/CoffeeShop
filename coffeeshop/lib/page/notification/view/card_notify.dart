@@ -1,5 +1,7 @@
 import 'package:coffeeshop/model/notify.dart';
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CardNotify extends StatelessWidget {
   final Notify notify;
@@ -41,18 +43,18 @@ class CardNotify extends StatelessWidget {
                     notify.content,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: GoogleFonts.getFont(
+                      'Quicksand',
                       color: Colors.black,
                       fontSize: 18,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Text(
+                  TextQuicksand(
                     notify.datetime,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
                 ],
               ),
