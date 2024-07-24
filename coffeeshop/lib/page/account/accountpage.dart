@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:coffeeshop/config/config.dart';
 import 'package:coffeeshop/config/login_status.dart';
 import 'package:coffeeshop/page/account/updateaccountpage.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-
 import '../order/orderhistorypage.dart';
 
 class AccountPage extends StatefulWidget {
@@ -21,11 +19,42 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   String? userName;
+  String? name;
+  String? image;
+  Map<String, dynamic>? profile;
   Map<String, dynamic>? user;
+
   @override
   void initState() {
     super.initState();
+    _getProfile();
     _loadUserInfo();
+  }
+
+  void _getProfile() async {
+    if (LoginStatus.instance.loggedIn) {
+      final userId = LoginStatus.instance.userID;
+      if (userId != null) {
+        final url = '$getProfileByUser$userId';
+        final response = await http.get(
+          Uri.parse(url),
+          headers: {"Content-Type": "application/json"},
+        );
+
+        if (response.statusCode == 200) {
+          final jsonResponse = jsonDecode(response.body);
+          if (jsonResponse['success'] == true) {
+            setState(() {
+              profile = jsonResponse['profile'];
+              name = profile?['name'];
+              image = profile?['image'];
+            });
+          } else {
+            print('Failed to load user');
+          }
+        }
+      }
+    }
   }
 
   void _loadUserInfo() async {
@@ -44,7 +73,7 @@ class _AccountPageState extends State<AccountPage> {
           if (jsonResponse['status'] == true) {
             setState(() {
               user = jsonResponse['userInfo'];
-              userName = user!['email'];
+              userName = user?['email'];
             });
           } else {
             print('Failed to load user name');
@@ -63,7 +92,7 @@ class _AccountPageState extends State<AccountPage> {
       decoration: const BoxDecoration(color: Color(0xFFFFFEF2)),
       child: CustomScrollView(
         slivers: [
-          //Header
+          // Header
           SliverToBoxAdapter(
             child: Stack(
               children: [
@@ -73,9 +102,9 @@ class _AccountPageState extends State<AccountPage> {
                   margin: const EdgeInsets.only(bottom: 50),
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                        image:
-                            AssetImage('assets/images/background_account.png'),
-                        fit: BoxFit.fill),
+                      image: AssetImage('assets/images/background_account.png'),
+                      fit: BoxFit.fill,
+                    ),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(70),
                       bottomRight: Radius.circular(70),
@@ -86,7 +115,7 @@ class _AccountPageState extends State<AccountPage> {
                         blurRadius: 4,
                         offset: Offset(0, 4),
                         spreadRadius: 0,
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -108,22 +137,22 @@ class _AccountPageState extends State<AccountPage> {
                           blurRadius: 4,
                           offset: Offset(0, 4),
                           spreadRadius: 0,
-                        )
+                        ),
                       ],
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: Row(
                         children: [
+                          // Display profile image
                           Container(
                             width: 90,
                             height: 90,
-                            decoration: const BoxDecoration(
-                              shape:
-                                  BoxShape.circle, // Đặt hình dạng là hình tròn
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: AssetImage(
+                                image: NetworkImage(image ??
                                     'assets/images/avatar_default.png'),
                               ),
                             ),
@@ -134,8 +163,9 @@ class _AccountPageState extends State<AccountPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const TextQuicksand(
-                                  'Nhân Võ',
+                                // Display user name
+                                TextQuicksand(
+                                  name ?? 'Tên người dùng',
                                   color: Colors.black,
                                   fontSize: 22,
                                   fontWeight: FontWeight.w700,
@@ -150,16 +180,16 @@ class _AccountPageState extends State<AccountPage> {
                                 ),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
-          //Mục tài khoản
+          // Account section
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
@@ -188,12 +218,12 @@ class _AccountPageState extends State<AccountPage> {
                           blurRadius: 4,
                           offset: Offset(0, 4),
                           spreadRadius: 0,
-                        )
+                        ),
                       ],
                     ),
                     child: Column(
                       children: [
-                        //Cập nhật thông tin
+                        // Update Info
                         ListTile(
                           title: Text(
                             'Cập nhật thông tin',
@@ -206,14 +236,15 @@ class _AccountPageState extends State<AccountPage> {
                           ),
                           onTap: () {
                             Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) =>
-                                        const UpdateAccountPage()));
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => const UpdateAccountPage(),
+                              ),
+                            );
                           },
                         ),
                         _buildDivider(),
-                        //Phương thức thanh toán
+                        // Payment Methods
                         ListTile(
                           title: Text(
                             'Phương thức thanh toán',
@@ -226,7 +257,7 @@ class _AccountPageState extends State<AccountPage> {
                           ),
                         ),
                         _buildDivider(),
-                        //Lịch sử đặt hàng
+                        // Order History
                         ListTile(
                           title: Text(
                             'Lịch sử đặt hàng',
@@ -239,14 +270,16 @@ class _AccountPageState extends State<AccountPage> {
                           ),
                           onTap: () {
                             Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) =>
-                                        const OrderHistoryWidget()));
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) =>
+                                    const OrderHistoryWidget(),
+                              ),
+                            );
                           },
                         ),
                         _buildDivider(),
-                        //Ưu đãi
+                        // Offers
                         ListTile(
                           title: Text(
                             'Ưu đãi',
@@ -265,7 +298,7 @@ class _AccountPageState extends State<AccountPage> {
               ),
             ),
           ),
-          //Mục Other
+          // Other section
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
@@ -297,12 +330,12 @@ class _AccountPageState extends State<AccountPage> {
                           blurRadius: 4,
                           offset: Offset(0, 4),
                           spreadRadius: 0,
-                        )
+                        ),
                       ],
                     ),
                     child: Column(
                       children: [
-                        //Thông Báo
+                        // Notifications
                         ListTile(
                           title: Text(
                             'Thông báo',
@@ -315,7 +348,7 @@ class _AccountPageState extends State<AccountPage> {
                           ),
                         ),
                         _buildDivider(),
-                        //Giới thiệu
+                        // About
                         ListTile(
                           title: Text(
                             'Giới thiệu',
@@ -328,7 +361,7 @@ class _AccountPageState extends State<AccountPage> {
                           ),
                         ),
                         _buildDivider(),
-                        //Lịch sử đặt hàng
+                        // Logout
                         ListTile(
                           title: Text(
                             'Đăng xuất',
@@ -341,9 +374,11 @@ class _AccountPageState extends State<AccountPage> {
                           ),
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Loginscreen()));
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Loginscreen(),
+                              ),
+                            );
                           },
                         ),
                         _buildDivider(),
@@ -353,7 +388,7 @@ class _AccountPageState extends State<AccountPage> {
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
