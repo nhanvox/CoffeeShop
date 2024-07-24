@@ -18,12 +18,21 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
+  bool _hasCart = false;
+  Map<String, dynamic>? _cart;
+
   int selectedSize = 1;
   int quantity = 1;
 
   int productsugarselected = 2;
   int producticeselected = 2;
   bool productisfavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkCart();
+  }
 
   String getSizeText(int size) {
     switch (size) {
@@ -64,6 +73,32 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
   }
 
+  Future<void> _checkCart() async {
+    String? userId = LoginStatus.instance.userID;
+
+    if (userId == null) return;
+
+    try {
+      Uri getCartUrl = Uri.parse(getCartsByUser + userId);
+      var response = await http.get(getCartUrl);
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['success'] == true) {
+          var cart = jsonResponse['carts'];
+          setState(() {
+            _hasCart = cart != null;
+            _cart = cart;
+          });
+        }
+      } else {
+        print('Failed to get profile');
+      }
+    } catch (e) {
+      print('Error checking profile: $e');
+    }
+  }
+
   Future<void> _addToCart() async {
     String? userID = LoginStatus.instance.userID;
     if (userID == null) {
@@ -82,7 +117,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     };
 
     try {
-      // Add the product to the cart first
       Uri addCartUrl = Uri.parse(addCarts);
       var addCartResponse = await http.post(addCartUrl,
           headers: {"Content-Type": "application/json"},
@@ -92,66 +126,101 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         var addCartJsonResponse = jsonDecode(addCartResponse.body);
         if (addCartJsonResponse['success'] == true) {
           print('Product added to cart successfully.');
-
-          // Fetch the user's current cart to check for duplicates
-          Uri fetchCartUrl = Uri.parse(getCartsByUser + userID);
-          var fetchCartResponse = await http
-              .get(fetchCartUrl, headers: {"Content-Type": "application/json"});
-
-          if (fetchCartResponse.statusCode == 200) {
-            var fetchCartJsonResponse = jsonDecode(fetchCartResponse.body);
-            if (fetchCartJsonResponse['success'] == true &&
-                fetchCartJsonResponse.containsKey('carts')) {
-              List carts = fetchCartJsonResponse['carts'];
-              var existingCartItem = carts.firstWhere(
-                  (cartItem) =>
-                      cartItem['productid']['_id'] == widget.product['_id'] &&
-                      cartItem['size'] == cartData['size'] &&
-                      cartItem['sugar'] == cartData['sugar'] &&
-                      cartItem['ice'] == cartData['ice'],
-                  orElse: () => null);
-
-              if (existingCartItem != null) {
-                // Update the existing cart item quantity
-                Uri updateCartUrl =
-                    Uri.parse(updateCart + existingCartItem['_id']);
-                var updateCartData = {
-                  'quantity': existingCartItem['quantity'] + quantity,
-                  'total': widget.product['price'] *
-                      (existingCartItem['quantity'] + quantity),
-                };
-                var updateCartResponse = await http.put(updateCartUrl,
-                    headers: {"Content-Type": "application/json"},
-                    body: jsonEncode(updateCartData));
-
-                if (updateCartResponse.statusCode == 200) {
-                  var updateCartJsonResponse =
-                      jsonDecode(updateCartResponse.body);
-                  if (updateCartJsonResponse['success'] == true) {
-                    print('Product updated in cart successfully.');
-                  } else {
-                    print('Failed to update product in cart.');
-                  }
-                } else {
-                  print(
-                      'Failed to update product in cart with status code: ${updateCartResponse.statusCode}');
-                }
-              } else {
-                print('Product added to cart as a new item.');
-              }
-            } else {
-              print('Failed to fetch cart or cart is empty.');
-            }
-          } else {
-            print(
-                'Failed to fetch cart with status code: ${fetchCartResponse.statusCode}');
-          }
         } else {
           print('Failed to add product to cart.');
         }
       } else {
         print(
             'Failed to add product to cart with status code: ${addCartResponse.statusCode}');
+      }
+    } catch (e) {
+      print('An error occurred while adding/updating product in cart: $e');
+    }
+  }
+
+  Future<void> _fetchToCart() async {
+    String? userID = LoginStatus.instance.userID;
+    if (userID == null) {
+      print('User is not logged in');
+      return;
+    }
+
+    final cartData = {
+      'productid': widget.product['_id'],
+      'userid': userID,
+      'size': getSizeText(selectedSize),
+      'total': widget.product['price'] * quantity,
+      'quantity': quantity,
+      'sugar': getSugarText(productsugarselected),
+      'ice': getIceText(producticeselected),
+    };
+
+    try {
+      // Fetch the user's current cart
+      Uri fetchCartUrl = Uri.parse(getCartsByUser + userID);
+      var fetchCartResponse = await http
+          .get(fetchCartUrl, headers: {"Content-Type": "application/json"});
+
+      if (fetchCartResponse.statusCode == 200) {
+        var fetchCartJsonResponse = jsonDecode(fetchCartResponse.body);
+        if (fetchCartJsonResponse['success'] == true) {
+          List carts = fetchCartJsonResponse['carts'] ?? [];
+
+          // Find if there is an existing cart item
+          var existingCartItem = carts.firstWhere(
+              (cartItem) =>
+                  cartItem['productid']['_id'] == widget.product['_id'] &&
+                  cartItem['size'] == cartData['size'] &&
+                  cartItem['sugar'] == cartData['sugar'] &&
+                  cartItem['ice'] == cartData['ice'],
+              orElse: () => null);
+
+          if (existingCartItem != null) {
+            // Update the existing cart item quantity
+            Uri updateCartUrl = Uri.parse(updateCart + existingCartItem['_id']);
+            var updateCartData = {
+              'quantity': existingCartItem['quantity'] + quantity,
+              'total': widget.product['price'] *
+                  (existingCartItem['quantity'] + quantity),
+            };
+            var updateCartResponse = await http.put(updateCartUrl,
+                headers: {"Content-Type": "application/json"},
+                body: jsonEncode(updateCartData));
+
+            if (updateCartResponse.statusCode == 200) {
+              var updateCartJsonResponse = jsonDecode(updateCartResponse.body);
+              if (updateCartJsonResponse['success'] == true) {
+                print('Product updated in cart successfully.');
+              } else {
+                print('Failed to update product in cart.');
+              }
+            } else {
+              print(
+                  'Failed to update product in cart with status code: ${updateCartResponse.statusCode}');
+            }
+          } else {
+            // Add the product to the cart as a new item
+            Uri addCartUrl = Uri.parse(addCarts);
+            var addCartResponse = await http.post(addCartUrl,
+                headers: {"Content-Type": "application/json"},
+                body: jsonEncode(cartData));
+
+            if (addCartResponse.statusCode == 200) {
+              var addCartJsonResponse = jsonDecode(addCartResponse.body);
+              if (addCartJsonResponse['success'] == true) {
+                print('Product added to cart successfully.');
+              } else {
+                print('Failed to add product to cart.');
+              }
+            } else {
+              print(
+                  'Failed to add product to cart with status code: ${addCartResponse.statusCode}');
+            }
+          }
+        }
+      } else {
+        print(
+            'Failed to fetch cart with status code: ${fetchCartResponse.statusCode}');
       }
     } catch (e) {
       print('An error occurred while adding/updating product in cart: $e');
@@ -530,7 +599,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ),
                 child: InkWell(
                   onTap: () async {
-                    await _addToCart();
+                    if (_hasCart) {
+                      await _fetchToCart();
+                    } else {
+                      await _addToCart();
+                    }
                     Navigator.push(
                       context,
                       MaterialPageRoute(

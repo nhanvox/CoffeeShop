@@ -1,11 +1,11 @@
 const url = 'http://192.168.1.14:3000/';
 
-//Authencation
+//Authencations
 const registration = "${url}register";
 const login = '${url}login';
 const getUserNameById = '${url}getusernamebyid/';
 const getUserInfoById = '${url}getuserinfobyid/';
-//Product
+//Products
 const getAllProducts = '${url}products';
 const getAllProductsBestSeller = '${url}productsbestseller';
 const getAllProductsNew = '${url}productsnew';
@@ -18,3 +18,10 @@ const addCarts = '${url}carts';
 const getCartsByUser = '${url}cartsbyuser/';
 const deleteCart = '${url}cart/';
 const updateCart = '${url}cart/';
+
+//Profiles
+const addProfile = '${url}addprofile';
+const getProfiles = '${url}profiles';
+const getProfileByUser = '${url}profilebyuser/';
+const deleteProfile = '${url}deleteprofile/';
+const updateProfile = '${url}updateprofile/';
