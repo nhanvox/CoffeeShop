@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import '../../config/authservice.dart';
 import '../order/orderhistorypage.dart';
 
 class AccountPage extends StatefulWidget {
@@ -30,6 +31,14 @@ class _AccountPageState extends State<AccountPage> {
     super.initState();
     _getProfile();
     _loadUserInfo();
+  }
+
+  void _logout(BuildContext context) async {
+    await AuthService.logout();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const Loginscreen()),
+    );
   }
 
   void _getProfile() async {
@@ -153,8 +162,11 @@ class _AccountPageState extends State<AccountPage> {
                               shape: BoxShape.circle,
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: NetworkImage(image ??
-                                    'assets/images/avatar_default.png'),
+                                image: user != null && image != ''
+                                    ? NetworkImage(image!)
+                                    : const AssetImage(
+                                            'assets/images/avatar_default.png')
+                                        as ImageProvider,
                               ),
                             ),
                           ),
@@ -369,7 +381,9 @@ class _AccountPageState extends State<AccountPage> {
                         // Logout
                         ListTile(
                           title: Text(
-                            'Đăng xuất',
+                            LoginStatus.instance.loggedIn
+                                ? 'Đăng xuất'
+                                : 'Đăng nhập',
                             style: _textStyle(),
                           ),
                           leading: const Icon(
@@ -377,14 +391,7 @@ class _AccountPageState extends State<AccountPage> {
                             size: 30,
                             color: Color(0xFFFF725E),
                           ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Loginscreen(),
-                              ),
-                            );
-                          },
+                          onTap: () => _logout(context),
                         ),
                         _buildDivider(),
                       ],
