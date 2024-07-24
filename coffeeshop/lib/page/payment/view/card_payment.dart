@@ -1,3 +1,4 @@
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
 
 class CardPayment extends StatefulWidget {
@@ -27,6 +28,7 @@ class _CardPaymentState extends State<CardPayment> {
     return GestureDetector(
       onTap: () {},
       child: Container(
+        height: 270,
         decoration: ShapeDecoration(
           color: Colors.white,
           shape: RoundedRectangleBorder(
@@ -48,69 +50,15 @@ class _CardPaymentState extends State<CardPayment> {
             const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                TextQuicksand(
                   'Phương thức thanh toán',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontFamily: 'Quicksand',
-                    fontWeight: FontWeight.w600,
-                  ),
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
                 ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(25), // Adjusted border radius
-                    child: Image.asset(
-                      'assets/images/payment/zalopay.jfif',
-                      fit: BoxFit.cover, // Adjusted fit
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                const Expanded(
-                  child: Text(
-                    'Ví ZaloPay',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      isCheckedZalo
-                          ? Icons.check_circle
-                          : Icons.check_circle_outline,
-                      color: Colors.black,
-                      size: 30,
-                    ),
-                    iconSize: 30,
-                    onPressed: () {
-                      setState(() {
-                        uncheckAll();
-                        isCheckedZalo = !isCheckedZalo;
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -130,15 +78,12 @@ class _CardPaymentState extends State<CardPayment> {
                   width: 10,
                 ),
                 const Expanded(
-                  child: Text(
+                  child: TextQuicksand(
                     'Ví Momo',
                     textAlign: TextAlign.left,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w600,
-                    ),
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 Align(
@@ -149,7 +94,7 @@ class _CardPaymentState extends State<CardPayment> {
                       isCheckedMomo
                           ? Icons.check_circle
                           : Icons.check_circle_outline,
-                      color: Colors.black,
+                      color: const Color(0xffff725e),
                       size: 30,
                     ),
                     iconSize: 30,
@@ -157,58 +102,6 @@ class _CardPaymentState extends State<CardPayment> {
                       setState(() {
                         uncheckAll();
                         isCheckedMomo = !isCheckedMomo;
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(25), // Adjusted border radius
-                    child: Image.asset(
-                      'assets/images/payment/visa_mastercard.jfif',
-                      fit: BoxFit.cover, // Adjusted fit
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                const Expanded(
-                  child: Text(
-                    'Thẻ thanh toán quốc tế (Visa, Master)',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      isCheckedVisa
-                          ? Icons.check_circle
-                          : Icons.check_circle_outline,
-                      color: Colors.black,
-                      size: 30,
-                    ),
-                    iconSize: 30,
-                    onPressed: () {
-                      setState(() {
-                        uncheckAll();
-                        isCheckedVisa = !isCheckedVisa;
                       });
                     },
                   ),
@@ -234,15 +127,12 @@ class _CardPaymentState extends State<CardPayment> {
                   width: 10,
                 ),
                 const Expanded(
-                  child: Text(
+                  child: TextQuicksand(
                     'Thẻ ATM và tài khoản ngân hàng',
                     textAlign: TextAlign.left,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w600,
-                    ),
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 Align(
@@ -253,7 +143,7 @@ class _CardPaymentState extends State<CardPayment> {
                       isCheckedAtm
                           ? Icons.check_circle
                           : Icons.check_circle_outline,
-                      color: Colors.black,
+                      color: const Color(0xffff725e),
                       size: 30,
                     ),
                     iconSize: 30,
@@ -286,15 +176,12 @@ class _CardPaymentState extends State<CardPayment> {
                   width: 10,
                 ),
                 const Expanded(
-                  child: Text(
+                  child: TextQuicksand(
                     'Thanh toán khi nhận hàng',
                     textAlign: TextAlign.left,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w600,
-                    ),
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 Align(
@@ -305,7 +192,7 @@ class _CardPaymentState extends State<CardPayment> {
                       isCheckedCash
                           ? Icons.check_circle
                           : Icons.check_circle_outline,
-                      color: Colors.black,
+                      color: const Color(0xffff725e),
                       size: 30,
                     ),
                     iconSize: 30,

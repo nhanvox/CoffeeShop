@@ -4,6 +4,7 @@ import 'package:coffeeshop/config/login_status.dart';
 import 'package:coffeeshop/page/account/updateaccountpage.dart';
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/login/view/loginscreen.dart';
+import 'package:coffeeshop/page/product/view/productfavouritepage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -106,17 +107,17 @@ class _AccountPageState extends State<AccountPage> {
             child: Stack(
               children: [
                 Container(
-                  height: 230,
+                  height: 210,
                   width: double.infinity,
                   margin: const EdgeInsets.only(bottom: 50),
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/background_account.png'),
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                     ),
                     borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(70),
-                      bottomRight: Radius.circular(70),
+                      bottomLeft: Radius.circular(50),
+                      bottomRight: Radius.circular(50),
                     ),
                     boxShadow: [
                       BoxShadow(
@@ -259,14 +260,21 @@ class _AccountPageState extends State<AccountPage> {
                         // Payment Methods
                         ListTile(
                           title: Text(
-                            'Phương thức thanh toán',
+                            'Sản phẩm yêu thích',
                             style: _textStyle(),
                           ),
                           leading: const Icon(
-                            Icons.credit_card,
+                            Icons.favorite,
                             size: 30,
                             color: Color(0xFFFF725E),
                           ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) =>
+                                        const ProductFavouritePage()));
+                          },
                         ),
                         _buildDivider(),
                         // Order History
@@ -317,15 +325,12 @@ class _AccountPageState extends State<AccountPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  const TextQuicksand(
                     'Other',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 22,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w700,
-                    ),
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
                   ),
                   Container(
                     height: 185,

@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -235,26 +237,20 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: const Text(
+                          child: const TextQuicksand(
                             'Hủy',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Color(0xFFB0B0B0),
-                              fontSize: 22,
-                              fontFamily: 'Quicksand',
-                              fontWeight: FontWeight.w500,
-                            ),
+                            color: Color(0xFFB0B0B0),
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        Text(
-                          _hasProfile ? 'Cập nhật' : 'Tạo',
+                        TextQuicksand(
+                          _hasProfile ? 'CẬP NHẬT' : 'TẠO',
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Color(0xFFFF725E),
-                            fontSize: 25,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w500,
-                          ),
+                          color: const Color(0xFFFF725E),
+                          fontSize: 25,
+                          fontWeight: FontWeight.w600,
                         ),
                         TextButton(
                           onPressed: () {
@@ -264,17 +260,14 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                               _addProfile();
                             }
                           },
-                          child: Text(
+                          child: TextQuicksand(
                             _hasProfile ? 'Lưu' : 'Thêm',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: _hasProfile
-                                  ? const Color(0xFF9290FF)
-                                  : const Color(0xFF9290FF),
-                              fontSize: 22,
-                              fontFamily: 'Quicksand',
-                              fontWeight: FontWeight.w500,
-                            ),
+                            color: _hasProfile
+                                ? const Color(0xFF9290FF)
+                                : const Color(0xFF9290FF),
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],
@@ -302,7 +295,10 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                           children: [
                             ListTile(
                               leading: const Icon(Icons.photo_library),
-                              title: const Text('Chọn ảnh từ thư viện'),
+                              title: const TextQuicksand(
+                                'Chọn ảnh từ thư viện',
+                                fontSize: 17,
+                              ),
                               onTap: () {
                                 Navigator.pop(context);
                                 _pickImage();
@@ -310,12 +306,18 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                             ),
                             ListTile(
                               leading: const Icon(Icons.link),
-                              title: const Text('Nhập URL hình ảnh'),
+                              title: const TextQuicksand(
+                                'Nhập URL hình ảnh',
+                                fontSize: 17,
+                              ),
                               onTap: () {
                                 Navigator.pop(context);
                                 _enterImageUrl();
                               },
                             ),
+                            const SizedBox(
+                              height: 15,
+                            )
                           ],
                         );
                       },
@@ -372,19 +374,19 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
       child: TextField(
         controller: controller,
         obscureText: obscureText,
-        style: const TextStyle(
+        style: GoogleFonts.getFont(
+          'Quicksand',
           color: Colors.black,
           fontSize: 21,
-          fontFamily: 'Quicksand',
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
         ),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: const TextStyle(
-            color: Color(0xFFB0B0B0),
-            fontSize: 21,
-            fontFamily: 'Quicksand',
-            fontWeight: FontWeight.w500,
+          labelStyle: GoogleFonts.getFont(
+            'Quicksand',
+            color: const Color(0xFFB0B0B0),
+            fontSize: 25,
+            fontWeight: FontWeight.w600,
           ),
           border: const UnderlineInputBorder(
             borderSide: BorderSide(color: Color(0xFFD5D5D5)),

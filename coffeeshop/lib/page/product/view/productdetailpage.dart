@@ -20,7 +20,6 @@ class ProductDetailPage extends StatefulWidget {
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
   bool _hasCart = false;
-  Map<String, dynamic>? _cart;
 
   int selectedSize = 3;
   int quantity = 1;
@@ -35,6 +34,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void initState() {
     super.initState();
     checkCart();
+    checkIfFavorite();
   }
 
   String getSizeText(int size) {
@@ -76,42 +76,36 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
   }
 
-  Future<void> _checkIfProductIsFavorite() async {
+  Future<void> checkIfFavorite() async {
     String? userID = LoginStatus.instance.userID;
     if (userID == null) {
       print('User is not logged in');
       return;
     }
-    //Lấy toàn bộ fav product theo userID
+
     Uri url = Uri.parse(getFavProductsByUser + userID);
     try {
-      var response = await http.get(
-        url,
-        headers: {"Content-Type": "application/json"},
-      );
-      //check nếu res trả về toàn bộ sản phẩm có
+      var response =
+          await http.get(url, headers: {"Content-Type": "application/json"});
       if (response.statusCode == 200) {
-        //trả về kiểu map
         var jsonResponse = jsonDecode(response.body);
-        print(jsonResponse);
         if (jsonResponse['success'] == true &&
             jsonResponse.containsKey('favproduct')) {
-          //lặp kiểm tra từng id sản phẩm trùng với id sản phẩm đang thể hiện nếu có thì đổi trạng thái nút sang true
-          for (var favproduct in jsonResponse['favproduct']) {
-            if (favproduct['productid']['_id'] == widget.product['_id']) {
+          for (var favProduct in jsonResponse['favproduct']) {
+            if (favProduct['productid'] == widget.product['_id']) {
               setState(() {
                 productisfavorite = true;
-                favProductId = favproduct['_id'];
+                favProductId = favProduct['_id'];
               });
               break;
             }
           }
         }
       } else {
-        throw 'Failed to load fav products: ${response.statusCode}';
+        print('Failed to load favorite products');
       }
     } catch (e) {
-      print('An error occurred while checking fav product status: $e');
+      print('Error fetching favorite products: $e');
     }
   }
 
@@ -142,7 +136,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
             'productid': widget.product['_id'],
-            'userId': userID,
+            'userid': userID,
           }),
         );
       } else {
@@ -154,7 +148,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
         setState(() {
-          //setState() được gọi, Flutter sẽ gọi lại phương thức build() của widget hiện tạt và cập nhật giao diện người dùng dựa trên trạng thái mới của productisfavorite
           productisfavorite = newFavoriteStatus;
           if (newFavoriteStatus) {
             favProductId = jsonResponse['_id']; // Assuming API returns the ID
@@ -185,7 +178,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           var cart = jsonResponse['carts'];
           setState(() {
             _hasCart = cart != null;
-            _cart = cart;
           });
         }
       } else {
@@ -545,7 +537,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           )),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 62),
+              padding: const EdgeInsets.symmetric(horizontal: 35),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -625,20 +617,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           const SliverToBoxAdapter(
               child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-            child: Text(
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 0),
+            child: TextQuicksand(
               'Đá',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.w600,
-              ),
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
             ),
           )),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 65),
+              padding: const EdgeInsets.symmetric(horizontal: 35),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -653,7 +642,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               producticeselected = value!;
                             });
                           }),
-                      const Text('30%'),
+                      const TextQuicksand(
+                        '30%',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ],
                   ),
                   const SizedBox(
@@ -675,7 +668,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               producticeselected = value!;
                             });
                           }),
-                      const Text('50%'),
+                      const TextQuicksand(
+                        '50%',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ],
                   ),
                   const SizedBox(
@@ -697,7 +694,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               producticeselected = value!;
                             });
                           }),
-                      const Text('100%'),
+                      const TextQuicksand(
+                        '100%',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ],
                   ),
                 ],
@@ -708,95 +709,105 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       ),
       bottomNavigationBar: SizedBox(
         height: 100,
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (quantity > 1) {
-                          quantity--;
-                        }
-                      });
-                    },
-                    child: Container(
-                      decoration: const ShapeDecoration(
-                          color: Color.fromARGB(255, 89, 119, 159),
-                          shape: CircleBorder()),
-                      child: const Icon(
-                        Icons.remove,
-                        color: Colors.white,
-                        size: 40,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (quantity > 1) {
+                            quantity--;
+                          }
+                        });
+                      },
+                      child: Container(
+                        decoration: const ShapeDecoration(
+                            color: Color.fromARGB(255, 89, 119, 159),
+                            shape: CircleBorder()),
+                        child: const Icon(
+                          Icons.remove,
+                          color: Colors.white,
+                          size: 35,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Text(quantity.toString(),
-                      style: const TextStyle(fontSize: 34)),
-                  const SizedBox(width: 12),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        quantity++;
-                      });
-                    },
-                    child: Container(
-                      decoration: const ShapeDecoration(
-                          color: Color.fromARGB(255, 89, 119, 159),
-                          shape: CircleBorder()),
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 40,
+                    const SizedBox(width: 12),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        quantity.toString(),
+                        style: GoogleFonts.getFont('Quicksand',
+                            fontSize: 30, fontWeight: FontWeight.w500),
                       ),
                     ),
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 30),
-                height: 60,
-                decoration: ShapeDecoration(
-                  color: const Color(0xFFFF725E),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                child: InkWell(
-                  onTap: () async {
-                    if (_hasCart) {
-                      await fetchToCart();
-                    } else {
-                      await addToCart();
-                    }
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CartPage(),
+                    const SizedBox(width: 12),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          quantity++;
+                        });
+                      },
+                      child: Container(
+                        decoration: const ShapeDecoration(
+                            color: Color.fromARGB(255, 89, 119, 159),
+                            shape: CircleBorder()),
+                        child: const Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: 35,
+                        ),
                       ),
-                    );
-                  },
-                  child: Center(
-                    child: Text(
-                      formatCurrency.format(widget.product['price'] * quantity),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
+                    )
+                  ],
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 30),
+                  height: 60,
+                  decoration: ShapeDecoration(
+                    color: const Color(0xFFFF725E),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: InkWell(
+                    onTap: () async {
+                      if (_hasCart) {
+                        await fetchToCart();
+                      } else {
+                        await addToCart();
+                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CartPage(),
+                        ),
+                      );
+                    },
+                    child: Center(
+                      child: Text(
+                        formatCurrency
+                            .format(widget.product['price'] * quantity),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontFamily: 'Quicksand',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
