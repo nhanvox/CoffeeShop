@@ -8,7 +8,6 @@ const ProfileRoute = require("./routes/profile.routes.js");
 const app = express();
 
 app.use(bodyParser.json());
-
 app.use("/", UserRoute);
 app.use("/", ProductRoute);
 app.use("/", CategoryRoute);
