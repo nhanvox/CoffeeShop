@@ -122,261 +122,258 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        decoration: const BoxDecoration(color: Color(0xFFFFFEF2)),
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              backgroundColor: const Color(0xFFFFFEF2),
-              actions: [
-                Container(
-                  margin: const EdgeInsets.only(right: 30),
-                  width: 40,
-                  height: 40,
-                  decoration: const ShapeDecoration(
-                    color: Color(0xFFFF725E),
-                    shape: OvalBorder(),
-                  ),
-                  child: IconButton(
-                      icon: const Icon(
-                        Icons.shopping_bag,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CartPage()));
-                      }),
+    return Container(
+      decoration: const BoxDecoration(color: Color(0xFFFFFEF2)),
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            backgroundColor: const Color(0xFFFFFEF2),
+            actions: [
+              Container(
+                margin: const EdgeInsets.only(right: 30),
+                width: 40,
+                height: 40,
+                decoration: const ShapeDecoration(
+                  color: Color(0xFFFF725E),
+                  shape: OvalBorder(),
                 ),
-              ],
-              leading: Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Builder(
-                  builder: (context) {
-                    return IconButton(
-                      icon: const Icon(
-                        Icons.menu,
-                        size: 30,
-                      ),
-                      onPressed: () {
-                        Scaffold.of(context).openDrawer();
-                      },
-                    );
-                  },
-                ),
+                child: IconButton(
+                    icon: const Icon(
+                      Icons.shopping_bag,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CartPage()));
+                    }),
               ),
-              title: Text(
-                'Xin chào bạn! ',
-                style: GoogleFonts.getFont(
-                  'Quicksand',
-                  color: const Color(0xFFADB5BD),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  height: 0,
-                ),
+            ],
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Builder(
+                builder: (context) {
+                  return IconButton(
+                    icon: const Icon(
+                      Icons.menu,
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                  );
+                },
               ),
             ),
-            //Tìm kiếm sản phẩm
-            const SliverToBoxAdapter(child: SearchView()),
-            //Danh mục sản phẩm
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Danh mục sản phẩm',
-                          style: GoogleFonts.getFont(
-                            'Quicksand',
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            widget.changePage(1);
-                          },
-                          child: const TextQuicksand(
-                            'Xem tất cả',
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            height: 0.10,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 30),
-                        if (categorieslist != null &&
-                            categorieslist!.isNotEmpty)
-                          ...categorieslist!.map(
-                            (category) => ItemsPP(
-                              category: category,
-                              onCategorySelected: _navigateToMenuPage,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ],
+            title: Text(
+              'Xin chào bạn! ',
+              style: GoogleFonts.getFont(
+                'Quicksand',
+                color: const Color(0xFFADB5BD),
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                height: 0,
               ),
             ),
-            //Sản phẩm best seller
-            Expanded(
-              child: SliverToBoxAdapter(
-                child: Container(
-                  width: 370,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+          ),
+          //Tìm kiếm sản phẩm
+          const SliverToBoxAdapter(child: SearchView()),
+          //Danh mục sản phẩm
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  clipBehavior: Clip.antiAlias,
-                  decoration: ShapeDecoration(
-                    color: const Color(0xFF2A4261),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Column(
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextQuicksand(
-                              'Best seller',
-                              color: Colors.white,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              height: 0,
-                            ),
-                            Text(
-                              'Xem tất cả',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontFamily: 'Quicksand',
-                                fontWeight: FontWeight.w400,
-                                height: 0.10,
-                                letterSpacing: 0.56,
-                              ),
-                            )
-                          ],
+                      Text(
+                        'Danh mục sản phẩm',
+                        style: GoogleFonts.getFont(
+                          'Quicksand',
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SingleChildScrollView(
-                        // padding: const EdgeInsets.all(20),
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            if (bestSellersList != null &&
-                                bestSellersList!.isNotEmpty)
-                              ...bestSellersList!.map((productsbestseller) =>
-                                  CardBestSeller(product: productsbestseller)),
-                          ],
+                      TextButton(
+                        onPressed: () {
+                          widget.changePage(1);
+                        },
+                        child: const TextQuicksand(
+                          'Xem tất cả',
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          height: 0.10,
                         ),
                       )
                     ],
                   ),
                 ),
-              ),
-            ),
-            //Sản phẩm mới
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextQuicksand(
-                          'Sản phẩm mới',
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 30),
+                      if (categorieslist != null && categorieslist!.isNotEmpty)
+                        ...categorieslist!.map(
+                          (category) => ItemsPP(
+                            category: category,
+                            onCategorySelected: _navigateToMenuPage,
+                          ),
                         ),
-                        TextQuicksand(
-                          'Xem tất cả',
-                          textAlign: TextAlign.right,
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 30),
-                        if (newsList != null && newsList!.isNotEmpty)
-                          ...newsList!.map((productsnew) =>
-                              CardNewProducts(product: productsnew)),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
-            //Tin tức - Sự kiện
-            const SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextQuicksand(
-                          'Tin tức - sự kiện',
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        TextQuicksand(
-                          'Xem tất cả',
-                          textAlign: TextAlign.right,
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ],
-                    ),
+          ),
+          //Sản phẩm best seller
+          Expanded(
+            child: SliverToBoxAdapter(
+              child: Container(
+                width: 370,
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                clipBehavior: Clip.antiAlias,
+                decoration: ShapeDecoration(
+                  color: const Color(0xFF2A4261),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CardNews(
-                          image: 'assets/images/news/news_1.png',
-                        ),
-                        CardNews(
-                          image: 'assets/images/news/news_2.png',
-                        ),
-                      ],
+                ),
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextQuicksand(
+                            'Best seller',
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            height: 0,
+                          ),
+                          Text(
+                            'Xem tất cả',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontFamily: 'Quicksand',
+                              fontWeight: FontWeight.w400,
+                              height: 0.10,
+                              letterSpacing: 0.56,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  )
-                ],
+                    SingleChildScrollView(
+                      // padding: const EdgeInsets.all(20),
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          if (bestSellersList != null &&
+                              bestSellersList!.isNotEmpty)
+                            ...bestSellersList!.map((productsbestseller) =>
+                                CardBestSeller(product: productsbestseller)),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+          //Sản phẩm mới
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextQuicksand(
+                        'Sản phẩm mới',
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      TextQuicksand(
+                        'Xem tất cả',
+                        textAlign: TextAlign.right,
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ],
+                  ),
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 30),
+                      if (newsList != null && newsList!.isNotEmpty)
+                        ...newsList!.map((productsnew) =>
+                            CardNewProducts(product: productsnew)),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          //Tin tức - Sự kiện
+          const SliverToBoxAdapter(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextQuicksand(
+                        'Tin tức - sự kiện',
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      TextQuicksand(
+                        'Xem tất cả',
+                        textAlign: TextAlign.right,
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ],
+                  ),
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CardNews(
+                        image: 'assets/images/news/news_1.png',
+                      ),
+                      CardNews(
+                        image: 'assets/images/news/news_2.png',
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

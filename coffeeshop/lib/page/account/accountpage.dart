@@ -5,6 +5,7 @@ import 'package:coffeeshop/config/login_status.dart';
 import 'package:coffeeshop/page/account/updateaccountpage.dart';
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/login/view/loginscreen.dart';
+import 'package:coffeeshop/page/product/view/productfavouritepage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -216,14 +217,21 @@ class _AccountPageState extends State<AccountPage> {
                         //Phương thức thanh toán
                         ListTile(
                           title: Text(
-                            'Phương thức thanh toán',
+                            'Sản phẩm yêu thích',
                             style: _textStyle(),
                           ),
                           leading: const Icon(
-                            Icons.credit_card,
+                            Icons.favorite,
                             size: 30,
                             color: Color(0xFFFF725E),
                           ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) =>
+                                        const ProductFavouritePage()));
+                          },
                         ),
                         _buildDivider(),
                         //Lịch sử đặt hàng

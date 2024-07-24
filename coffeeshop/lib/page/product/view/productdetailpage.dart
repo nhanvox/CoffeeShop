@@ -37,11 +37,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   String getSizeText(int size) {
     switch (size) {
-      case 0:
-        return 'Nhỏ';
       case 1:
-        return 'Vừa';
+        return 'Nhỏ';
       case 2:
+        return 'Vừa';
+      case 3:
         return 'Lớn';
       default:
         return 'Unknown';
@@ -483,7 +483,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           )),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 62),
+              padding: const EdgeInsets.symmetric(horizontal: 35),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -563,20 +563,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           const SliverToBoxAdapter(
               child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-            child: Text(
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 0),
+            child: TextQuicksand(
               'Đá',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.w600,
-              ),
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
             ),
           )),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 65),
+              padding: const EdgeInsets.symmetric(horizontal: 35),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -591,7 +588,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               producticeselected = value!;
                             });
                           }),
-                      const Text('30%'),
+                      const TextQuicksand(
+                        '30%',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ],
                   ),
                   const SizedBox(
@@ -613,7 +614,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               producticeselected = value!;
                             });
                           }),
-                      const Text('50%'),
+                      const TextQuicksand(
+                        '50%',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ],
                   ),
                   const SizedBox(
@@ -635,7 +640,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               producticeselected = value!;
                             });
                           }),
-                      const Text('100%'),
+                      const TextQuicksand(
+                        '100%',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ],
                   ),
                 ],
@@ -646,91 +655,101 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       ),
       bottomNavigationBar: SizedBox(
         height: 100,
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (quantity > 1) {
-                          quantity--;
-                        }
-                      });
-                    },
-                    child: Container(
-                      decoration: const ShapeDecoration(
-                          color: Color.fromARGB(255, 89, 119, 159),
-                          shape: CircleBorder()),
-                      child: const Icon(
-                        Icons.remove,
-                        color: Colors.white,
-                        size: 40,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (quantity > 1) {
+                            quantity--;
+                          }
+                        });
+                      },
+                      child: Container(
+                        decoration: const ShapeDecoration(
+                            color: Color.fromARGB(255, 89, 119, 159),
+                            shape: CircleBorder()),
+                        child: const Icon(
+                          Icons.remove,
+                          color: Colors.white,
+                          size: 35,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Text(quantity.toString(),
-                      style: const TextStyle(fontSize: 34)),
-                  const SizedBox(width: 12),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        quantity++;
-                      });
-                    },
-                    child: Container(
-                      decoration: const ShapeDecoration(
-                          color: Color.fromARGB(255, 89, 119, 159),
-                          shape: CircleBorder()),
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 40,
+                    const SizedBox(width: 12),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        quantity.toString(),
+                        style: GoogleFonts.getFont('Quicksand',
+                            fontSize: 30, fontWeight: FontWeight.w500),
                       ),
                     ),
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 30),
-                height: 60,
-                decoration: ShapeDecoration(
-                  color: const Color(0xFFFF725E),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                child: InkWell(
-                  onTap: () async {
-                    await _addToCart();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CartPage(),
+                    const SizedBox(width: 12),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          quantity++;
+                        });
+                      },
+                      child: Container(
+                        decoration: const ShapeDecoration(
+                            color: Color.fromARGB(255, 89, 119, 159),
+                            shape: CircleBorder()),
+                        child: const Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: 35,
+                        ),
                       ),
-                    );
-                  },
-                  child: Center(
-                    child: Text(
-                      formatCurrency.format(widget.product['price'] * quantity),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
+                    )
+                  ],
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 30),
+                  height: 60,
+                  decoration: ShapeDecoration(
+                    color: const Color(0xFFFF725E),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: InkWell(
+                    onTap: () async {
+                      await _addToCart();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CartPage(),
+                        ),
+                      );
+                    },
+                    child: Center(
+                      child: Text(
+                        formatCurrency
+                            .format(widget.product['price'] * quantity),
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.getFont(
+                          'Quicksand',
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
