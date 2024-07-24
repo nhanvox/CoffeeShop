@@ -20,6 +20,8 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
+  bool _hasCart = false;
+
   int selectedSize = 3;
   int quantity = 1;
 
@@ -32,7 +34,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   @override
   void initState() {
     super.initState();
-    _checkIfProductIsFavorite();
+    checkCart();
+    checkIfFavorite();
   }
 
   String getSizeText(int size) {
@@ -74,42 +77,36 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
   }
 
-  Future<void> _checkIfProductIsFavorite() async {
+  Future<void> checkIfFavorite() async {
     String? userID = LoginStatus.instance.userID;
     if (userID == null) {
       print('User is not logged in');
       return;
     }
-    //Lấy toàn bộ fav product theo userID
+
     Uri url = Uri.parse(getFavProductsByUser + userID);
     try {
-      var response = await http.get(
-        url,
-        headers: {"Content-Type": "application/json"},
-      );
-      //check nếu res trả về toàn bộ sản phẩm có
+      var response =
+          await http.get(url, headers: {"Content-Type": "application/json"});
       if (response.statusCode == 200) {
-        //trả về kiểu map
         var jsonResponse = jsonDecode(response.body);
-        print(jsonResponse);
         if (jsonResponse['success'] == true &&
             jsonResponse.containsKey('favproduct')) {
-          //lặp kiểm tra từng id sản phẩm trùng với id sản phẩm đang thể hiện nếu có thì đổi trạng thái nút sang true
-          for (var favproduct in jsonResponse['favproduct']) {
-            if (favproduct['productid']['_id'] == widget.product['_id']) {
+          for (var favProduct in jsonResponse['favproduct']) {
+            if (favProduct['productid'] == widget.product['_id']) {
               setState(() {
                 productisfavorite = true;
-                favProductId = favproduct['_id'];
+                favProductId = favProduct['_id'];
               });
               break;
             }
           }
         }
       } else {
-        throw 'Failed to load fav products: ${response.statusCode}';
+        print('Failed to load favorite products');
       }
     } catch (e) {
-      print('An error occurred while checking fav product status: $e');
+      print('Error fetching favorite products: $e');
     }
   }
 
@@ -140,7 +137,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
             'productid': widget.product['_id'],
-            'userId': userID,
+            'userid': userID,
           }),
         );
       } else {
@@ -152,7 +149,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
         setState(() {
-          //setState() được gọi, Flutter sẽ gọi lại phương thức build() của widget hiện tạt và cập nhật giao diện người dùng dựa trên trạng thái mới của productisfavorite
           productisfavorite = newFavoriteStatus;
           if (newFavoriteStatus) {
             favProductId = jsonResponse['_id']; // Assuming API returns the ID
@@ -168,7 +164,32 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
   }
 
-  Future<void> _addToCart() async {
+  Future<void> checkCart() async {
+    String? userId = LoginStatus.instance.userID;
+
+    if (userId == null) return;
+
+    try {
+      Uri getCartUrl = Uri.parse(getCartsByUser + userId);
+      var response = await http.get(getCartUrl);
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['success'] == true) {
+          var cart = jsonResponse['carts'];
+          setState(() {
+            _hasCart = cart != null;
+          });
+        }
+      } else {
+        print('Failed to get profile');
+      }
+    } catch (e) {
+      print('Error checking profile: $e');
+    }
+  }
+
+  Future<void> addToCart() async {
     String? userID = LoginStatus.instance.userID;
     if (userID == null) {
       print('User is not logged in');
@@ -186,7 +207,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     };
 
     try {
-      // Add the product to the cart first
       Uri addCartUrl = Uri.parse(addCarts);
       var addCartResponse = await http.post(addCartUrl,
           headers: {"Content-Type": "application/json"},
@@ -196,66 +216,101 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         var addCartJsonResponse = jsonDecode(addCartResponse.body);
         if (addCartJsonResponse['success'] == true) {
           print('Product added to cart successfully.');
-
-          // Fetch the user's current cart to check for duplicates
-          Uri fetchCartUrl = Uri.parse(getCartsByUser + userID);
-          var fetchCartResponse = await http
-              .get(fetchCartUrl, headers: {"Content-Type": "application/json"});
-
-          if (fetchCartResponse.statusCode == 200) {
-            var fetchCartJsonResponse = jsonDecode(fetchCartResponse.body);
-            if (fetchCartJsonResponse['success'] == true &&
-                fetchCartJsonResponse.containsKey('carts')) {
-              List carts = fetchCartJsonResponse['carts'];
-              var existingCartItem = carts.firstWhere(
-                  (cartItem) =>
-                      cartItem['productid']['_id'] == widget.product['_id'] &&
-                      cartItem['size'] == cartData['size'] &&
-                      cartItem['sugar'] == cartData['sugar'] &&
-                      cartItem['ice'] == cartData['ice'],
-                  orElse: () => null);
-
-              if (existingCartItem != null) {
-                // Update the existing cart item quantity
-                Uri updateCartUrl =
-                    Uri.parse(updateCart + existingCartItem['_id']);
-                var updateCartData = {
-                  'quantity': existingCartItem['quantity'] + quantity,
-                  'total': widget.product['price'] *
-                      (existingCartItem['quantity'] + quantity),
-                };
-                var updateCartResponse = await http.put(updateCartUrl,
-                    headers: {"Content-Type": "application/json"},
-                    body: jsonEncode(updateCartData));
-
-                if (updateCartResponse.statusCode == 200) {
-                  var updateCartJsonResponse =
-                      jsonDecode(updateCartResponse.body);
-                  if (updateCartJsonResponse['success'] == true) {
-                    print('Product updated in cart successfully.');
-                  } else {
-                    print('Failed to update product in cart.');
-                  }
-                } else {
-                  print(
-                      'Failed to update product in cart with status code: ${updateCartResponse.statusCode}');
-                }
-              } else {
-                print('Product added to cart as a new item.');
-              }
-            } else {
-              print('Failed to fetch cart or cart is empty.');
-            }
-          } else {
-            print(
-                'Failed to fetch cart with status code: ${fetchCartResponse.statusCode}');
-          }
         } else {
           print('Failed to add product to cart.');
         }
       } else {
         print(
             'Failed to add product to cart with status code: ${addCartResponse.statusCode}');
+      }
+    } catch (e) {
+      print('An error occurred while adding/updating product in cart: $e');
+    }
+  }
+
+  Future<void> fetchToCart() async {
+    String? userID = LoginStatus.instance.userID;
+    if (userID == null) {
+      print('User is not logged in');
+      return;
+    }
+
+    final cartData = {
+      'productid': widget.product['_id'],
+      'userid': userID,
+      'size': getSizeText(selectedSize),
+      'total': widget.product['price'] * quantity,
+      'quantity': quantity,
+      'sugar': getSugarText(productsugarselected),
+      'ice': getIceText(producticeselected),
+    };
+
+    try {
+      // Fetch the user's current cart
+      Uri fetchCartUrl = Uri.parse(getCartsByUser + userID);
+      var fetchCartResponse = await http
+          .get(fetchCartUrl, headers: {"Content-Type": "application/json"});
+
+      if (fetchCartResponse.statusCode == 200) {
+        var fetchCartJsonResponse = jsonDecode(fetchCartResponse.body);
+        if (fetchCartJsonResponse['success'] == true) {
+          List carts = fetchCartJsonResponse['carts'] ?? [];
+
+          // Find if there is an existing cart item
+          var existingCartItem = carts.firstWhere(
+              (cartItem) =>
+                  cartItem['productid']['_id'] == widget.product['_id'] &&
+                  cartItem['size'] == cartData['size'] &&
+                  cartItem['sugar'] == cartData['sugar'] &&
+                  cartItem['ice'] == cartData['ice'],
+              orElse: () => null);
+
+          if (existingCartItem != null) {
+            // Update the existing cart item quantity
+            Uri updateCartUrl = Uri.parse(updateCart + existingCartItem['_id']);
+            var updateCartData = {
+              'quantity': existingCartItem['quantity'] + quantity,
+              'total': widget.product['price'] *
+                  (existingCartItem['quantity'] + quantity),
+            };
+            var updateCartResponse = await http.put(updateCartUrl,
+                headers: {"Content-Type": "application/json"},
+                body: jsonEncode(updateCartData));
+
+            if (updateCartResponse.statusCode == 200) {
+              var updateCartJsonResponse = jsonDecode(updateCartResponse.body);
+              if (updateCartJsonResponse['success'] == true) {
+                print('Product updated in cart successfully.');
+              } else {
+                print('Failed to update product in cart.');
+              }
+            } else {
+              print(
+                  'Failed to update product in cart with status code: ${updateCartResponse.statusCode}');
+            }
+          } else {
+            // Add the product to the cart as a new item
+            Uri addCartUrl = Uri.parse(addCarts);
+            var addCartResponse = await http.post(addCartUrl,
+                headers: {"Content-Type": "application/json"},
+                body: jsonEncode(cartData));
+
+            if (addCartResponse.statusCode == 200) {
+              var addCartJsonResponse = jsonDecode(addCartResponse.body);
+              if (addCartJsonResponse['success'] == true) {
+                print('Product added to cart successfully.');
+              } else {
+                print('Failed to add product to cart.');
+              }
+            } else {
+              print(
+                  'Failed to add product to cart with status code: ${addCartResponse.statusCode}');
+            }
+          }
+        }
+      } else {
+        print(
+            'Failed to fetch cart with status code: ${fetchCartResponse.statusCode}');
       }
     } catch (e) {
       print('An error occurred while adding/updating product in cart: $e');
@@ -724,7 +779,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                   child: InkWell(
                     onTap: () async {
-                      await _addToCart();
+                      if (_hasCart) {
+                        await fetchToCart();
+                      } else {
+                        await addToCart();
+                      }
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -737,17 +796,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         formatCurrency
                             .format(widget.product['price'] * quantity),
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.getFont(
-                          'Quicksand',
+                        style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
+                          fontSize: 22,
+                          fontFamily: 'Quicksand',
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
+              )
             ],
           ),
         ),

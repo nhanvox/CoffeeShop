@@ -1,3 +1,4 @@
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
 import 'view/card_order_product.dart';
 import 'view/card_info.dart';
@@ -30,14 +31,11 @@ class _PaymentPageState extends State<PaymentPage> {
               ),
             ),
             centerTitle: true,
-            title: const Text(
-              'Xác nhận đơn hàng',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.w500,
-              ),
+            title: const TextQuicksand(
+              'XÁC NHẬN ĐƠN HÀNG',
+              color: Colors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
             ),
             floating: true,
             pinned: true,
@@ -65,7 +63,7 @@ class _PaymentPageState extends State<PaymentPage> {
         ],
       ),
       bottomNavigationBar: Container(
-        height: 120,
+        height: 160,
         decoration: ShapeDecoration(
           color: Colors.white,
           shape: RoundedRectangleBorder(
@@ -79,23 +77,17 @@ class _PaymentPageState extends State<PaymentPage> {
             const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                TextQuicksand(
                   'Tổng: 2 sản phẩm',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontFamily: 'Quicksand',
-                    fontWeight: FontWeight.w600,
-                  ),
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
                 ),
-                Text(
+                TextQuicksand(
                   '120,000đ',
-                  style: TextStyle(
-                    color: Color(0xFFFF8675),
-                    fontSize: 18,
-                    fontFamily: 'Quicksand',
-                    fontWeight: FontWeight.w600,
-                  ),
+                  color: Color(0xFFFF8675),
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
                 ),
               ],
             ),
@@ -104,8 +96,8 @@ class _PaymentPageState extends State<PaymentPage> {
                 _showUpdateSuccessDialog(context);
               },
               child: Container(
-                width: 180,
-                height: 50,
+                width: MediaQuery.of(context).size.width,
+                height: 60,
                 decoration: ShapeDecoration(
                   color: const Color(0xFFFF725E),
                   shape: RoundedRectangleBorder(
@@ -113,15 +105,12 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                 ),
                 child: const Center(
-                  child: Text(
-                    'Đặt hàng',
+                  child: TextQuicksand(
+                    'ĐẶT HÀNG',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w400,
-                    ),
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
@@ -142,8 +131,8 @@ class _PaymentPageState extends State<PaymentPage> {
             alignment: Alignment.center,
             children: [
               Container(
-                width: 300,
-                height: 180,
+                width: 400,
+                height: 200,
                 margin: const EdgeInsets.only(top: 38),
                 padding: const EdgeInsets.only(right: 30, left: 30, top: 50),
                 decoration: BoxDecoration(
@@ -154,20 +143,18 @@ class _PaymentPageState extends State<PaymentPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const SizedBox(height: 20),
-                    const Text(
+                    const TextQuicksand(
                       'Đặt hàng thành công!',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w600,
-                      ),
+                      color: Colors.black,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     SizedBox(
                       width: double.infinity,
+                      height: 50,
                       child: ElevatedButton(
                         onPressed: () {
                           // Navigator.push(
@@ -183,14 +170,11 @@ class _PaymentPageState extends State<PaymentPage> {
                             borderRadius: BorderRadius.circular(13),
                           ),
                         ),
-                        child: const Text(
-                          'Xong',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w600,
-                          ),
+                        child: const TextQuicksand(
+                          'XONG',
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),

@@ -1,3 +1,4 @@
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/payment/view/list_voucher.dart';
 import 'package:flutter/material.dart';
 
@@ -41,25 +42,19 @@ class _CardVoucherState extends State<CardVoucher> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                const TextQuicksand(
                   'Khuyến mãi',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontFamily: 'Quicksand',
-                    fontWeight: FontWeight.w600,
-                  ),
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
                 ),
                 TextButton(
                   onPressed: _openIconButtonPressed,
-                  child: const Text(
+                  child: const TextQuicksand(
                     'Xem thêm',
-                    style: TextStyle(
-                      color: Colors.deepOrange,
-                      fontSize: 14,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w400,
-                    ),
+                    color: Colors.deepOrange,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
@@ -100,59 +95,47 @@ class _CardVoucherState extends State<CardVoucher> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        TextQuicksand(
                           'NEWKM15K',
                           textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w600,
-                          ),
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
                         ),
-                        Text(
-                          'Giảm 15,000đ cho đơn hàng đầu',
-                          maxLines: 1, // Chỉ hiển thị một dòng
+                        TextQuicksand(
+                          'Giảm 15,000đ cho đơn đầu tiên',
+                          maxLine: 1, // Chỉ hiển thị một dòng
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w600,
-                          ),
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                         ),
-                        Text(
+                        TextQuicksand(
                           '01/07/2024 23:59',
                           textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w600,
-                          ),
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                         ),
                       ],
                     ),
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 15),
+                        horizontal: 15, vertical: 10),
                     decoration: ShapeDecoration(
-                      color: const Color.fromARGB(255, 204, 134, 122),
+                      color: const Color(0xffff725e),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
-                    child: const Text(
+                    child: const TextQuicksand(
                       'Chọn',
                       textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w600,
-                      ),
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],

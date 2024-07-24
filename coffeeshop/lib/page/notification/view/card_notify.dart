@@ -20,7 +20,7 @@ class CardNotify extends StatelessWidget {
           children: [
             Container(
               width: 70.0,
-              height: 70.0,
+              height: double.infinity,
               margin: const EdgeInsets.only(right: 10),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,

@@ -1,5 +1,7 @@
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/payment/view/change_info.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CardInfo extends StatefulWidget {
   const CardInfo({super.key});
@@ -42,26 +44,20 @@ class _CardInfoState extends State<CardInfo> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                const TextQuicksand(
                   'Thông tin nhận hàng',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontFamily: 'Quicksand',
-                    fontWeight: FontWeight.w600,
-                  ),
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
                 ),
                 Container(width: 40),
                 TextButton(
                   onPressed: _openIconButtonPressed,
-                  child: const Text(
+                  child: const TextQuicksand(
                     'Thay đổi',
-                    style: TextStyle(
-                      color: Colors.deepOrange,
-                      fontSize: 14,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w400,
-                    ),
+                    color: Colors.deepOrange,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
@@ -69,37 +65,32 @@ class _CardInfoState extends State<CardInfo> {
             const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                TextQuicksand(
                   'Nguyễn Văn A | 0987654321',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontFamily: 'Quicksand',
-                    fontWeight: FontWeight.w400,
-                  ),
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
               ],
             ),
             const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                TextQuicksand(
                   '231/b, ql27, Tp. Hồ Chí Minh, Việt Nam',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontFamily: 'Quicksand',
-                    fontWeight: FontWeight.w400,
-                  ),
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
               ],
             ),
+            const SizedBox(height: 10),
             TextFormField(
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey.shade200,
                 hintText: 'Thêm hướng dẫn giao hàng',
-                hintStyle: const TextStyle(color: Colors.grey),
+                hintStyle: GoogleFonts.getFont('Quicksand', color: Colors.grey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide.none,

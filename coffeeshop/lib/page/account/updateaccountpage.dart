@@ -1,18 +1,216 @@
+import 'dart:io';
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+
+import '../../config/config.dart';
+import '../../config/login_status.dart';
+import '../login/view/loginscreen.dart';
 
 class UpdateAccountPage extends StatefulWidget {
   const UpdateAccountPage({super.key});
 
   @override
-  State<UpdateAccountPage> createState() => _UpdateAccountPageState();
+  _UpdateAccountPageState createState() => _UpdateAccountPageState();
 }
 
 class _UpdateAccountPageState extends State<UpdateAccountPage> {
+  bool _hasProfile = false;
+  Map<String, dynamic>? _profile;
+
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _imageUrlController = TextEditingController();
+  String? _imagePath;
+
+  @override
+  void initState() {
+    super.initState();
+    checkUserLoggedIn();
+    _checkProfile();
+  }
+
+  void checkUserLoggedIn() async {
+    String? userId = LoginStatus.instance.userID;
+
+    if (userId == null) {
+      // Người dùng chưa đăng nhập, điều hướng đến trang đăng nhập
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const Loginscreen()));
+      });
+    } else {
+      // Người dùng đã đăng nhập, lấy thông tin hồ sơ
+      _getProfile(userId);
+    }
+  }
+
+  void _getProfile(String userId) async {
+    try {
+      Uri getProfileUrl = Uri.parse(getProfileByUser + userId);
+      var response = await http.get(getProfileUrl);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['success'] == true) {
+          var profile = jsonResponse['profile'];
+          setState(() {
+            _nameController.text = profile['name'] ?? '';
+            _phoneController.text = profile['phoneNumber'] ?? '';
+            _addressController.text = profile['address'] ?? '';
+            _imagePath = profile['image'];
+          });
+        }
+      }
+    } catch (e) {
+      print('Error fetching profile: $e');
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _imagePath = pickedFile.path;
+      });
+    }
+  }
+
+  Future<void> _enterImageUrl() async {
+    final url = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Nhập URL hình ảnh'),
+          content: TextField(
+            controller: _imageUrlController,
+            decoration: const InputDecoration(hintText: 'URL hình ảnh'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Hủy'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(_imageUrlController.text);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    if (url != null && url.isNotEmpty) {
+      setState(() {
+        _imagePath = url;
+      });
+    }
+  }
+
+  Future<void> _checkProfile() async {
+    String? userId = LoginStatus.instance.userID;
+
+    if (userId == null) return;
+
+    try {
+      Uri getProfileUrl = Uri.parse(getProfileByUser + userId);
+      var response = await http.get(getProfileUrl);
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['success'] == true) {
+          var profile = jsonResponse['profile'];
+          setState(() {
+            _hasProfile = profile != null;
+            _profile = profile;
+          });
+        }
+      } else {
+        print('Failed to get profile');
+      }
+    } catch (e) {
+      print('Error checking profile: $e');
+    }
+  }
+
+  void _addProfile() async {
+    String? userId = LoginStatus.instance.userID;
+
+    if (userId == null) return;
+
+    final data = {
+      'userid': userId,
+      'name': _nameController.text,
+      'phoneNumber': _phoneController.text,
+      'address': _addressController.text,
+      'image': _imagePath ?? '',
+    };
+
+    try {
+      Uri addProfileUrl = Uri.parse(addProfile);
+      var addProfileResponse = await http.post(
+        addProfileUrl,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(data),
+      );
+
+      if (addProfileResponse.statusCode == 200) {
+        var jsonResponse = jsonDecode(addProfileResponse.body);
+        if (jsonResponse['success'] == true) {
+          _showUpdateSuccessDialog(context);
+        }
+      } else {
+        print('Failed to update profile');
+      }
+    } catch (e) {
+      print('Error updating profile: $e');
+    }
+  }
+
+  Future<void> _updateProfile() async {
+    String? userId = LoginStatus.instance.userID;
+
+    if (userId == null || _profile == null) return;
+
+    final data = {
+      'userid': userId,
+      'name': _nameController.text,
+      'phoneNumber': _phoneController.text,
+      'address': _addressController.text,
+      'image': _imagePath ?? '',
+    };
+
+    String profileId = _profile!['_id'];
+
+    try {
+      Uri updateProfileUrl = Uri.parse(updateProfile + profileId);
+      var updateProfileResponse = await http.put(
+        updateProfileUrl,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(data),
+      );
+
+      if (updateProfileResponse.statusCode == 200) {
+        var jsonResponse = jsonDecode(updateProfileResponse.body);
+        if (jsonResponse['success'] == true) {
+          _showUpdateSuccessDialog(context);
+        }
+      } else {
+        print('Failed to update profile');
+      }
+    } catch (e) {
+      print('Error updating profile: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,40 +237,37 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: const Text(
+                          child: const TextQuicksand(
                             'Hủy',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Color(0xFFB0B0B0),
-                              fontSize: 22,
-                              fontFamily: 'Quicksand',
-                              fontWeight: FontWeight.w500,
-                            ),
+                            color: Color(0xFFB0B0B0),
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const Text(
-                          'Cập nhật',
+                        TextQuicksand(
+                          _hasProfile ? 'CẬP NHẬT' : 'TẠO',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xFFFF725E),
-                            fontSize: 25,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w500,
-                          ),
+                          color: const Color(0xFFFF725E),
+                          fontSize: 25,
+                          fontWeight: FontWeight.w600,
                         ),
                         TextButton(
                           onPressed: () {
-                            _showUpdateSuccessDialog(context);
+                            if (_hasProfile) {
+                              _updateProfile();
+                            } else {
+                              _addProfile();
+                            }
                           },
-                          child: const Text(
-                            'Lưu',
+                          child: TextQuicksand(
+                            _hasProfile ? 'Lưu' : 'Thêm',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Color(0xFF9290FF),
-                              fontSize: 22,
-                              fontFamily: 'Quicksand',
-                              fontWeight: FontWeight.w500,
-                            ),
+                            color: _hasProfile
+                                ? const Color(0xFF9290FF)
+                                : const Color(0xFF9290FF),
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],
@@ -90,23 +285,66 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
               child: Container(
                 margin: const EdgeInsets.only(top: 30),
                 alignment: Alignment.center,
-                child: const Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 75,
-                      backgroundImage:
-                          AssetImage('assets/images/avatar_default.png'),
-                    ),
-                    Positioned(
-                      right: 0,
-                      bottom: 0,
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Color(0xFFFF725E),
-                        child: Icon(Icons.camera_alt, color: Colors.white),
+                child: GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTile(
+                              leading: const Icon(Icons.photo_library),
+                              title: const TextQuicksand(
+                                'Chọn ảnh từ thư viện',
+                                fontSize: 17,
+                              ),
+                              onTap: () {
+                                Navigator.pop(context);
+                                _pickImage();
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.link),
+                              title: const TextQuicksand(
+                                'Nhập URL hình ảnh',
+                                fontSize: 17,
+                              ),
+                              onTap: () {
+                                Navigator.pop(context);
+                                _enterImageUrl();
+                              },
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 75,
+                        backgroundImage: _imagePath != null
+                            ? (_imagePath!.startsWith('http')
+                                ? NetworkImage(_imagePath!)
+                                : FileImage(File(_imagePath!)) as ImageProvider)
+                            : const AssetImage(
+                                'assets/images/avatar_default.png'),
                       ),
-                    ),
-                  ],
+                      const Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Color(0xFFFF725E),
+                          child: Icon(Icons.camera_alt, color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -117,10 +355,7 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                 child: Column(
                   children: [
                     _buildTextField('Họ tên', _nameController),
-                    _buildTextField('Email', _emailController),
                     _buildTextField('Số điện thoại', _phoneController),
-                    _buildTextField('Mật khẩu', _passwordController,
-                        obscureText: true),
                     _buildTextField('Địa chỉ', _addressController),
                   ],
                 ),
@@ -139,19 +374,19 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
       child: TextField(
         controller: controller,
         obscureText: obscureText,
-        style: const TextStyle(
+        style: GoogleFonts.getFont(
+          'Quicksand',
           color: Colors.black,
           fontSize: 21,
-          fontFamily: 'Quicksand',
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
         ),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: const TextStyle(
-            color: Color(0xFFB0B0B0),
-            fontSize: 21,
-            fontFamily: 'Quicksand',
-            fontWeight: FontWeight.w500,
+          labelStyle: GoogleFonts.getFont(
+            'Quicksand',
+            color: const Color(0xFFB0B0B0),
+            fontSize: 25,
+            fontWeight: FontWeight.w600,
           ),
           border: const UnderlineInputBorder(
             borderSide: BorderSide(color: Color(0xFFD5D5D5)),

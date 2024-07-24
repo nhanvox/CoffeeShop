@@ -126,7 +126,7 @@ class _CartPageState extends State<CartPage> {
         ],
       ),
       bottomNavigationBar: Container(
-        height: 180,
+        height: 160,
         decoration: ShapeDecoration(
           color: Colors.white,
           shape: RoundedRectangleBorder(
