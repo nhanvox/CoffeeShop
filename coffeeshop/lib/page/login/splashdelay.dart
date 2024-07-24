@@ -1,5 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:coffeeshop/mainpage.dart';
+import 'package:coffeeshop/page/login/view/loginscreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -17,7 +17,7 @@ class SplashDelay extends StatelessWidget {
       // backgroundColor: Color.fromRGBO(255, 254, 242, 100),
       backgroundColor: const Color(0xFFFFFEF2),
       // backgroundColor: Color(0xFFFEF2),
-      nextScreen: const MainPage(),
+      nextScreen: const Loginscreen(),
     );
   }
 }

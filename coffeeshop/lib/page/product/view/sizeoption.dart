@@ -1,3 +1,4 @@
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
 
 class SizeOption extends StatelessWidget {
@@ -41,12 +42,11 @@ class SizeOption extends StatelessWidget {
               ),
             ),
           ),
-          Text(
+          TextQuicksand(
             label,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.black,
-            ),
+            fontSize: 16,
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
           ),
         ],
       ),

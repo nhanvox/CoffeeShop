@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/payment/paymentpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../config/login_status.dart';
 import 'view/card_order_product.dart';
@@ -87,14 +89,11 @@ class _CartPageState extends State<CartPage> {
               ),
             ),
             centerTitle: true,
-            title: const Text(
-              'Giỏ hàng',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.w500,
-              ),
+            title: const TextQuicksand(
+              'GIỎ HÀNG',
+              color: Colors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
             ),
             floating: true,
             pinned: true,
@@ -102,22 +101,32 @@ class _CartPageState extends State<CartPage> {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              child: Column(
-                children: cartsList != null
-                    ? cartsList!
-                        .map((cart) => CardOrderProduct(
-                              cart: cart,
-                              onUpdate: _getCartsByUser, // Pass the callback
-                            ))
-                        .toList()
-                    : [const Text('Không có sản phẩm trong giỏ hàng')],
-              ),
+              child: cartsList != null
+                  ? Column(
+                      children: cartsList!
+                          .map((cart) => CardOrderProduct(
+                                cart: cart,
+                                onUpdate: _getCartsByUser, // Pass the callback
+                              ))
+                          .toList(),
+                    )
+                  : SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.8,
+                      child: Center(
+                        child: Image.asset(
+                          'assets/images/cartisempty.png',
+                          height: 350,
+                          fit: BoxFit
+                              .contain, // Adjusts the image to fit within the specified height
+                        ),
+                      ),
+                    ),
             ),
-          ),
+          )
         ],
       ),
       bottomNavigationBar: Container(
-        height: 120,
+        height: 180,
         decoration: ShapeDecoration(
           color: Colors.white,
           shape: RoundedRectangleBorder(
@@ -126,31 +135,30 @@ class _CartPageState extends State<CartPage> {
         ),
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                TextQuicksand(
                   'Tổng: $totalQuantity sản phẩm',
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontFamily: 'Quicksand',
-                    fontWeight: FontWeight.w600,
-                  ),
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
                 ),
                 Text(
                   NumberFormat.simpleCurrency(locale: 'vi_VN', name: 'VND')
                       .format(totalPrice),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontFamily: 'Quicksand',
-                    fontWeight: FontWeight.w600,
+                  style: GoogleFonts.getFont(
+                    'Quicksand',
+                    color: Colors.red,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ],
+            ),
+            const SizedBox(
+              height: 15,
             ),
             GestureDetector(
               onTap: () {
@@ -162,8 +170,8 @@ class _CartPageState extends State<CartPage> {
                 );
               },
               child: Container(
-                width: 180,
-                height: 50,
+                width: double.infinity,
+                height: 60,
                 decoration: ShapeDecoration(
                   color: const Color(0xFFFF725E),
                   shape: RoundedRectangleBorder(
@@ -171,15 +179,12 @@ class _CartPageState extends State<CartPage> {
                   ),
                 ),
                 child: const Center(
-                  child: Text(
-                    'Đặt hàng',
+                  child: TextQuicksand(
+                    'ĐẶT HÀNG',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w400,
-                    ),
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),

@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/product/cartpage.dart';
 import 'package:coffeeshop/page/product/view/sizeoption.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../../config/config.dart';
@@ -18,12 +20,20 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
-  int selectedSize = 1;
+  int selectedSize = 3;
   int quantity = 1;
 
-  int productsugarselected = 2;
-  int producticeselected = 2;
+  int productsugarselected = 3;
+  int producticeselected = 3;
   bool productisfavorite = false;
+  bool isExpanded = false;
+  String? favProductId;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfProductIsFavorite();
+  }
 
   String getSizeText(int size) {
     switch (size) {
@@ -61,6 +71,100 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         return '100%';
       default:
         return 'Unknown';
+    }
+  }
+
+  Future<void> _checkIfProductIsFavorite() async {
+    String? userID = LoginStatus.instance.userID;
+    if (userID == null) {
+      print('User is not logged in');
+      return;
+    }
+    //Lấy toàn bộ fav product theo userID
+    Uri url = Uri.parse(getFavProductsByUser + userID);
+    try {
+      var response = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
+      //check nếu res trả về toàn bộ sản phẩm có
+      if (response.statusCode == 200) {
+        //trả về kiểu map
+        var jsonResponse = jsonDecode(response.body);
+        print(jsonResponse);
+        if (jsonResponse['success'] == true &&
+            jsonResponse.containsKey('favproduct')) {
+          //lặp kiểm tra từng id sản phẩm trùng với id sản phẩm đang thể hiện nếu có thì đổi trạng thái nút sang true
+          for (var favproduct in jsonResponse['favproduct']) {
+            if (favproduct['productid']['_id'] == widget.product['_id']) {
+              setState(() {
+                productisfavorite = true;
+                favProductId = favproduct['_id'];
+              });
+              break;
+            }
+          }
+        }
+      } else {
+        throw 'Failed to load fav products: ${response.statusCode}';
+      }
+    } catch (e) {
+      print('An error occurred while checking fav product status: $e');
+    }
+  }
+
+  Future<void> toggleFavorite() async {
+    final newFavoriteStatus = !productisfavorite;
+    String? userID = LoginStatus.instance.userID;
+    if (userID == null) {
+      print('User is not logged in');
+      return;
+    }
+
+    Uri url;
+    if (newFavoriteStatus) {
+      url = Uri.parse(addFavProduct);
+    } else {
+      if (favProductId == null) {
+        print('No favProductId found for deletion');
+        return;
+      }
+      url = Uri.parse(deleteFavProduct + favProductId!);
+    }
+
+    try {
+      http.Response response;
+      if (newFavoriteStatus) {
+        response = await http.post(
+          url,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'productid': widget.product['_id'],
+            'userId': userID,
+          }),
+        );
+      } else {
+        response = await http.delete(
+          url,
+          headers: {'Content-Type': 'application/json'},
+        );
+      }
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        setState(() {
+          //setState() được gọi, Flutter sẽ gọi lại phương thức build() của widget hiện tạt và cập nhật giao diện người dùng dựa trên trạng thái mới của productisfavorite
+          productisfavorite = newFavoriteStatus;
+          if (newFavoriteStatus) {
+            favProductId = jsonResponse['_id']; // Assuming API returns the ID
+          } else {
+            favProductId = null;
+          }
+        });
+      } else {
+        throw Exception('Failed to update favorite status');
+      }
+    } catch (error) {
+      print('Error updating favorite status: $error');
     }
   }
 
@@ -179,15 +283,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ),
             centerTitle: true,
-            title: Text(
+            title: TextQuicksand(
               widget.product['name'],
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.w500,
-                height: 0,
-              ),
+              color: Colors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+              height: 0,
             ),
             actions: [
               Container(
@@ -265,9 +366,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         size: 40,
                       ),
                       onPressed: () {
-                        setState(() {
-                          productisfavorite = !productisfavorite;
-                        });
+                        toggleFavorite();
                       },
                     ),
                   ),
@@ -277,37 +376,62 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           SliverToBoxAdapter(
               child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-            child: Row(
+            padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Text(
+                AnimatedCrossFade(
+                  firstChild: Text(
                     widget.product['description'],
-                    style: const TextStyle(
+                    textAlign: TextAlign.justify,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.getFont(
+                      'Quicksand',
                       color: Colors.black,
                       fontSize: 18,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
+                  secondChild: Text(
+                    widget.product['description'],
+                    textAlign: TextAlign.justify,
+                    style: GoogleFonts.getFont(
+                      'Quicksand',
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  crossFadeState: isExpanded
+                      ? CrossFadeState.showSecond
+                      : CrossFadeState.showFirst,
+                  duration: const Duration(milliseconds: 200),
                 ),
-                const SizedBox(
-                  width: 40,
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isExpanded = !isExpanded;
+                    });
+                  },
+                  child: TextQuicksand(
+                    isExpanded ? 'Thu gọn' : 'Xem thêm',
+                    color: const Color(0xffadb5bd),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),
           )),
           const SliverToBoxAdapter(
               child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-            child: Text(
+            padding: EdgeInsets.symmetric(horizontal: 35, vertical: 5),
+            child: TextQuicksand(
               'Chọn kích cỡ',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.w600,
-              ),
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
             ),
           )),
           SliverToBoxAdapter(
@@ -320,27 +444,27 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     label: 'Nhỏ',
                     icon: Icons.local_cafe,
                     iconSize: 24.0,
-                    isSelected: selectedSize == 0,
-                    onTap: () => setState(() {
-                      selectedSize = 0;
-                    }),
-                  ),
-                  SizeOption(
-                    label: 'Vừa',
-                    icon: Icons.local_cafe,
-                    iconSize: 34.0,
                     isSelected: selectedSize == 1,
                     onTap: () => setState(() {
                       selectedSize = 1;
                     }),
                   ),
                   SizeOption(
-                    label: 'Lớn',
+                    label: 'Vừa',
                     icon: Icons.local_cafe,
-                    iconSize: 44.0,
+                    iconSize: 34.0,
                     isSelected: selectedSize == 2,
                     onTap: () => setState(() {
                       selectedSize = 2;
+                    }),
+                  ),
+                  SizeOption(
+                    label: 'Lớn',
+                    icon: Icons.local_cafe,
+                    iconSize: 44.0,
+                    isSelected: selectedSize == 3,
+                    onTap: () => setState(() {
+                      selectedSize = 3;
                     }),
                   ),
                 ],
@@ -349,61 +473,92 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           const SliverToBoxAdapter(
               child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-            child: Text(
+            padding: EdgeInsets.symmetric(horizontal: 35, vertical: 5),
+            child: TextQuicksand(
               'Đường',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.w600,
-              ),
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
             ),
           )),
           SliverToBoxAdapter(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: RadioListTile<int>(
-                    title: const Text('30%'),
-                    value: 1,
-                    groupValue: productsugarselected,
-                    onChanged: (int? value) {
-                      setState(() {
-                        productsugarselected = value!;
-                      });
-                    },
-                    activeColor: const Color(0xFFFF725E),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 62),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    children: [
+                      Radio(
+                          activeColor: const Color(0xFFFF725E),
+                          value: 1,
+                          groupValue: productsugarselected,
+                          onChanged: (int? value) {
+                            setState(() {
+                              productsugarselected = value!;
+                            });
+                          }),
+                      const TextQuicksand(
+                        '30%',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ],
                   ),
-                ),
-                Expanded(
-                  child: RadioListTile<int>(
-                    title: const Text('50%'),
-                    value: 2,
-                    groupValue: productsugarselected,
-                    onChanged: (int? value) {
-                      setState(() {
-                        productsugarselected = value!;
-                      });
-                    },
-                    activeColor: const Color(0xFFFF725E),
+                  const SizedBox(
+                      height: 25,
+                      width: 10,
+                      child: VerticalDivider(
+                        color: Color.fromARGB(75, 0, 0, 0),
+                        width: 40,
+                        thickness: 2,
+                      )),
+                  Row(
+                    children: [
+                      Radio(
+                          activeColor: const Color(0xFFFF725E),
+                          value: 2,
+                          groupValue: productsugarselected,
+                          onChanged: (int? value) {
+                            setState(() {
+                              productsugarselected = value!;
+                            });
+                          }),
+                      const TextQuicksand(
+                        '50%',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ],
                   ),
-                ),
-                Expanded(
-                  child: RadioListTile<int>(
-                    title: const Text('100%'),
-                    value: 3,
-                    groupValue: productsugarselected,
-                    onChanged: (int? value) {
-                      setState(() {
-                        productsugarselected = value!;
-                      });
-                    },
-                    activeColor: const Color(0xFFFF725E),
+                  const SizedBox(
+                      height: 25,
+                      width: 10,
+                      child: VerticalDivider(
+                        color: Color.fromARGB(75, 0, 0, 0),
+                        width: 40,
+                        thickness: 2,
+                      )),
+                  Row(
+                    children: [
+                      Radio(
+                          activeColor: const Color(0xFFFF725E),
+                          value: 3,
+                          groupValue: productsugarselected,
+                          onChanged: (int? value) {
+                            setState(() {
+                              productsugarselected = value!;
+                            });
+                          }),
+                      const TextQuicksand(
+                        '100%',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           const SliverToBoxAdapter(
@@ -420,49 +575,71 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
           )),
           SliverToBoxAdapter(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: RadioListTile<int>(
-                    title: const Text('30%'),
-                    value: 1,
-                    groupValue: producticeselected,
-                    onChanged: (int? value) {
-                      setState(() {
-                        producticeselected = value!;
-                      });
-                    },
-                    activeColor: const Color(0xFFFF725E),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 65),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    children: [
+                      Radio(
+                          activeColor: const Color(0xFFFF725E),
+                          value: 1,
+                          groupValue: producticeselected,
+                          onChanged: (value) {
+                            setState(() {
+                              producticeselected = value!;
+                            });
+                          }),
+                      const Text('30%'),
+                    ],
                   ),
-                ),
-                Expanded(
-                  child: RadioListTile<int>(
-                    title: const Text('50%'),
-                    value: 2,
-                    groupValue: producticeselected,
-                    onChanged: (int? value) {
-                      setState(() {
-                        producticeselected = value!;
-                      });
-                    },
-                    activeColor: const Color(0xFFFF725E),
+                  const SizedBox(
+                      height: 25,
+                      width: 10,
+                      child: VerticalDivider(
+                        color: Color.fromARGB(75, 0, 0, 0),
+                        width: 40,
+                        thickness: 2,
+                      )),
+                  Row(
+                    children: [
+                      Radio(
+                          activeColor: const Color(0xFFFF725E),
+                          value: 2,
+                          groupValue: producticeselected,
+                          onChanged: (value) {
+                            setState(() {
+                              producticeselected = value!;
+                            });
+                          }),
+                      const Text('50%'),
+                    ],
                   ),
-                ),
-                Expanded(
-                  child: RadioListTile<int>(
-                    title: const Text('100%'),
-                    value: 3,
-                    groupValue: producticeselected,
-                    onChanged: (int? value) {
-                      setState(() {
-                        producticeselected = value!;
-                      });
-                    },
-                    activeColor: const Color(0xFFFF725E),
+                  const SizedBox(
+                      height: 25,
+                      width: 10,
+                      child: VerticalDivider(
+                        color: Color.fromARGB(75, 0, 0, 0),
+                        width: 40,
+                        thickness: 2,
+                      )),
+                  Row(
+                    children: [
+                      Radio(
+                          activeColor: const Color(0xFFFF725E),
+                          value: 3,
+                          groupValue: producticeselected,
+                          onChanged: (value) {
+                            setState(() {
+                              producticeselected = value!;
+                            });
+                          }),
+                      const Text('100%'),
+                    ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

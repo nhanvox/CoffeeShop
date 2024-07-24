@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:coffeeshop/config/config.dart';
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
@@ -85,7 +87,6 @@ class _CardOrderProductState extends State<CardOrderProduct> {
       child: Container(
         padding: const EdgeInsets.all(5),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
               decoration: BoxDecoration(
@@ -106,8 +107,8 @@ class _CardOrderProductState extends State<CardOrderProduct> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: 70,
-                    height: 70,
+                    width: 150,
+                    height: 150,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: Image.network(
@@ -135,10 +136,10 @@ class _CardOrderProductState extends State<CardOrderProduct> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
-                              style: const TextStyle(
+                              style: GoogleFonts.getFont(
+                                'Quicksand',
                                 color: Colors.black,
                                 fontSize: 18,
-                                fontFamily: 'Quicksand',
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -148,7 +149,8 @@ class _CardOrderProductState extends State<CardOrderProduct> {
                               itemBuilder: (context) => [
                                 PopupMenuItem(
                                   value: 'details',
-                                  child: const Text('Chi tiết đơn hàng'),
+                                  child:
+                                      const TextQuicksand('Chi tiết đơn hàng'),
                                   onTap: () async {
                                     Navigator.pop(context);
                                     final result = await Navigator.push(
@@ -165,7 +167,7 @@ class _CardOrderProductState extends State<CardOrderProduct> {
                                 ),
                                 PopupMenuItem(
                                   value: 'delete',
-                                  child: const Text('Xóa sản phẩm'),
+                                  child: const TextQuicksand('Xóa sản phẩm'),
                                   onTap: () {
                                     _deleteCart(widget.cart['_id']);
                                   },
@@ -174,48 +176,36 @@ class _CardOrderProductState extends State<CardOrderProduct> {
                             ),
                           ],
                         ),
-                        Text(
+                        TextQuicksand(
                           'Số lượng: ${widget.cart['quantity']}',
                           textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w400,
-                          ),
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
                         ),
-                        Text(
+                        TextQuicksand(
                           'Size: ${widget.cart['size']}',
                           textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w400,
-                          ),
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
                         ),
-                        Text(
+                        TextQuicksand(
                           'Đường: ${widget.cart['sugar']}',
                           textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w400,
-                          ),
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            TextQuicksand(
                               'Đá: ${widget.cart['ice']}',
                               textAlign: TextAlign.left,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontFamily: 'Quicksand',
-                                fontWeight: FontWeight.w400,
-                              ),
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
                             ),
                             Padding(
                               padding: const EdgeInsets.only(right: 20),
@@ -224,7 +214,7 @@ class _CardOrderProductState extends State<CardOrderProduct> {
                                 textAlign: TextAlign.left,
                                 style: const TextStyle(
                                   color: Colors.black,
-                                  fontSize: 16,
+                                  fontSize: 18,
                                   fontFamily: 'Quicksand',
                                   fontWeight: FontWeight.w600,
                                 ),
