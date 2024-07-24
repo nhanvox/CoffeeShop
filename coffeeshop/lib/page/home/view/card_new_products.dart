@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../product/view/productdetailpage.dart';
@@ -68,11 +69,11 @@ class CardNewProducts extends StatelessWidget {
                       maxLines: 1, // Chỉ hiển thị một dòng
                       overflow:
                           TextOverflow.ellipsis, // Thêm dấu ba chấm nếu quá dài
-                      style: const TextStyle(
+                      style: GoogleFonts.getFont(
+                        'Quicksand',
                         color: Colors.black,
-                        fontSize: 15,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 0.60,
                       ),
                     ),
@@ -83,9 +84,9 @@ class CardNewProducts extends StatelessWidget {
                       formatCurrency.format(product['price']),
                       style: const TextStyle(
                         color: Colors.black,
-                        fontSize: 13,
+                        fontSize: 16,
                         fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w500,
                         letterSpacing: 0.52,
                       ),
                     ),
@@ -94,7 +95,7 @@ class CardNewProducts extends StatelessWidget {
                       child: Container(
                         width: 24,
                         height: 24,
-                        margin: const EdgeInsets.only(top: 10),
+                        margin: const EdgeInsets.only(),
                         clipBehavior: Clip.antiAlias,
                         decoration: const ShapeDecoration(
                           color: Color(0xFFFF725E),

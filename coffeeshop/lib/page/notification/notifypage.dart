@@ -1,3 +1,4 @@
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/notification/view/card_notify.dart';
 import 'package:flutter/material.dart';
 
@@ -84,15 +85,12 @@ class _NotifyPageState extends State<NotifyPage> {
               ),
             ),
             centerTitle: true,
-            title: const Text(
-              'Thông báo',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.w500,
-                height: 0,
-              ),
+            title: const TextQuicksand(
+              'THÔNG BÁO',
+              color: Colors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              height: 0,
             ),
             floating: true, // Giữ AppBar hiển thị khi cuộn
             pinned: true, // Giữ AppBar cố định
@@ -104,14 +102,11 @@ class _NotifyPageState extends State<NotifyPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (todayNotifications.isNotEmpty) ...[
-                    const Text(
+                    const TextQuicksand(
                       'Hôm nay',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 21,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w500,
-                      ),
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
                     ),
                     ListView.builder(
                       padding: EdgeInsets.zero,
@@ -126,15 +121,12 @@ class _NotifyPageState extends State<NotifyPage> {
                     const SizedBox(
                         height: 20), // Thêm khoảng cách giữa các phần
                   ],
-                  const Text(
+                  const TextQuicksand(
                     'Trong tuần',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 21,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w500,
-                    ),
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
                   ),
                   ListView.builder(
                     padding: EdgeInsets.zero,
