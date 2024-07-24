@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/product/cartpage.dart';
 import 'package:coffeeshop/page/product/view/sizeoption.dart';
@@ -40,11 +39,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   String getSizeText(int size) {
     switch (size) {
-      case 0:
-        return 'Nhỏ';
       case 1:
-        return 'Vừa';
+        return 'Nhỏ';
       case 2:
+        return 'Vừa';
+      case 3:
         return 'Lớn';
       default:
         return 'Unknown';
