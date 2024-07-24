@@ -20,7 +20,6 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
-
   bool _hasCart = false;
   Map<String, dynamic>? _cart;
 
@@ -36,13 +35,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   @override
   void initState() {
     super.initState();
-    _checkIfProductIsFavorite();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _checkCart();
+    checkCart();
   }
 
   String getSizeText(int size) {
@@ -175,8 +168,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       }
     } catch (error) {
       print('Error updating favorite status: $error');
+    }
+  }
 
-      Future<void> _checkCart() async {
+  Future<void> checkCart() async {
     String? userId = LoginStatus.instance.userID;
 
     if (userId == null) return;
@@ -199,11 +194,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       }
     } catch (e) {
       print('Error checking profile: $e');
-
     }
   }
 
-  Future<void> _addToCart() async {
+  Future<void> addToCart() async {
     String? userID = LoginStatus.instance.userID;
     if (userID == null) {
       print('User is not logged in');
@@ -242,7 +236,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
   }
 
-  Future<void> _fetchToCart() async {
+  Future<void> fetchToCart() async {
     String? userID = LoginStatus.instance.userID;
     if (userID == null) {
       print('User is not logged in');
@@ -777,9 +771,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 child: InkWell(
                   onTap: () async {
                     if (_hasCart) {
-                      await _fetchToCart();
+                      await fetchToCart();
                     } else {
-                      await _addToCart();
+                      await addToCart();
                     }
                     Navigator.push(
                       context,
