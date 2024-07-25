@@ -162,7 +162,7 @@ class _AccountPageState extends State<AccountPage> {
                               shape: BoxShape.circle,
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: user != null && image != ''
+                                image: profile != null && image != ''
                                     ? NetworkImage(image!)
                                     : const AssetImage(
                                             'assets/images/avatar_default.png')
