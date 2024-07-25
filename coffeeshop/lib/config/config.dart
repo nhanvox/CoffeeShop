@@ -1,9 +1,12 @@
-const url = 'http://192.168.1.76:3000/';
+
+const url = 'http://192.168.1.123:3000/';
+
 //Authencation
 const registration = "${url}register";
 const login = '${url}login';
 const getUserNameById = '${url}getusernamebyid/';
 const getUserInfoById = '${url}getuserinfobyid/';
+const changePass = '${url}changepass/';
 //Products
 const getAllProducts = '${url}products';
 const getAllProductsBestSeller = '${url}productsbestseller';

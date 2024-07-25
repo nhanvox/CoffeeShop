@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:coffeeshop/page/home/view/drawer_tile.dart';
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +28,40 @@ class _MainPageState extends State<MainPage> {
   String selectedCategoryId = 'all';
   String? userName;
   Map<String, dynamic>? user;
+  String? name;
+  String? image;
+  Map<String, dynamic>? profile;
   @override
   void initState() {
     super.initState();
     _loadUserInfo();
+    _getProfile();
+  }
+
+  void _getProfile() async {
+    if (LoginStatus.instance.loggedIn) {
+      final userId = LoginStatus.instance.userID;
+      if (userId != null) {
+        final url = '$getProfileByUser$userId';
+        final response = await http.get(
+          Uri.parse(url),
+          headers: {"Content-Type": "application/json"},
+        );
+
+        if (response.statusCode == 200) {
+          final jsonResponse = jsonDecode(response.body);
+          if (jsonResponse['success'] == true) {
+            setState(() {
+              profile = jsonResponse['profile'];
+              name = profile?['name'];
+              image = profile?['image'];
+            });
+          } else {
+            print('Failed to load user');
+          }
+        }
+      }
+    }
   }
 
   void _loadUserInfo() async {
@@ -134,8 +165,14 @@ class _MainPageState extends State<MainPage> {
                         shape: BoxShape.circle,
                         image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: user != null && user!['image'] != null
-                              ? NetworkImage(user!['image'])
+                          image: profile != null && image != ''
+                              ? (image!.startsWith('http')
+                                      ? NetworkImage(image!)
+                                      : FileImage(File(image!))
+                                          as ImageProvider) ??
+                                  const AssetImage(
+                                          'assets/images/avatar_default.png')
+                                      as ImageProvider
                               : const AssetImage(
                                       'assets/images/avatar_default.png')
                                   as ImageProvider,
@@ -158,7 +195,7 @@ class _MainPageState extends State<MainPage> {
                         ),
                         Text(
                           LoginStatus.instance.loggedIn
-                              ? userName ?? 'Người dùng'
+                              ? name ?? 'Người dùng'
                               : 'Đăng nhập/ Đăng ký',
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,

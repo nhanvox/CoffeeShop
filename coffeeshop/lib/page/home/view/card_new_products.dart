@@ -1,25 +1,186 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
+import '../../../config/config.dart';
+import '../../../config/login_status.dart';
+import '../../product/cartpage.dart';
 import '../../product/view/productdetailpage.dart';
 
-class CardNewProducts extends StatelessWidget {
+class CardNewProducts extends StatefulWidget {
   final Map product;
   const CardNewProducts({super.key, required this.product});
 
   @override
+  State<CardNewProducts> createState() => _CardNewProductsState();
+}
+
+class _CardNewProductsState extends State<CardNewProducts> {
+  bool _hasCart = false;
+  @override
+  void initState() {
+    super.initState();
+    checkCart();
+  }
+
+  Future<void> checkCart() async {
+    String? userId = LoginStatus.instance.userID;
+
+    try {
+      Uri getCartUrl = Uri.parse(getCartsByUser + userId!);
+      var response = await http.get(getCartUrl);
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['success'] == true) {
+          var cart = jsonResponse['carts'];
+          setState(() {
+            _hasCart = cart != null;
+          });
+        }
+      } else {
+        print('Failed to get profile');
+      }
+    } catch (e) {
+      print('Error checking profile: $e');
+    }
+  }
+
+  Future<void> addToCart() async {
+    String? userID = LoginStatus.instance.userID;
+
+    final cartData = {
+      'productid': widget.product['_id'],
+      'userid': userID,
+      'size': 'Lớn',
+      'total': widget.product['price'],
+      'quantity': 1,
+      'sugar': '100%',
+      'ice': '100%',
+    };
+
+    try {
+      Uri addCartUrl = Uri.parse(addCarts);
+      var addCartResponse = await http.post(addCartUrl,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(cartData));
+
+      if (addCartResponse.statusCode == 200) {
+        var addCartJsonResponse = jsonDecode(addCartResponse.body);
+        if (addCartJsonResponse['success'] == true) {
+          print('Product added to cart successfully.');
+        } else {
+          print('Failed to add product to cart.');
+        }
+      } else {
+        print(
+            'Failed to add product to cart with status code: ${addCartResponse.statusCode}');
+      }
+    } catch (e) {
+      print('An error occurred while adding/updating product in cart: $e');
+    }
+  }
+
+  Future<void> fetchToCart() async {
+    String? userID = LoginStatus.instance.userID;
+
+    final cartData = {
+      'productid': widget.product['_id'],
+      'userid': userID,
+      'size': 'Lớn',
+      'total': widget.product['price'],
+      'quantity': 1,
+      'sugar': '100%',
+      'ice': '100%',
+    };
+
+    try {
+      // Fetch the user's current cart
+      Uri fetchCartUrl = Uri.parse(getCartsByUser + userID!);
+      var fetchCartResponse = await http
+          .get(fetchCartUrl, headers: {"Content-Type": "application/json"});
+
+      if (fetchCartResponse.statusCode == 200) {
+        var fetchCartJsonResponse = jsonDecode(fetchCartResponse.body);
+        if (fetchCartJsonResponse['success'] == true) {
+          List carts = fetchCartJsonResponse['carts'] ?? [];
+
+          // Find if there is an existing cart item
+          var existingCartItem = carts.firstWhere(
+              (cartItem) =>
+                  cartItem['productid']['_id'] == widget.product['_id'] &&
+                  cartItem['size'] == cartData['size'] &&
+                  cartItem['sugar'] == cartData['sugar'] &&
+                  cartItem['ice'] == cartData['ice'],
+              orElse: () => null);
+
+          if (existingCartItem != null) {
+            // Update the existing cart item quantity
+            Uri updateCartUrl = Uri.parse(updateCart + existingCartItem['_id']);
+            var updateCartData = {
+              'quantity': existingCartItem['quantity'] + 1,
+              'total':
+                  widget.product['price'] * (existingCartItem['quantity'] + 1),
+            };
+            var updateCartResponse = await http.put(updateCartUrl,
+                headers: {"Content-Type": "application/json"},
+                body: jsonEncode(updateCartData));
+
+            if (updateCartResponse.statusCode == 200) {
+              var updateCartJsonResponse = jsonDecode(updateCartResponse.body);
+              if (updateCartJsonResponse['success'] == true) {
+                print('Product updated in cart successfully.');
+              } else {
+                print('Failed to update product in cart.');
+              }
+            } else {
+              print(
+                  'Failed to update product in cart with status code: ${updateCartResponse.statusCode}');
+            }
+          } else {
+            // Add the product to the cart as a new item
+            Uri addCartUrl = Uri.parse(addCarts);
+            var addCartResponse = await http.post(addCartUrl,
+                headers: {"Content-Type": "application/json"},
+                body: jsonEncode(cartData));
+
+            if (addCartResponse.statusCode == 200) {
+              var addCartJsonResponse = jsonDecode(addCartResponse.body);
+              if (addCartJsonResponse['success'] == true) {
+                print('Product added to cart successfully.');
+              } else {
+                print('Failed to add product to cart.');
+              }
+            } else {
+              print(
+                  'Failed to add product to cart with status code: ${addCartResponse.statusCode}');
+            }
+          }
+        }
+      } else {
+        print(
+            'Failed to fetch cart with status code: ${fetchCartResponse.statusCode}');
+      }
+    } catch (e) {
+      print('An error occurred while adding/updating product in cart: $e');
+    }
+  }
+
+  final formatCurrency =
+      NumberFormat.simpleCurrency(locale: 'vi_VN', name: 'VND');
+  @override
   Widget build(BuildContext context) {
-    final formatCurrency =
-        NumberFormat.simpleCurrency(locale: 'vi_VN', name: 'VND');
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           CupertinoPageRoute(
             builder: (context) => ProductDetailPage(
-              product: product,
+              product: widget.product,
             ),
           ),
         );
@@ -49,7 +210,7 @@ class CardNewProducts extends StatelessWidget {
               height: double.infinity,
               width: 110,
               child: Image.network(
-                product['image'],
+                widget.product['image'],
                 fit: BoxFit.fill,
               ),
             ),
@@ -65,7 +226,7 @@ class CardNewProducts extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      product['name'],
+                      widget.product['name'],
                       maxLines: 1, // Chỉ hiển thị một dòng
                       overflow:
                           TextOverflow.ellipsis, // Thêm dấu ba chấm nếu quá dài
@@ -81,7 +242,7 @@ class CardNewProducts extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      formatCurrency.format(product['price']),
+                      formatCurrency.format(widget.product['price']),
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -93,24 +254,36 @@ class CardNewProducts extends StatelessWidget {
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Container(
-                        width: 24,
-                        height: 24,
-                        margin: const EdgeInsets.only(),
-                        clipBehavior: Clip.antiAlias,
-                        decoration: const ShapeDecoration(
-                          color: Color(0xFFFF725E),
-                          shape: CircleBorder(),
-                        ),
-                        child: IconButton(
+                          width: 24,
+                          height: 24,
+                          margin: const EdgeInsets.only(),
+                          clipBehavior: Clip.antiAlias,
+                          decoration: const ShapeDecoration(
+                            color: Color(0xFFFF725E),
+                            shape: CircleBorder(),
+                          ),
+                          child: IconButton(
                             padding: EdgeInsets.zero,
                             icon: const Icon(
                               Icons.add,
                               size: 20,
                               color: Colors.white,
                             ),
-                            onPressed: () {}),
-                      ),
-                    ),
+                            onPressed: () async {
+                              if (_hasCart) {
+                                await fetchToCart();
+                              } else {
+                                await addToCart();
+                              }
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CartPage(),
+                                ),
+                              );
+                            },
+                          )),
+                    )
                   ],
                 ),
               ),
