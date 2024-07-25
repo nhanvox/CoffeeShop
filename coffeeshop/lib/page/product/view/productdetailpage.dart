@@ -34,7 +34,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void initState() {
     super.initState();
     checkCart();
-    checkIfFavorite();
+    _checkIfProductIsFavorite();
   }
 
   String getSizeText(int size) {
@@ -76,36 +76,42 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
   }
 
-  Future<void> checkIfFavorite() async {
+  Future<void> _checkIfProductIsFavorite() async {
     String? userID = LoginStatus.instance.userID;
     if (userID == null) {
       print('User is not logged in');
       return;
     }
-
+    //Lấy toàn bộ fav product theo userID
     Uri url = Uri.parse(getFavProductsByUser + userID);
     try {
-      var response =
-          await http.get(url, headers: {"Content-Type": "application/json"});
+      var response = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
+      //check nếu res trả về toàn bộ sản phẩm có
       if (response.statusCode == 200) {
+        //trả về kiểu map
         var jsonResponse = jsonDecode(response.body);
+        print(jsonResponse);
         if (jsonResponse['success'] == true &&
             jsonResponse.containsKey('favproduct')) {
-          for (var favProduct in jsonResponse['favproduct']) {
-            if (favProduct['productid'] == widget.product['_id']) {
+          //lặp kiểm tra từng id sản phẩm trùng với id sản phẩm đang thể hiện nếu có thì đổi trạng thái nút sang true
+          for (var favproduct in jsonResponse['favproduct']) {
+            if (favproduct['productid']['_id'] == widget.product['_id']) {
               setState(() {
                 productisfavorite = true;
-                favProductId = favProduct['_id'];
+                favProductId = favproduct['_id'];
               });
               break;
             }
           }
         }
       } else {
-        print('Failed to load favorite products');
+        throw 'Failed to load fav products: ${response.statusCode}';
       }
     } catch (e) {
-      print('Error fetching favorite products: $e');
+      print('An error occurred while checking fav product status: $e');
     }
   }
 
@@ -116,8 +122,35 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       print('User is not logged in');
       return;
     }
-
-    Uri url;
+    Uri url = Uri.parse(getFavProductsByUser + userID);
+    try {
+      var response = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
+      //check nếu res trả về toàn bộ sản phẩm có
+      if (response.statusCode == 200) {
+        //trả về kiểu map
+        var jsonResponse = jsonDecode(response.body);
+        print(jsonResponse);
+        if (jsonResponse['success'] == true &&
+            jsonResponse.containsKey('favproduct')) {
+          //lặp kiểm tra từng id sản phẩm trùng với id sản phẩm đang thể hiện nếu có thì đổi trạng thái nút sang true
+          for (var favproduct in jsonResponse['favproduct']) {
+            if (favproduct['productid']['_id'] == widget.product['_id']) {
+              setState(() {
+                favProductId = favproduct['_id'];
+              });
+              break;
+            }
+          }
+        }
+      } else {
+        throw 'Failed to load fav products: ${response.statusCode}';
+      }
+    } catch (e) {
+      print('An error occurred while checking fav product status: $e');
+    }
     if (newFavoriteStatus) {
       url = Uri.parse(addFavProduct);
     } else {
@@ -136,7 +169,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
             'productid': widget.product['_id'],
-            'userid': userID,
+            'userId': userID,
           }),
         );
       } else {
@@ -148,6 +181,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
         setState(() {
+          //setState() được gọi, Flutter sẽ gọi lại phương thức build() của widget hiện tạt và cập nhật giao diện người dùng dựa trên trạng thái mới của productisfavorite
           productisfavorite = newFavoriteStatus;
           if (newFavoriteStatus) {
             favProductId = jsonResponse['_id']; // Assuming API returns the ID
