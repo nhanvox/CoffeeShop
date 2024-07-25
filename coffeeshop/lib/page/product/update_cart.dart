@@ -16,7 +16,7 @@ class UpdateCartPage extends StatefulWidget {
 }
 
 class _UpdateCartPage extends State<UpdateCartPage> {
-  int selectedSize = 1;
+  int selectedSize = 2;
   int quantity = 1;
   int productsugarselected = 2;
   int producticeselected = 2;
@@ -35,13 +35,13 @@ class _UpdateCartPage extends State<UpdateCartPage> {
   int getSizeIndex(String size) {
     switch (size) {
       case 'Nhỏ':
-        return 0;
+        return 1;
       case 'Vừa':
-        return 1;
-      case 'Lớn':
         return 2;
+      case 'Lớn':
+        return 3;
       default:
-        return 1;
+        return 2;
     }
   }
 
@@ -82,7 +82,7 @@ class _UpdateCartPage extends State<UpdateCartPage> {
       'productid': widget.cart['productid'],
       'userid': userID,
       'size': getSizeText(selectedSize),
-      'total': widget.cart['total'],
+      'total': widget.cart['productid']['price'] * quantity,
       'quantity': quantity,
       'sugar': getSugarText(productsugarselected),
       'ice': getIceText(producticeselected),
@@ -113,11 +113,11 @@ class _UpdateCartPage extends State<UpdateCartPage> {
 
   String getSizeText(int size) {
     switch (size) {
-      case 0:
-        return 'Nhỏ';
       case 1:
-        return 'Vừa';
+        return 'Nhỏ';
       case 2:
+        return 'Vừa';
+      case 3:
         return 'Lớn';
       default:
         return 'Unknown';
@@ -312,27 +312,27 @@ class _UpdateCartPage extends State<UpdateCartPage> {
                     label: 'Nhỏ',
                     icon: Icons.local_cafe,
                     iconSize: 24.0,
-                    isSelected: selectedSize == 0,
-                    onTap: () => setState(() {
-                      selectedSize = 0;
-                    }),
-                  ),
-                  SizeOption(
-                    label: 'Vừa',
-                    icon: Icons.local_cafe,
-                    iconSize: 34.0,
                     isSelected: selectedSize == 1,
                     onTap: () => setState(() {
                       selectedSize = 1;
                     }),
                   ),
                   SizeOption(
-                    label: 'Lớn',
+                    label: 'Vừa',
                     icon: Icons.local_cafe,
-                    iconSize: 44.0,
+                    iconSize: 34.0,
                     isSelected: selectedSize == 2,
                     onTap: () => setState(() {
                       selectedSize = 2;
+                    }),
+                  ),
+                  SizeOption(
+                    label: 'Lớn',
+                    icon: Icons.local_cafe,
+                    iconSize: 44.0,
+                    isSelected: selectedSize == 3,
+                    onTap: () => setState(() {
+                      selectedSize = 3;
                     }),
                   ),
                 ],
