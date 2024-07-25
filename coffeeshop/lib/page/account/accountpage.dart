@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:coffeeshop/config/config.dart';
 import 'package:coffeeshop/config/login_status.dart';
 import 'package:coffeeshop/page/account/updateaccountpage.dart';
@@ -161,8 +162,14 @@ class _AccountPageState extends State<AccountPage> {
                               shape: BoxShape.circle,
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: user != null && image != ''
-                                    ? NetworkImage(image!)
+                                image: profile != null && image != ''
+                                    ? (image!.startsWith('http')
+                                            ? NetworkImage(image!)
+                                            : FileImage(File(image!))
+                                                as ImageProvider) ??
+                                        const AssetImage(
+                                                'assets/images/avatar_default.png')
+                                            as ImageProvider
                                     : const AssetImage(
                                             'assets/images/avatar_default.png')
                                         as ImageProvider,

@@ -157,7 +157,7 @@ class _CardOrderProductState extends State<CardOrderProduct> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            UpdateCartPage(cart: widget.cart),
+                                            UpdateCartPage(cart: widget.cart,),
                                       ),
                                     );
                                     if (result != null) {

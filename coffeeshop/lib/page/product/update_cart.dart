@@ -82,7 +82,7 @@ class _UpdateCartPage extends State<UpdateCartPage> {
       'productid': widget.cart['productid'],
       'userid': userID,
       'size': getSizeText(selectedSize),
-      'total': widget.cart['total'],
+      'total': widget.cart['productid']['price'] * quantity,
       'quantity': quantity,
       'sugar': getSugarText(productsugarselected),
       'ice': getIceText(producticeselected),

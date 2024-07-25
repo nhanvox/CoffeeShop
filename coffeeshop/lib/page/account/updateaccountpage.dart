@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -6,6 +7,8 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../config/config.dart';
 import '../../config/login_status.dart';
+import '../login/view/components/quicksand.dart';
+import 'changepassword.dart';
 import '../login/view/loginscreen.dart';
 
 class UpdateAccountPage extends StatefulWidget {
@@ -356,6 +359,26 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                     _buildTextField('Số điện thoại', _phoneController),
                     _buildTextField('Địa chỉ', _addressController),
                   ],
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ChangePassPage()),
+                  );
+                },
+                child: const Text(
+                  'Đổi mật khẩu',
+                  style: TextStyle(
+                    color: Color(0xFF9290FF),
+                    fontSize: 20,
+                    fontFamily: 'Quicksand',
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
