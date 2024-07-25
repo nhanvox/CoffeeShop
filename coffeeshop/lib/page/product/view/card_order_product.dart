@@ -8,6 +8,15 @@ import 'package:http/http.dart' as http;
 
 import '../update_cart.dart';
 
+String shortenProductName(String name, int wordLimit) {
+  List<String> words = name.split(' ');
+  if (words.length <= wordLimit) {
+    return name;
+  } else {
+    return words.sublist(0, wordLimit).join(' ') + '...';
+  }
+}
+
 class CardOrderProduct extends StatefulWidget {
   final Map cart;
   final Function onUpdate; // Callback function to notify CartPage
@@ -132,7 +141,8 @@ class _CardOrderProductState extends State<CardOrderProduct> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              widget.cart['productid']['name'],
+                              shortenProductName(
+                                  widget.cart['productid']['name'], 4),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
