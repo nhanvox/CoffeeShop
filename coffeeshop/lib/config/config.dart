@@ -4,6 +4,7 @@ const registration = "${url}register";
 const login = '${url}login';
 const getUserNameById = '${url}getusernamebyid/';
 const getUserInfoById = '${url}getuserinfobyid/';
+const changePass = '${url}changepass/';
 //Products
 const getAllProducts = '${url}products';
 const getAllProductsBestSeller = '${url}productsbestseller';

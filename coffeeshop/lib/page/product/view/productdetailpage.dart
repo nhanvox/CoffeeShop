@@ -46,7 +46,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       case 3:
         return 'Lớn';
       default:
-        return 'Unknown';
+        return '3';
     }
   }
 
@@ -59,7 +59,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       case 3:
         return '100%';
       default:
-        return 'Unknown';
+        return '3';
     }
   }
 
@@ -72,7 +72,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       case 3:
         return '100%';
       default:
-        return 'Unknown';
+        return '3';
     }
   }
 
@@ -229,11 +229,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       return;
     }
 
+    int adjustedPrice = widget.product['price'];
+    if (selectedSize == 1) {
+      adjustedPrice -= 10000;
+    } else if (selectedSize == 3) {
+      adjustedPrice += 10000;
+    }
+
     final cartData = {
       'productid': widget.product['_id'],
       'userid': userID,
       'size': getSizeText(selectedSize),
-      'total': widget.product['price'] * quantity,
+      'total': adjustedPrice * quantity,
       'quantity': quantity,
       'sugar': getSugarText(productsugarselected),
       'ice': getIceText(producticeselected),
@@ -268,11 +275,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       return;
     }
 
+    int adjustedPrice = widget.product['price'];
+    if (selectedSize == 1) {
+      adjustedPrice -= 10000;
+    } else if (selectedSize == 3) {
+      adjustedPrice += 10000;
+    }
+
     final cartData = {
       'productid': widget.product['_id'],
       'userid': userID,
       'size': getSizeText(selectedSize),
-      'total': widget.product['price'] * quantity,
+      'total': adjustedPrice * quantity,
       'quantity': quantity,
       'sugar': getSugarText(productsugarselected),
       'ice': getIceText(producticeselected),
@@ -303,8 +317,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Uri updateCartUrl = Uri.parse(updateCart + existingCartItem['_id']);
             var updateCartData = {
               'quantity': existingCartItem['quantity'] + quantity,
-              'total': widget.product['price'] *
-                  (existingCartItem['quantity'] + quantity),
+              'total':
+                  adjustedPrice * (existingCartItem['quantity'] + quantity),
             };
             var updateCartResponse = await http.put(updateCartUrl,
                 headers: {"Content-Type": "application/json"},
@@ -354,6 +368,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget build(BuildContext context) {
     final formatCurrency =
         NumberFormat.simpleCurrency(locale: 'vi_VN', name: 'VND');
+
+    int adjustedPrice = widget.product['price'];
+    if (selectedSize == 1) {
+      adjustedPrice -= 10000;
+    } else if (selectedSize == 3) {
+      adjustedPrice += 10000;
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFFEF2),
@@ -826,8 +847,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     },
                     child: Center(
                       child: Text(
-                        formatCurrency
-                            .format(widget.product['price'] * quantity),
+                        formatCurrency.format(adjustedPrice * quantity),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: Colors.white,
