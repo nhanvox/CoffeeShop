@@ -1,9 +1,5 @@
-
-import 'package:coffeeshop/page/notification/view/card_notify.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
-import '../../model/notify.dart';
 
 class TutorialPage extends StatefulWidget {
   const TutorialPage({super.key});
@@ -38,7 +34,6 @@ class _TutorialPageState extends State<TutorialPage> {
     super.dispose();
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,27 +47,24 @@ class _TutorialPageState extends State<TutorialPage> {
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: IconButton(
-                    icon: const Icon(
-                      Icons.more_vert,
-                      color: Colors.black,
-                      size: 33,
-                    ),
-                    onPressed: () {}),
+                  icon: const Icon(
+                    Icons.more_vert,
+                    color: Colors.black,
+                    size: 33,
+                  ),
+                  onPressed: () {},
+                ),
               ),
             ],
             leading: Padding(
               padding: const EdgeInsets.only(left: 20),
-              child: Builder(
-                builder: (context) {
-                  return IconButton(
-                    icon: const Icon(
-                      Icons.menu,
-                      size: 30,
-                    ),
-                    onPressed: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                  );
+              child: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                  size: 30,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
                 },
               ),
             ),
@@ -101,7 +93,6 @@ class _TutorialPageState extends State<TutorialPage> {
                       controller: _ytController,
                       showVideoProgressIndicator: true,
                     ),
-                
                   const SizedBox(height: 20),
                 ],
               ),

@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'package:coffeeshop/page/about/about_page.dart';
 import 'package:coffeeshop/page/home/view/drawer_tile.dart';
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
+import 'package:coffeeshop/page/support/support_page.dart';
+import 'package:coffeeshop/page/tutorial/tutorial.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -85,6 +89,7 @@ class _MainPageState extends State<MainPage> {
         return const NotifyPage();
       case 3:
         return const AccountPage();
+        
       default:
         return HomePage(
             changePage: (newIndex) {
@@ -239,34 +244,28 @@ class _MainPageState extends State<MainPage> {
               icon: Icons.favorite,
             ),
             DrawerTile(
-              isActive: currentPage == 4,
+              isActive: false,
               press: () {
-                setState(() {
-                  // currentPage = 4;
-                });
-                Navigator.pop(context);
-              },
+                Navigator.pop(context); // Close the drawer
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => const SupportPage(),
+                  ),
+                );              },
               title: 'Hỗ trợ',
               icon: Icons.support_agent,
             ),
             DrawerTile(
-              isActive: currentPage == 5,
+              isActive: false,
               press: () {
-                setState(() {
-                  // currentPage = 5;
-                });
-                Navigator.pop(context);
-              },
-              title: 'Chính sách bảo mật',
-              icon: Icons.security,
-            ),
-            DrawerTile(
-              isActive: currentPage == 6,
-              press: () {
-                setState(() {
-                  // currentPage = 6;
-                });
-                Navigator.pop(context);
+                Navigator.pop(context); // Close the drawer
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => const AboutPage(),
+                  ),
+                );
               },
               title: 'Về chúng tôi',
               icon: Icons.info,
