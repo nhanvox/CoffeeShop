@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:coffeeshop/config/config.dart';
 import 'package:coffeeshop/config/login_status.dart';
 import 'package:coffeeshop/page/account/updateaccountpage.dart';
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/login/view/loginscreen.dart';
 import 'package:coffeeshop/page/product/view/productfavouritepage.dart';
+import 'package:coffeeshop/page/tutorial/tutorial.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -163,7 +165,13 @@ class _AccountPageState extends State<AccountPage> {
                               image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: profile != null && image != ''
-                                    ? NetworkImage(image!)
+                                    ? (image!.startsWith('http')
+                                            ? NetworkImage(image!)
+                                            : FileImage(File(image!))
+                                                as ImageProvider) ??
+                                        const AssetImage(
+                                                'assets/images/avatar_default.png')
+                                            as ImageProvider
                                     : const AssetImage(
                                             'assets/images/avatar_default.png')
                                         as ImageProvider,
@@ -355,14 +363,21 @@ class _AccountPageState extends State<AccountPage> {
                         // Notifications
                         ListTile(
                           title: Text(
-                            'Thông báo',
+                            'Hướng dẫn sử dụng',
                             style: _textStyle(),
                           ),
                           leading: const Icon(
-                            Icons.notifications,
+                            Icons.menu_book,
                             size: 30,
                             color: Color(0xFFFF725E),
                           ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) =>
+                                        const TutorialPage()));
+                          },
                         ),
                         _buildDivider(),
                         // About

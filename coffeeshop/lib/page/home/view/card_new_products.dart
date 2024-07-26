@@ -57,7 +57,7 @@ class _CardNewProductsState extends State<CardNewProducts> {
       'productid': widget.product['_id'],
       'userid': userID,
       'size': 'Lớn',
-      'total': widget.product['price'],
+      'total': widget.product['price'] + 10000,
       'quantity': 1,
       'sugar': '100%',
       'ice': '100%',
@@ -92,7 +92,7 @@ class _CardNewProductsState extends State<CardNewProducts> {
       'productid': widget.product['_id'],
       'userid': userID,
       'size': 'Lớn',
-      'total': widget.product['price'],
+      'total': widget.product['price'] + 10000,
       'quantity': 1,
       'sugar': '100%',
       'ice': '100%',
@@ -123,8 +123,8 @@ class _CardNewProductsState extends State<CardNewProducts> {
             Uri updateCartUrl = Uri.parse(updateCart + existingCartItem['_id']);
             var updateCartData = {
               'quantity': existingCartItem['quantity'] + 1,
-              'total':
-                  widget.product['price'] * (existingCartItem['quantity'] + 1),
+              'total': (widget.product['price'] + 10000) *
+                  (existingCartItem['quantity'] + 1),
             };
             var updateCartResponse = await http.put(updateCartUrl,
                 headers: {"Content-Type": "application/json"},
