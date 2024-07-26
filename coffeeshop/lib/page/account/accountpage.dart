@@ -255,13 +255,17 @@ class _AccountPageState extends State<AccountPage> {
                             size: 30,
                             color: Color(0xFFFF725E),
                           ),
-                          onTap: () {
-                            Navigator.push(
+                          onTap: () async {
+                            final result = await Navigator.push(
                               context,
                               CupertinoPageRoute(
                                 builder: (context) => const UpdateAccountPage(),
                               ),
                             );
+                            if (result == true) {
+                              _getProfile();
+                              _loadUserInfo();
+                            }
                           },
                         ),
                         _buildDivider(),

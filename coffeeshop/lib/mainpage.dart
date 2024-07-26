@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
+import 'config/authservice.dart';
 import 'config/config.dart';
 import 'config/login_status.dart';
 import 'page/account/accountpage.dart';
@@ -95,6 +96,14 @@ class _MainPageState extends State<MainPage> {
         }
       }
     }
+  }
+
+  void _logout(BuildContext context) async {
+    await AuthService.logout();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const Loginscreen()),
+    );
   }
 
   void _changeCategory(String categoryId) {
@@ -310,7 +319,7 @@ class _MainPageState extends State<MainPage> {
             DrawerTile(
               isActive: false,
               press: () {
-                // Handle logout
+                _logout(context);
               },
               title: 'Đăng xuất',
               icon: Icons.logout,
