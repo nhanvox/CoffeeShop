@@ -1,8 +1,5 @@
-import 'package:coffeeshop/page/notification/view/card_notify.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
-import '../../model/notify.dart';
 
 class TutorialPage extends StatefulWidget {
   const TutorialPage({super.key});
