@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/search/view/item_keyword.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 import '../../config/config.dart';
@@ -132,7 +134,10 @@ class _SearchPageState extends State<SearchPage> {
                   fillColor: Colors.grey.shade200, // Màu nền của TextFormField
                   prefixIcon: const Icon(Icons.search, color: Colors.grey),
                   hintText: 'Tìm kiếm sản phẩm',
-                  hintStyle: const TextStyle(color: Colors.grey),
+                  hintStyle: GoogleFonts.getFont('Quicksand',
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20), // Bo tròn góc
                     borderSide: BorderSide.none, // Loại bỏ đường viền
@@ -146,17 +151,14 @@ class _SearchPageState extends State<SearchPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    TextQuicksand(
                       'Từ khoá gợi ý',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w600,
-                      ),
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
                     ),
                     Wrap(
-                      spacing: 10,
+                      spacing: 8,
                       children: [
                         ItemKeyword(itemname: 'Frosty'),
                         ItemKeyword(itemname: 'Trà'),
