@@ -36,71 +36,75 @@ class _TutorialPageState extends State<TutorialPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(color: Color(0xFFFFFEF2)),
-      child: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            backgroundColor: const Color(0xFFFFFEF2),
-            surfaceTintColor: const Color(0xFFFFFEF2),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 15),
-                child: IconButton(
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(color: Color(0xFFFFFEF2)),
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: const Color(0xFFFFFEF2),
+              surfaceTintColor: const Color(0xFFFFFEF2),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: IconButton(
                     icon: const Icon(
                       Icons.more_vert,
                       color: Colors.black,
                       size: 33,
                     ),
-                    onPressed: () {}),
-              ),
-            ],
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Builder(
-                builder: (context) {
-                  return IconButton(
-                    icon: const Icon(
-                      Icons.menu,
-                      size: 30,
-                    ),
-                    onPressed: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                  );
-                },
-              ),
-            ),
-            centerTitle: true,
-            title: const Text(
-              'Hướng dẫn sử dụng',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.w500,
-                height: 0,
-              ),
-            ),
-            floating: true, // Giữ AppBar hiển thị khi cuộn
-            pinned: true, // Giữ AppBar cố định
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  YoutubePlayer(
-                    controller: _ytController,
-                    showVideoProgressIndicator: true,
+                    onPressed: () {},
                   ),
-                  const SizedBox(height: 20),
-                ],
+                ),
+              ],
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Builder(
+                  builder: (context) {
+                    return IconButton(
+                      icon: const Icon(
+                        Icons.menu,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                    );
+                  },
+                ),
+              ),
+              centerTitle: true,
+              title: const Text(
+                'Hướng dẫn sử dụng',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontFamily: 'Quicksand',
+                  fontWeight: FontWeight.w500,
+                  height: 0,
+                ),
+              ),
+              floating: true, // Giữ AppBar hiển thị khi cuộn
+              pinned: true, // Giữ AppBar cố định
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    YoutubePlayer(
+                      controller: _ytController,
+                      showVideoProgressIndicator: true,
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

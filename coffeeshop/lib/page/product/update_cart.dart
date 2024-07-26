@@ -7,6 +7,7 @@ import 'package:coffeeshop/page/product/view/sizeoption.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:coffeeshop/config/config.dart';
+
 import 'package:coffeeshop/config/login_status.dart';
 
 class UpdateCartPage extends StatefulWidget {
@@ -18,10 +19,11 @@ class UpdateCartPage extends StatefulWidget {
 }
 
 class _UpdateCartPage extends State<UpdateCartPage> {
-  int selectedSize = 2;
+  int selectedSize = 3;
   int quantity = 1;
-  int productsugarselected = 2;
-  int producticeselected = 2;
+  int productsugarselected = 3;
+  int producticeselected = 3;
+  bool productisfavorite = false;
   bool isExpanded = false;
 
   @override
@@ -43,7 +45,7 @@ class _UpdateCartPage extends State<UpdateCartPage> {
       case 'Lớn':
         return 3;
       default:
-        return 2;
+        return 3;
     }
   }
 
@@ -56,7 +58,7 @@ class _UpdateCartPage extends State<UpdateCartPage> {
       case '100%':
         return 3;
       default:
-        return 2;
+        return 3;
     }
   }
 
@@ -69,7 +71,7 @@ class _UpdateCartPage extends State<UpdateCartPage> {
       case '100%':
         return 3;
       default:
-        return 2;
+        return 3;
     }
   }
 
@@ -80,11 +82,18 @@ class _UpdateCartPage extends State<UpdateCartPage> {
       return;
     }
 
+    int adjustedPrice = widget.cart['productid']['price'];
+    if (selectedSize == 1) {
+      adjustedPrice -= 10000;
+    } else if (selectedSize == 3) {
+      adjustedPrice += 10000;
+    }
+
     final cartData = {
       'productid': widget.cart['productid'],
       'userid': userID,
       'size': getSizeText(selectedSize),
-      'total': widget.cart['productid']['price'] * quantity,
+      'total': adjustedPrice * quantity,
       'quantity': quantity,
       'sugar': getSugarText(productsugarselected),
       'ice': getIceText(producticeselected),
@@ -122,7 +131,7 @@ class _UpdateCartPage extends State<UpdateCartPage> {
       case 3:
         return 'Lớn';
       default:
-        return 'Unknown';
+        return 'Lớn';
     }
   }
 
@@ -135,7 +144,7 @@ class _UpdateCartPage extends State<UpdateCartPage> {
       case 3:
         return '100%';
       default:
-        return 'Unknown';
+        return '100%';
     }
   }
 
@@ -148,7 +157,7 @@ class _UpdateCartPage extends State<UpdateCartPage> {
       case 3:
         return '100%';
       default:
-        return 'Unknown';
+        return '100%';
     }
   }
 
