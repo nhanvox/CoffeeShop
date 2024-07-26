@@ -125,10 +125,17 @@ class _ProductFavouritePageState extends State<ProductFavouritePage> {
                             CardFavProduct(favproduct: favproduct))
                         .toList()
                     : [
-                        const Text(
-                          'Có sản phẩm nào làm bạn yêu không?',
-                          style: TextStyle(fontSize: 18),
-                        )
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          child: Center(
+                            child: Image.asset(
+                              'assets/images/emptyfav.png',
+                              height: 350,
+                              fit: BoxFit
+                                  .contain, // Adjusts the image to fit within the specified height
+                            ),
+                          ),
+                        ),
                       ],
               ),
             ),
