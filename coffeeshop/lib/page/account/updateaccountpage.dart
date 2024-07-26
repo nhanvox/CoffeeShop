@@ -456,7 +456,7 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          Navigator.pop(context);
+                          Navigator.pop(context, true);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFFF725E),

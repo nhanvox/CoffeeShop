@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:coffeeshop/mainpage.dart';
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/payment/paymentpage.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,14 +20,16 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  bool _hasCart = false;
   List? cartsList;
+
   @override
   void initState() {
     super.initState();
     _getCartsByUser();
   }
 
-  void _getCartsByUser() async {
+  Future<void> _getCartsByUser() async {
     String? userID = LoginStatus.instance.userID;
     if (userID == null) {
       print('User is not logged in');
@@ -47,10 +50,12 @@ class _CartPageState extends State<CartPage> {
             jsonResponse.containsKey('carts')) {
           setState(() {
             cartsList = jsonResponse['carts'];
+            _hasCart = cartsList!.isNotEmpty;
           });
         } else {
           setState(() {
             cartsList = [];
+            _hasCart = false;
           });
           print('No products found for this user.');
         }
@@ -162,12 +167,16 @@ class _CartPageState extends State<CartPage> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const PaymentPage(),
-                  ),
-                );
+                if (_hasCart) {
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) => const PaymentPage(),
+                    ),
+                  );
+                } else {
+                  _showUpdateSuccessDialog(context);
+                }
               },
               child: Container(
                 width: double.infinity,
@@ -192,6 +201,93 @@ class _CartPageState extends State<CartPage> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showUpdateSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                width: 300,
+                height: 180,
+                margin: const EdgeInsets.only(top: 38),
+                padding: const EdgeInsets.only(right: 30, left: 30, top: 50),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Vui lòng thêm sản phẩm vào giỏ hàng!',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontFamily: 'Quicksand',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MainPage()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFF725E),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(13),
+                          ),
+                        ),
+                        child: const Text(
+                          'Tiếp tục',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontFamily: 'Quicksand',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 10,
+                right: 0,
+                left: 0,
+                child: Container(
+                  width: 90,
+                  height: 90,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      fit: BoxFit.contain,
+                      image: AssetImage('assets/images/check_mark.png'),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }
