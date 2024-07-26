@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -87,23 +88,39 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Nhập URL hình ảnh'),
-          content: TextField(
-            controller: _imageUrlController,
-            decoration: const InputDecoration(hintText: 'URL hình ảnh'),
+          title: const TextQuicksand(
+            'Nhập URL hình ảnh',
+            fontSize: 24,
+          ),
+          content: SizedBox(
+            width: 500,
+            child: TextField(
+              controller: _imageUrlController,
+              decoration: InputDecoration(
+                  hintText: 'URL hình ảnh',
+                  hintStyle: GoogleFonts.getFont(
+                    'Quicksand',
+                  )),
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Hủy'),
+              child: const TextQuicksand(
+                'Hủy',
+                fontSize: 24,
+              ),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(_imageUrlController.text);
               },
-              child: const Text('OK'),
+              child: const TextQuicksand(
+                'Ok',
+                fontSize: 24,
+              ),
             ),
           ],
         );
@@ -238,23 +255,20 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: const Text(
+                          child: const TextQuicksand(
                             'Hủy',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Color(0xFFB0B0B0),
-                              fontSize: 22,
-                              fontFamily: 'Quicksand',
-                              fontWeight: FontWeight.w500,
-                            ),
+                            color: Color(0xFFB0B0B0),
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         Text(
-                          _hasProfile ? 'Cập nhật' : 'Tạo',
+                          _hasProfile ? 'CẬP NHẬT' : 'TẠO',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Color(0xFFFF725E),
-                            fontSize: 25,
+                            fontSize: 24,
                             fontFamily: 'Quicksand',
                             fontWeight: FontWeight.w500,
                           ),
@@ -267,17 +281,14 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                               _addProfile();
                             }
                           },
-                          child: Text(
+                          child: TextQuicksand(
                             _hasProfile ? 'Lưu' : 'Thêm',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: _hasProfile
-                                  ? const Color(0xFF9290FF)
-                                  : const Color(0xFF9290FF),
-                              fontSize: 22,
-                              fontFamily: 'Quicksand',
-                              fontWeight: FontWeight.w500,
-                            ),
+                            color: _hasProfile
+                                ? Colors.blue[300]
+                                : Colors.green[300],
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],
@@ -371,14 +382,11 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                         builder: (context) => const ChangePassPage()),
                   );
                 },
-                child: const Text(
+                child: const TextQuicksand(
                   'Đổi mật khẩu',
-                  style: TextStyle(
-                    color: Color(0xFF9290FF),
-                    fontSize: 20,
-                    fontFamily: 'Quicksand',
-                    fontWeight: FontWeight.w500,
-                  ),
+                  color: Color(0xFF9290FF),
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -395,19 +403,19 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
       child: TextField(
         controller: controller,
         obscureText: obscureText,
-        style: const TextStyle(
+        style: GoogleFonts.getFont(
+          'Quicksand',
           color: Colors.black,
           fontSize: 21,
-          fontFamily: 'Quicksand',
           fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: const TextStyle(
-            color: Color(0xFFB0B0B0),
-            fontSize: 21,
-            fontFamily: 'Quicksand',
-            fontWeight: FontWeight.w500,
+          labelStyle: GoogleFonts.getFont(
+            'Quicksand',
+            color: const Color(0xFFB0B0B0),
+            fontSize: 25,
+            fontWeight: FontWeight.w600,
           ),
           border: const UnderlineInputBorder(
             borderSide: BorderSide(color: Color(0xFFD5D5D5)),
@@ -439,14 +447,11 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const SizedBox(height: 20),
-                    const Text(
+                    const TextQuicksand(
                       'Cập nhật thành công!',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w600,
-                      ),
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
                     ),
                     const SizedBox(
                       height: 10,
@@ -464,14 +469,11 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                             borderRadius: BorderRadius.circular(13),
                           ),
                         ),
-                        child: const Text(
-                          'Tiếp tục',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w600,
-                          ),
+                        child: const TextQuicksand(
+                          'TIẾP TỤC',
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
