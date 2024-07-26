@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:coffeeshop/page/product/cartpage.dart';
 import 'package:coffeeshop/page/product/view/sizeoption.dart';
@@ -20,7 +22,7 @@ class _UpdateCartPage extends State<UpdateCartPage> {
   int quantity = 1;
   int productsugarselected = 2;
   int producticeselected = 2;
-  bool productisfavorite = false;
+  bool isExpanded = false;
 
   @override
   void initState() {
@@ -171,41 +173,13 @@ class _UpdateCartPage extends State<UpdateCartPage> {
               ),
             ),
             centerTitle: true,
-            title: Text(
+            title: TextQuicksand(
               widget.cart['productid']['name'],
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.w500,
-                height: 0,
-              ),
+              color: Colors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+              height: 0,
             ),
-            actions: [
-              Container(
-                margin: const EdgeInsets.only(right: 30),
-                width: 40,
-                height: 40,
-                decoration: const ShapeDecoration(
-                  color: Color(0xFFFF725E),
-                  shape: OvalBorder(),
-                ),
-                child: IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: const Icon(
-                      Icons.shopping_bag,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CartPage(),
-                        ),
-                      );
-                    }),
-              ),
-            ],
             floating: true,
             pinned: true,
           ),
@@ -237,69 +211,68 @@ class _UpdateCartPage extends State<UpdateCartPage> {
                       ],
                     ),
                   ),
-                  Positioned(
-                    top: 20,
-                    right: 25,
-                    child: IconButton(
-                      icon: Icon(
-                        productisfavorite
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                        color: const Color(0xff2A4261),
-                        shadows: const [
-                          BoxShadow(
-                            color: Color(0x3F000000),
-                            blurRadius: 4,
-                            offset: Offset(4, 4),
-                            spreadRadius: 0,
-                          )
-                        ],
-                        size: 40,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          productisfavorite = !productisfavorite;
-                        });
-                      },
-                    ),
-                  ),
                 ],
               ),
             ),
           ),
           SliverToBoxAdapter(
               child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-            child: Row(
+            padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Text(
+                AnimatedCrossFade(
+                  firstChild: Text(
                     widget.cart['productid']['description'],
-                    style: const TextStyle(
+                    textAlign: TextAlign.justify,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.getFont(
+                      'Quicksand',
                       color: Colors.black,
                       fontSize: 18,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
+                  secondChild: Text(
+                    widget.cart['productid']['description'],
+                    textAlign: TextAlign.justify,
+                    style: GoogleFonts.getFont(
+                      'Quicksand',
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  crossFadeState: isExpanded
+                      ? CrossFadeState.showSecond
+                      : CrossFadeState.showFirst,
+                  duration: const Duration(milliseconds: 200),
                 ),
-                const SizedBox(
-                  width: 40,
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isExpanded = !isExpanded;
+                    });
+                  },
+                  child: TextQuicksand(
+                    isExpanded ? 'Thu gọn' : 'Xem thêm',
+                    color: const Color(0xffadb5bd),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),
           )),
           const SliverToBoxAdapter(
               child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-            child: Text(
+            padding: EdgeInsets.symmetric(horizontal: 35, vertical: 5),
+            child: TextQuicksand(
               'Chọn kích cỡ',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.w600,
-              ),
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
             ),
           )),
           SliverToBoxAdapter(
@@ -341,164 +314,87 @@ class _UpdateCartPage extends State<UpdateCartPage> {
           ),
           const SliverToBoxAdapter(
               child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-            child: Text(
+            padding: EdgeInsets.symmetric(horizontal: 35, vertical: 5),
+            child: TextQuicksand(
               'Đường',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.w600,
-              ),
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
             ),
           )),
-          SliverToBoxAdapter(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: RadioListTile<int>(
-                    title: const Text('30%'),
-                    value: 1,
-                    groupValue: productsugarselected,
-                    onChanged: (int? value) {
-                      setState(() {
-                        productsugarselected = value!;
-                      });
-                    },
-                    activeColor: const Color(0xFFFF725E),
-                  ),
-                ),
-                Expanded(
-                  child: RadioListTile<int>(
-                    title: const Text('50%'),
-                    value: 2,
-                    groupValue: productsugarselected,
-                    onChanged: (int? value) {
-                      setState(() {
-                        productsugarselected = value!;
-                      });
-                    },
-                    activeColor: const Color(0xFFFF725E),
-                  ),
-                ),
-                Expanded(
-                  child: RadioListTile<int>(
-                    title: const Text('100%'),
-                    value: 3,
-                    groupValue: productsugarselected,
-                    onChanged: (int? value) {
-                      setState(() {
-                        productsugarselected = value!;
-                      });
-                    },
-                    activeColor: const Color(0xFFFF725E),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SliverToBoxAdapter(
-              child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-            child: Text(
-              'Đá',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          )),
-          SliverToBoxAdapter(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: RadioListTile<int>(
-                    title: const Text('30%'),
-                    value: 1,
-                    groupValue: producticeselected,
-                    onChanged: (int? value) {
-                      setState(() {
-                        producticeselected = value!;
-                      });
-                    },
-                    activeColor: const Color(0xFFFF725E),
-                  ),
-                ),
-                Expanded(
-                  child: RadioListTile<int>(
-                    title: const Text('50%'),
-                    value: 2,
-                    groupValue: producticeselected,
-                    onChanged: (int? value) {
-                      setState(() {
-                        producticeselected = value!;
-                      });
-                    },
-                    activeColor: const Color(0xFFFF725E),
-                  ),
-                ),
-                Expanded(
-                  child: RadioListTile<int>(
-                    title: const Text('100%'),
-                    value: 3,
-                    groupValue: producticeselected,
-                    onChanged: (int? value) {
-                      setState(() {
-                        producticeselected = value!;
-                      });
-                    },
-                    activeColor: const Color(0xFFFF725E),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 35),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text(
-                    'Số lượng',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
                   Row(
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.remove),
-                        onPressed: () {
-                          setState(() {
-                            if (quantity > 1) quantity--;
-                          });
-                        },
+                      Radio(
+                          activeColor: const Color(0xFFFF725E),
+                          value: 1,
+                          groupValue: productsugarselected,
+                          onChanged: (int? value) {
+                            setState(() {
+                              productsugarselected = value!;
+                            });
+                          }),
+                      const TextQuicksand(
+                        '30%',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
-                      Text(
-                        quantity.toString(),
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontFamily: 'Quicksand',
-                          fontWeight: FontWeight.w400,
-                        ),
+                    ],
+                  ),
+                  const SizedBox(
+                      height: 25,
+                      width: 10,
+                      child: VerticalDivider(
+                        color: Color.fromARGB(75, 0, 0, 0),
+                        width: 40,
+                        thickness: 2,
+                      )),
+                  Row(
+                    children: [
+                      Radio(
+                          activeColor: const Color(0xFFFF725E),
+                          value: 2,
+                          groupValue: productsugarselected,
+                          onChanged: (int? value) {
+                            setState(() {
+                              productsugarselected = value!;
+                            });
+                          }),
+                      const TextQuicksand(
+                        '50%',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.add),
-                        onPressed: () {
-                          setState(() {
-                            quantity++;
-                          });
-                        },
+                    ],
+                  ),
+                  const SizedBox(
+                      height: 25,
+                      width: 10,
+                      child: VerticalDivider(
+                        color: Color.fromARGB(75, 0, 0, 0),
+                        width: 40,
+                        thickness: 2,
+                      )),
+                  Row(
+                    children: [
+                      Radio(
+                          activeColor: const Color(0xFFFF725E),
+                          value: 3,
+                          groupValue: productsugarselected,
+                          onChanged: (int? value) {
+                            setState(() {
+                              productsugarselected = value!;
+                            });
+                          }),
+                      const TextQuicksand(
+                        '100%',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ],
                   ),
@@ -506,34 +402,236 @@ class _UpdateCartPage extends State<UpdateCartPage> {
               ),
             ),
           ),
+          const SliverToBoxAdapter(
+              child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 0),
+            child: TextQuicksand(
+              'Đá',
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          )),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              child: ElevatedButton(
-                onPressed: () async {
-                  await _updateCart();
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CartPage(),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFF725E),
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  textStyle: const TextStyle(
-                    fontSize: 18,
-                    fontFamily: 'Quicksand',
-                    fontWeight: FontWeight.w600,
+              padding: const EdgeInsets.symmetric(horizontal: 35),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    children: [
+                      Radio(
+                          activeColor: const Color(0xFFFF725E),
+                          value: 1,
+                          groupValue: producticeselected,
+                          onChanged: (value) {
+                            setState(() {
+                              producticeselected = value!;
+                            });
+                          }),
+                      const TextQuicksand(
+                        '30%',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ],
                   ),
-                ),
-                child: const Text('Cập nhật giỏ hàng'),
+                  const SizedBox(
+                      height: 25,
+                      width: 10,
+                      child: VerticalDivider(
+                        color: Color.fromARGB(75, 0, 0, 0),
+                        width: 40,
+                        thickness: 2,
+                      )),
+                  Row(
+                    children: [
+                      Radio(
+                          activeColor: const Color(0xFFFF725E),
+                          value: 2,
+                          groupValue: producticeselected,
+                          onChanged: (value) {
+                            setState(() {
+                              producticeselected = value!;
+                            });
+                          }),
+                      const TextQuicksand(
+                        '50%',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                      height: 25,
+                      width: 10,
+                      child: VerticalDivider(
+                        color: Color.fromARGB(75, 0, 0, 0),
+                        width: 40,
+                        thickness: 2,
+                      )),
+                  Row(
+                    children: [
+                      Radio(
+                          activeColor: const Color(0xFFFF725E),
+                          value: 3,
+                          groupValue: producticeselected,
+                          onChanged: (value) {
+                            setState(() {
+                              producticeselected = value!;
+                            });
+                          }),
+                      const TextQuicksand(
+                        '100%',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: SizedBox(
+        height: 100,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (quantity > 1) {
+                            quantity--;
+                          }
+                        });
+                      },
+                      child: Container(
+                        decoration: const ShapeDecoration(
+                            color: Color.fromARGB(255, 89, 119, 159),
+                            shape: CircleBorder()),
+                        child: const Icon(
+                          Icons.remove,
+                          color: Colors.white,
+                          size: 35,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        quantity.toString(),
+                        style: GoogleFonts.getFont('Quicksand',
+                            fontSize: 30, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          quantity++;
+                        });
+                      },
+                      child: Container(
+                        decoration: const ShapeDecoration(
+                            color: Color.fromARGB(255, 89, 119, 159),
+                            shape: CircleBorder()),
+                        child: const Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: 35,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                  child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 30),
+                      height: 60,
+                      decoration: ShapeDecoration(
+                          color: const Color(0xFFFF725E),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          )),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          await _updateCart();
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CartPage(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFF725E),
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          textStyle: GoogleFonts.getFont(
+                            'Quicksand',
+                            fontSize: 24,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        child: const Text(
+                          'CẬP NHẬT',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ))
+                  // Expanded(
+                  //   child: Container(
+                  //     margin: const EdgeInsets.symmetric(horizontal: 30),
+                  //     height: 60,
+                  //     decoration: ShapeDecoration(
+                  //       color: const Color(0xFFFF725E),
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(20),
+                  //       ),
+                  //     ),
+                  //     child: InkWell(
+                  //       onTap: () async {
+                  //         if (_hasCart) {
+                  //           await fetchToCart();
+                  //         } else {
+                  //           await addToCart();
+                  //         }
+                  //         Navigator.push(
+                  //           context,
+                  //           MaterialPageRoute(
+                  //             builder: (context) => const CartPage(),
+                  //           ),
+                  //         );
+                  //       },
+                  //       child: Center(
+                  //         child: Text(
+                  //           formatCurrency
+                  //               .format(widget.product['price'] * quantity),
+                  //           textAlign: TextAlign.center,
+                  //           style: const TextStyle(
+                  //             color: Colors.white,
+                  //             fontSize: 22,
+                  //             fontFamily: 'Quicksand',
+                  //             fontWeight: FontWeight.w400,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // )
+                  )
+            ],
+          ),
+        ),
       ),
     );
   }

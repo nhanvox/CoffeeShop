@@ -1,9 +1,5 @@
-
-import 'package:coffeeshop/page/notification/view/card_notify.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
-import '../../model/notify.dart';
 
 class TutorialPage extends StatefulWidget {
   const TutorialPage({super.key});
@@ -38,7 +34,6 @@ class _TutorialPageState extends State<TutorialPage> {
     super.dispose();
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -96,12 +91,10 @@ class _TutorialPageState extends State<TutorialPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (_ytController != null)
-                    YoutubePlayer(
-                      controller: _ytController,
-                      showVideoProgressIndicator: true,
-                    ),
-                
+                  YoutubePlayer(
+                    controller: _ytController,
+                    showVideoProgressIndicator: true,
+                  ),
                   const SizedBox(height: 20),
                 ],
               ),

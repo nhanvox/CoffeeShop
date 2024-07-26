@@ -1,5 +1,7 @@
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/order/orderinfopage.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OrderHistoryWidget extends StatefulWidget {
   const OrderHistoryWidget({super.key});
@@ -37,19 +39,16 @@ class OrderHistoryWidgetState extends State<OrderHistoryWidget> {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFEF2),
       appBar: AppBar(
-        title: const Text(
-          'Lịch sử đơn hàng',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 24,
-            fontFamily: 'Quicksand',
-            fontWeight: FontWeight.w500,
-          ),
+        title: const TextQuicksand(
+          'LỊCH SỬ ĐƠN HÀNG',
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
         ),
         centerTitle: true,
         backgroundColor: const Color(0xFFFFFEF2),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
+          iconSize: 36,
           onPressed: () {
             Navigator.pop(context);
           },
@@ -111,42 +110,41 @@ class OrderHistoryWidgetState extends State<OrderHistoryWidget> {
             children: [
               Image.network(
                 product['imageUrl'],
-                width: 80,
-                height: 80,
+                width: 100,
+                height: 100,
               ),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    TextQuicksand(
                       product['title'],
-                      style: const TextStyle(fontSize: 18),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
                     ),
                     const SizedBox(height: 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        TextQuicksand(
                           product['details'],
-                          style: const TextStyle(fontSize: 14),
+                          fontSize: 16,
                         ),
-                        Text(
+                        TextQuicksand(
                           "x${product['quantity']}",
-                          style: const TextStyle(fontSize: 14),
+                          fontSize: 18,
                         ),
                       ],
                     ),
                     const SizedBox(height: 5),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Text(
+                      child: TextQuicksand(
                         product['price'],
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
                   ],
@@ -156,28 +154,32 @@ class OrderHistoryWidgetState extends State<OrderHistoryWidget> {
           ),
           const Divider(thickness: 1),
           const Center(
-            child: Text("Xem thêm", style: TextStyle(fontSize: 14)),
+            child: TextQuicksand(
+              "Xem thêm",
+              fontSize: 17,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey,
+            ),
           ),
           const Divider(thickness: 1),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("${product['quantity']} sản phẩm",
-                  style: const TextStyle(fontSize: 14)),
+              TextQuicksand("${product['quantity']} sản phẩm", fontSize: 16),
               RichText(
                 text: TextSpan(
                   children: [
-                    const TextSpan(
+                    TextSpan(
                       text: "Thành tiền: ",
-                      style: TextStyle(
-                          fontSize: 14,
+                      style: GoogleFonts.getFont('Quicksand',
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black),
                     ),
                     TextSpan(
                       text: product['totalPrice'],
-                      style: const TextStyle(
-                          fontSize: 14,
+                      style: GoogleFonts.getFont('Quicksand',
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.red),
                     ),
@@ -190,13 +192,10 @@ class OrderHistoryWidgetState extends State<OrderHistoryWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(
-                product['status'],
-                style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red),
-              ),
+              TextQuicksand(product['status'],
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.green),
             ],
           ),
         ],
