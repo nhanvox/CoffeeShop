@@ -13,9 +13,19 @@ class CardInfo extends StatefulWidget {
 class _CardInfoState extends State<CardInfo> {
   void _openIconButtonPressed() {
     showModalBottomSheet(
-      context: context,
-      builder: (ctx) => const ChangeInfo(),
-    );
+        backgroundColor: Colors.transparent,
+        context: context,
+        isScrollControlled: true,
+        isDismissible: true,
+        builder: (BuildContext context) {
+          return DraggableScrollableSheet(
+              initialChildSize: 0.8, //set this as you want
+//set this as you want
+              expand: true,
+              builder: (context, scrollController) {
+                return const ChangeInfo(); //whatever you're returning, does not have to be a Container
+              });
+        });
   }
 
   @override

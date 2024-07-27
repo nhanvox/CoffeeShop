@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -128,40 +130,31 @@ class _ChangePassPageState extends State<ChangePassPage> {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: const Text(
+                          child: const TextQuicksand(
                             'Hủy',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Color(0xFFB0B0B0),
-                              fontSize: 22,
-                              fontFamily: 'Quicksand',
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        const Text(
-                          'Đổi mật khẩu',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xFFFF725E),
-                            fontSize: 25,
-                            fontFamily: 'Quicksand',
+                            color: Color(0xFFB0B0B0),
+                            fontSize: 22,
                             fontWeight: FontWeight.w500,
                           ),
+                        ),
+                        const TextQuicksand(
+                          'ĐỔI MẬT KHẨU',
+                          textAlign: TextAlign.center,
+                          color: Color(0xFFFF725E),
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
                         ),
                         TextButton(
                           onPressed: () {
                             _changePass();
                           },
-                          child: const Text(
+                          child: const TextQuicksand(
                             'Lưu',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Color(0xFF9290FF),
-                              fontSize: 22,
-                              fontFamily: 'Quicksand',
-                              fontWeight: FontWeight.w500,
-                            ),
+                            color: Color(0xFF9290FF),
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
@@ -205,18 +198,18 @@ class _ChangePassPageState extends State<ChangePassPage> {
       child: TextField(
         controller: controller,
         obscureText: obscureText,
-        style: const TextStyle(
+        style: GoogleFonts.getFont(
+          'Quicksand',
           color: Colors.black,
           fontSize: 21,
-          fontFamily: 'Quicksand',
           fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: const TextStyle(
-            color: Color(0xFFB0B0B0),
-            fontSize: 21,
-            fontFamily: 'Quicksand',
+          labelStyle: GoogleFonts.getFont(
+            'Quicksand',
+            color: Colors.grey,
+            fontSize: 20,
             fontWeight: FontWeight.w500,
           ),
           border: const UnderlineInputBorder(

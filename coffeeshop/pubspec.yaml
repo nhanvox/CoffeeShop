@@ -33,7 +33,19 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
+  fonts:
+    - family: SVN-Appleberry
+      fonts:
+        - asset: assets/fonts/SVN-Appleberry.ttf
+    - family: SVN-Pokys
+      fonts:
+        - asset: assets/fonts/SVN-Pokys.ttf
+    - family: SVN-Whimsy
+      fonts:
+        - asset: assets/fonts/SVN-Whimsy.ttf
+    - family: Itim
+      fonts:
+        - asset: assets/fonts/Itim-Regular.ttf
   assets:
     - assets/
     - assets/icon/
@@ -43,3 +55,4 @@ flutter:
     - assets/images/news/
     - assets/images/payment/
     - assets/images/cartisempty.png
+    - assets/fonts/
