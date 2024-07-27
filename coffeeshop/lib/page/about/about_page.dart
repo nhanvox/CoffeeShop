@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
@@ -14,13 +15,11 @@ class AboutPageState extends State<AboutPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFEF2),
       appBar: AppBar(
-        title: const Text(
+        title: const TextQuicksand(
           'Về chúng tôi',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          color: Colors.black,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
         ),
         centerTitle: true,
         backgroundColor: const Color(0xFFFFFEF2),
@@ -56,19 +55,16 @@ class AboutPageState extends State<AboutPage> {
             _buildStaticCarousel(),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-              child: Text(
+              child: TextQuicksand(
                 'Ngọt Cà Phê sẽ là nơi mọi người xích lại gần nhau, sẻ chia thân tình bên những tách cà phê.',
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.black,
-                ),
+                fontSize: 17,
+                fontWeight: FontWeight.normal,
+                color: Colors.black,
                 textAlign: TextAlign.center,
               ),
             ),
             _buildApproachSection(),
-            _buildContactSection(), // New contact section
-            // Add more content here as needed
+            _buildContactSection(),
           ],
         ),
       ),
@@ -126,28 +122,22 @@ class AboutPageState extends State<AboutPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              TextQuicksand(
                 'Giới thiệu',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
-              SizedBox(height: 3),
               Divider(
                 color: Colors.yellow,
                 thickness: 3,
                 endIndent: 270, 
               ),
-              SizedBox(height: 3),
-              Text(
+              TextQuicksand(
                 'Ngọt Cà Phê không chỉ nổi tiếng với các loại cà phê tuyệt hảo mà còn với thực đơn bánh ngọt phong phú, hấp dẫn.\n\n'
                 'Khách hàng có thể thưởng thức các loại bánh ngọt được chế biến tỉ mỉ kết hợp hoàn hảo với tách cà phê nóng hổi. Với phong cách phục vụ tận tình, chuyên nghiệp, cam kết mang đến cho khách hàng những trải nghiệm tuyệt vời nhất, từ chất lượng đồ uống đến không gian và dịch vụ.',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
+                fontSize: 18,
+                color: Colors.white,
               ),
             ],
           ),
@@ -170,13 +160,11 @@ class AboutPageState extends State<AboutPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              TextQuicksand(
                 'Liên hệ chúng tôi',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
               SizedBox(height: 8),
               Row(
@@ -186,12 +174,40 @@ class AboutPageState extends State<AboutPage> {
                     color: Colors.black,
                   ),
                   SizedBox(width: 8),
-                  Text(
+                  TextQuicksand(
                     '828 Sư Vạn Hạnh, P.13, Q.10',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    ),
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Icon(
+                    Icons.phone,
+                    color: Colors.black,
+                  ),
+                  SizedBox(width: 8),
+                  TextQuicksand(
+                    '(+84) 123 456 789',
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Icon(
+                    Icons.email,
+                    color: Colors.black,
+                  ),
+                  SizedBox(width: 8),
+                  TextQuicksand(
+                    'contact@ngotcafe.com',
+                    fontSize: 18,
+                    color: Colors.black,
                   ),
                 ],
               ),

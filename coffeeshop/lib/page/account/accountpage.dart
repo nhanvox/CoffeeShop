@@ -7,6 +7,7 @@ import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/login/view/loginscreen.dart';
 import 'package:coffeeshop/page/product/view/productfavouritepage.dart';
 import 'package:coffeeshop/page/tutorial/tutorial.dart';
+import 'package:coffeeshop/page/voucher/voucher_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -255,13 +256,17 @@ class _AccountPageState extends State<AccountPage> {
                             size: 30,
                             color: Color(0xFFFF725E),
                           ),
-                          onTap: () {
-                            Navigator.push(
+                          onTap: () async {
+                            final result = await Navigator.push(
                               context,
                               CupertinoPageRoute(
                                 builder: (context) => const UpdateAccountPage(),
                               ),
                             );
+                            if (result == true) {
+                              _getProfile();
+                              _loadUserInfo();
+                            }
                           },
                         ),
                         _buildDivider(),
@@ -318,6 +323,16 @@ class _AccountPageState extends State<AccountPage> {
                             size: 30,
                             color: Color(0xFFFF725E),
                           ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) =>
+                                    const VoucherPage(),
+                              ),
+                            );
+                          },
+
                         ),
                       ],
                     ),
@@ -341,7 +356,7 @@ class _AccountPageState extends State<AccountPage> {
                     fontWeight: FontWeight.w700,
                   ),
                   Container(
-                    height: 185,
+                    height: 170,
                     width: double.infinity,
                     margin: const EdgeInsets.only(top: 10),
                     decoration: ShapeDecoration(
@@ -408,7 +423,6 @@ class _AccountPageState extends State<AccountPage> {
                           ),
                           onTap: () => _logout(context),
                         ),
-                        _buildDivider(),
                       ],
                     ),
                   ),
