@@ -82,6 +82,21 @@ class UserServices {
       throw err;
     }
   }
+  static async getAllUsers() {
+    try {
+      return await UserModel.find();
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  static async deleteUser(userId) {
+    try {
+      return await UserModel.findByIdAndDelete(userId);
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 module.exports = UserServices;
