@@ -129,7 +129,7 @@ class _MainPageState extends State<MainPage> {
         return const NotifyPage();
       case 3:
         return const AccountPage();
-        
+
       default:
         return HomePage(
             changePage: (newIndex) {
@@ -298,7 +298,8 @@ class _MainPageState extends State<MainPage> {
                   CupertinoPageRoute(
                     builder: (context) => const SupportPage(),
                   ),
-                );              },
+                );
+              },
               title: 'Hỗ trợ',
               icon: Icons.support_agent,
             ),

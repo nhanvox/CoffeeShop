@@ -1,4 +1,6 @@
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChangeInfo extends StatefulWidget {
   const ChangeInfo({super.key});
@@ -12,215 +14,211 @@ class _ChangeInfoState extends State<ChangeInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            backgroundColor: Colors.white,
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: IconButton(
-                onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(Icons.arrow_back),
-                iconSize: 28,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: CustomScrollView(
+          // shape: RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.circular(15),
+          slivers: [
+            SliverAppBar(
+              backgroundColor: const Color(0xffFFFEF2),
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.arrow_back),
+                  iconSize: 28,
+                ),
               ),
-            ),
-            centerTitle: true,
-            title: const Text(
-              'Thay đổi thông tin',
-              style: TextStyle(
+              centerTitle: true,
+              title: const TextQuicksand(
+                'THAY ĐỔI THÔNG TIN',
                 color: Colors.black,
-                fontSize: 20,
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.w500,
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
               ),
+              floating: true,
+              pinned: true,
             ),
-            floating: true,
-            pinned: true,
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      shadows: const [
-                        BoxShadow(
-                          color: Color(0x3F000000),
-                          blurRadius: 4,
-                          offset: Offset(0, 4),
-                          spreadRadius: 0,
-                        )
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextFormField(
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.grey.shade200,
-                            hintText: 'Tìm kiếm địa chỉ',
-                            hintStyle: const TextStyle(color: Colors.grey),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide.none,
-                            ),
-                            prefixIcon:
-                                const Icon(Icons.search, color: Colors.grey),
-                            suffixIcon: const Icon(Icons.cancel_outlined,
-                                color: Colors.grey),
-                          ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: 350,
+                      decoration: ShapeDecoration(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                        const SizedBox(height: 20),
-                        const Text(
-                          'Chọn từ bản đồ',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
+                        shadows: const [
+                          BoxShadow(
+                            color: Color(0x3F000000),
+                            blurRadius: 10,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          )
+                        ],
+                      ),
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextFormField(
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.grey.shade200,
+                              hintText: 'Tìm kiếm địa chỉ',
+                              hintStyle: GoogleFonts.getFont('Quicksand',
+                                  color: Colors.grey,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide.none,
+                              ),
+                              prefixIcon:
+                                  const Icon(Icons.search, color: Colors.grey),
+                              suffixIcon: const Icon(Icons.cancel_outlined,
+                                  color: Colors.grey),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          const TextQuicksand(
+                            'Chọn từ bản đồ',
+                            textAlign: TextAlign.start,
                             color: Colors.black,
                             fontSize: 18,
-                            fontFamily: 'Quicksand',
                             fontWeight: FontWeight.w500,
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.grey.shade200,
-                            hintText: 'Vị trí hiện tại của bạn',
-                            hintStyle: const TextStyle(color: Colors.grey),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide.none,
+                          TextFormField(
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.grey.shade200,
+                              hintText: 'Vị trí hiện tại của bạn',
+                              hintStyle: GoogleFonts.getFont('Quicksand',
+                                  color: Colors.grey,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide.none,
+                              ),
+                              prefixIcon: const Icon(Icons.location_on_outlined,
+                                  color: Colors.grey),
                             ),
-                            prefixIcon: const Icon(Icons.location_on_outlined,
-                                color: Colors.grey),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.grey.shade200,
-                            hintText: 'Chọn trên bản đồ',
-                            hintStyle: const TextStyle(color: Colors.grey),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide.none,
+                          const Align(
+                            alignment: Alignment.centerRight,
+                            child: TextQuicksand(
+                              'Hay chọn từ bản đồ',
+                              textAlign: TextAlign.start,
+                              color: Colors.green,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
                             ),
-                            prefixIcon: const Icon(Icons.map_outlined,
-                                color: Colors.grey),
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        const Text(
-                          'Địa chỉ đã lưu',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
+                          const TextQuicksand(
+                            'Địa chỉ đã lưu',
+                            textAlign: TextAlign.start,
                             color: Colors.black,
                             fontSize: 18,
-                            fontFamily: 'Quicksand',
                             fontWeight: FontWeight.w500,
                           ),
-                        ),
-                        Row(
-                          children: [
-                            IconButton(
-                              padding: EdgeInsets.zero,
-                              icon: const Icon(Icons.disc_full_outlined),
-                              iconSize: 25,
-                              onPressed: () {},
-                            ),
-                            const Text(
-                              '231/b, ql27, Tp. Hồ Chí Minh, Việt Nam',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
+                          Row(
+                            children: [
+                              IconButton(
+                                padding: EdgeInsets.zero,
+                                icon:
+                                    const Icon(Icons.add_location_alt_outlined),
+                                iconSize: 25,
+                                onPressed: () {},
+                              ),
+                              const TextQuicksand(
+                                '231/b, ql27, Tp. Hồ Chí Minh, Việt Nam',
+                                textAlign: TextAlign.left,
                                 color: Colors.black,
                                 fontSize: 16,
-                                fontFamily: 'Quicksand',
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.w500,
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            IconButton(
-                              padding: EdgeInsets.zero,
-                              icon: const Icon(Icons.add),
-                              iconSize: 25,
-                              onPressed: () {},
-                            ),
-                            const Text(
-                              'Thêm địa chỉ mới',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              IconButton(
+                                padding: EdgeInsets.zero,
+                                icon: const Icon(Icons.add),
+                                iconSize: 25,
+                                onPressed: () {},
+                              ),
+                              const TextQuicksand(
+                                'Thêm địa chỉ mới',
+                                textAlign: TextAlign.left,
                                 color: Colors.black,
                                 fontSize: 16,
-                                fontFamily: 'Quicksand',
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.w500,
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+                            ],
+                          ),
+                        ],
                       ),
-                      shadows: const [
-                        BoxShadow(
-                          color: Color(0x3F000000),
-                          blurRadius: 4,
-                          offset: Offset(0, 4),
-                          spreadRadius: 0,
-                        )
-                      ],
                     ),
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildTextField('Họ tên', _nameController),
-                        _buildTextField('Địa chỉ', _addressController),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 180,
+                      decoration: ShapeDecoration(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        shadows: const [
+                          BoxShadow(
+                            color: Color(0x3F000000),
+                            blurRadius: 4,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          )
+                        ],
+                      ),
+                      padding: const EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildTextField('Họ tên', _nameController),
+                          _buildTextField('Địa chỉ', _addressController),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: Container(
-        height: 100,
+        height: 120,
         decoration: ShapeDecoration(
-          color: Colors.white,
+          // color: const Color(0x0fffffef),
+          color: const Color(0xffFFFEF2),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
             side: const BorderSide(
-              color: Colors.grey, // Border color
+              color: Color(0xff2A4261), // Border color
               width: 1, // Border width
             ),
           ),
@@ -234,8 +232,8 @@ class _ChangeInfoState extends State<ChangeInfo> {
                 _showUpdateSuccessDialog(context);
               },
               child: Container(
-                width: 180,
-                height: 50,
+                width: double.infinity,
+                height: 60,
                 decoration: ShapeDecoration(
                   color: const Color(0xFFFF725E),
                   shape: RoundedRectangleBorder(
@@ -243,15 +241,12 @@ class _ChangeInfoState extends State<ChangeInfo> {
                   ),
                 ),
                 child: const Center(
-                  child: Text(
-                    'Lưu thay đổi',
+                  child: TextQuicksand(
+                    'LƯU THAY ĐỔI',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w400,
-                    ),
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -265,22 +260,22 @@ class _ChangeInfoState extends State<ChangeInfo> {
   Widget _buildTextField(String label, TextEditingController controller,
       {bool obscureText = false}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 0),
       child: TextField(
         controller: controller,
         obscureText: obscureText,
-        style: const TextStyle(
+        style: GoogleFonts.getFont(
+          'Quicksand',
           color: Colors.black,
-          fontSize: 16,
-          fontFamily: 'Quicksand',
+          fontSize: 18,
           fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: const TextStyle(
+          labelStyle: GoogleFonts.getFont(
+            'Quicksand',
             color: Colors.black,
-            fontSize: 16,
-            fontFamily: 'Quicksand',
+            fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
           border: const UnderlineInputBorder(
@@ -290,6 +285,8 @@ class _ChangeInfoState extends State<ChangeInfo> {
       ),
     );
   }
+
+  //dialog thay đổi thành công
 
   void _showUpdateSuccessDialog(BuildContext context) {
     showDialog(
@@ -301,9 +298,8 @@ class _ChangeInfoState extends State<ChangeInfo> {
             alignment: Alignment.center,
             children: [
               Container(
-                width: 300,
+                width: 500,
                 height: 180,
-                margin: const EdgeInsets.only(top: 38),
                 padding: const EdgeInsets.only(right: 30, left: 30, top: 50),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -313,14 +309,11 @@ class _ChangeInfoState extends State<ChangeInfo> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const SizedBox(height: 20),
-                    const Text(
+                    const TextQuicksand(
                       'Thay đổi thành công!',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w600,
-                      ),
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
                     ),
                     const SizedBox(height: 10),
                     SizedBox(
@@ -336,14 +329,11 @@ class _ChangeInfoState extends State<ChangeInfo> {
                             borderRadius: BorderRadius.circular(13),
                           ),
                         ),
-                        child: const Text(
-                          'Xong',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontFamily: 'Quicksand',
-                            fontWeight: FontWeight.w600,
-                          ),
+                        child: const TextQuicksand(
+                          'XONG',
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),

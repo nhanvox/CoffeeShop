@@ -1,4 +1,4 @@
-const url = 'http://192.168.1.71:3000/';
+const url = 'http://192.168.1.136:3000/';
 //Authencation
 const registration = "${url}register";
 const login = '${url}login';

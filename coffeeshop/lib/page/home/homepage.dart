@@ -239,7 +239,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               clipBehavior: Clip.antiAlias,
               decoration: ShapeDecoration(
-                color: const Color(0xFFFF725E),
+                color: const Color(0xFF2A4261),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -365,7 +365,8 @@ class _HomePageState extends State<HomePage> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8.0),
                               image: const DecorationImage(
-                                image: AssetImage('assets/images/news/news_1.png'),
+                                image:
+                                    AssetImage('assets/images/news/news_1.png'),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -391,7 +392,8 @@ class _HomePageState extends State<HomePage> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8.0),
                               image: const DecorationImage(
-                                image: AssetImage('assets/images/news/news_2.png'),
+                                image:
+                                    AssetImage('assets/images/news/news_2.png'),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -410,7 +412,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20) 
+                const SizedBox(height: 20)
               ],
             ),
           ),
