@@ -7,8 +7,10 @@ import 'package:coffeeshop/page/login/view/loginscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../config/config.dart';
+import '../../../config/login_status.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -62,13 +64,10 @@ class _SignupState extends State<Signup> {
       });
       print('Error: Mật khẩu và xác nhận mật khẩu không khớp.');
     } else {
-      // Tạo đối tượng JSON chứa email và password từ textfield
       var regBody = {
         "email": emailController.text,
         "password": passwordController.text
       };
-      // Đoạn này gửi một yêu cầu HTTP POST tới URL registration với nội dung là regBody
-      // được mã hóa thành JSON và tiêu đề Content-Type là application/json.
       try {
         var response = await http.post(Uri.parse(registration),
             headers: {"Content-Type": "application/json"},
@@ -76,10 +75,9 @@ class _SignupState extends State<Signup> {
 
         if (response.statusCode == 200) {
           print("Ngon");
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const MainPage()));
+          // Automatically log in the user
+          loginUser(emailController.text, passwordController.text);
         } else {
-          // ignore: avoid_print
           print("Server error: ${response.statusCode}");
           setState(() {
             _errorMessage = "Email đã được sử dụng.";
@@ -87,9 +85,37 @@ class _SignupState extends State<Signup> {
           print('Error: Email đã được sử dụng.');
         }
       } catch (e) {
-        // ignore: avoid_print
         print('Error: $e');
       }
+    }
+  }
+
+  void loginUser(String email, String password) async {
+    var reqBody = {"email": email, "password": password};
+
+    var response = await http.post(Uri.parse(login),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(reqBody));
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      String token = jsonResponse['token'];
+      prefs.setString('token', token);
+
+      // Lưu trạng thái isChecked
+      prefs.setBool('isChecked', isChecked!);
+
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      String? userID = decodedToken['_id'];
+
+      LoginStatus.instance.loggedIn = true;
+      LoginStatus.instance.userID = userID;
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const MainPage()));
+    } else {
+      setState(() {
+        _errorMessage = "Đăng nhập thất bại.";
+      });
     }
   }
 

@@ -25,6 +25,10 @@ class CartService {
   static async getAllCarts() {
     return await Cart.find({});
   }
+
+  static async deleteCartsByUser(userId) {
+    return await Cart.deleteMany({ userid: userId });
+  }
 }
 
 module.exports = CartService;

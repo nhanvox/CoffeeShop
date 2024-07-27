@@ -61,9 +61,9 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
         if (jsonResponse['success'] == true) {
           var profile = jsonResponse['profile'];
           setState(() {
-            _nameController.text = profile['name'] ?? '';
-            _phoneController.text = profile['phoneNumber'] ?? '';
-            _addressController.text = profile['address'] ?? '';
+            _nameController.text = profile['name'];
+            _phoneController.text = profile['phoneNumber'];
+            _addressController.text = profile['address'];
             _imagePath = profile['image'];
           });
         }

@@ -200,10 +200,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Future<void> checkCart() async {
     String? userId = LoginStatus.instance.userID;
 
-    if (userId == null) return;
-
     try {
-      Uri getCartUrl = Uri.parse(getCartsByUser + userId);
+      Uri getCartUrl = Uri.parse(getCartsByUser + userId!);
       var response = await http.get(getCartUrl);
 
       if (response.statusCode == 200) {
@@ -211,13 +209,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         if (jsonResponse['success'] == true) {
           var cart = jsonResponse['carts'];
           setState(() {
-            _hasCart = cart != null;
+            _hasCart = cart != null && cart.isNotEmpty;
           });
+        } else {
+          _hasCart = false;
         }
       } else {
         print('Failed to get profile');
+        _hasCart = false;
       }
     } catch (e) {
+      _hasCart = false;
       print('Error checking profile: $e');
     }
   }

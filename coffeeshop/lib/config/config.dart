@@ -1,4 +1,4 @@
-const url = 'http://192.168.1.136:3000/';
+const url = 'http://192.168.1.86:3000/';
 //Authencation
 const registration = "${url}register";
 const login = '${url}login';
@@ -18,6 +18,7 @@ const addCarts = '${url}carts';
 const getCartsByUser = '${url}cartsbyuser/';
 const deleteCart = '${url}cart/';
 const updateCart = '${url}cart/';
+const deleteCartsByUser = '${url}cartsbyuser/';
 //ProductFav
 const addFavProduct = '${url}favproduct';
 const getAllFavProducts = '${url}favproducts';
@@ -29,3 +30,8 @@ const getProfiles = '${url}profiles';
 const getProfileByUser = '${url}profilebyuser/';
 const deleteProfile = '${url}deleteprofile/';
 const updateProfile = '${url}updateprofile/';
+//Orders
+const addOrder = '${url}order';
+const getOrders = '${url}order/';
+const getOdersByUser = '${url}ordersbyuser/';
+const getAllOrders = '${url}ordersbyuser/';
