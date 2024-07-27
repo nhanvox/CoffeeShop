@@ -105,3 +105,24 @@ exports.changePass = async (req, res, next) => {
     next(err);
   }
 };
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const users = await UserServices.getAllUsers();
+    res.status(200).json(users);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.deleteUser = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const deletedUser = await UserServices.deleteUser(userId);
+    if (!deletedUser) {
+      throw new Error("User not found");
+    }
+    res.status(200).json({ status: true, message: "User deleted successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
