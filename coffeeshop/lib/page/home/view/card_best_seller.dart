@@ -38,13 +38,17 @@ class _CardBestSellerState extends State<CardBestSeller> {
         if (jsonResponse['success'] == true) {
           var cart = jsonResponse['carts'];
           setState(() {
-            _hasCart = cart != null;
+            _hasCart = cart != null && cart.isNotEmpty;
           });
+        } else {
+          _hasCart = false;
         }
       } else {
         print('Failed to get profile');
+        _hasCart = false;
       }
     } catch (e) {
+      _hasCart = false;
       print('Error checking profile: $e');
     }
   }
@@ -268,7 +272,11 @@ class _CardBestSellerState extends State<CardBestSeller> {
                                   MaterialPageRoute(
                                     builder: (context) => const CartPage(),
                                   ),
-                                );
+                                ).then((value) {
+                                  if (value == true) {
+                                    checkCart();
+                                  }
+                                });
                               },
                             )),
                       ],

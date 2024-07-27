@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:coffeeshop/page/home/view/drawer_tile.dart';
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/support/support_page.dart';
-import 'package:coffeeshop/page/tutorial/tutorial.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,6 +35,8 @@ class _MainPageState extends State<MainPage> {
   String? name;
   String? image;
   Map<String, dynamic>? profile;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -58,14 +59,22 @@ class _MainPageState extends State<MainPage> {
           if (jsonResponse['success'] == true) {
             setState(() {
               profile = jsonResponse['profile'];
-              name = profile?['name'];
-              image = profile?['image'];
+              name = profile!['name'];
+              image = profile!['image'];
             });
+            print('Profile loaded successfully');
           } else {
-            print('Failed to load user');
+            print('Failed to load user: ${jsonResponse['message']}');
           }
+        } else {
+          print(
+              'Failed to load profile with status code: ${response.statusCode}');
         }
+      } else {
+        print('User ID is null');
       }
+    } else {
+      print('User is not logged in');
     }
   }
 
@@ -129,7 +138,7 @@ class _MainPageState extends State<MainPage> {
         return const NotifyPage();
       case 3:
         return const AccountPage();
-        
+
       default:
         return HomePage(
             changePage: (newIndex) {
@@ -144,6 +153,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       drawer: Drawer(
         backgroundColor: const Color(0xFFFFFEF2),
         child: Column(
@@ -181,12 +191,8 @@ class _MainPageState extends State<MainPage> {
                           fit: BoxFit.cover,
                           image: profile != null && image != ''
                               ? (image!.startsWith('http')
-                                      ? NetworkImage(image!)
-                                      : FileImage(File(image!))
-                                          as ImageProvider) ??
-                                  const AssetImage(
-                                          'assets/images/avatar_default.png')
-                                      as ImageProvider
+                                  ? NetworkImage(image!)
+                                  : FileImage(File(image!)) as ImageProvider)
                               : const AssetImage(
                                       'assets/images/avatar_default.png')
                                   as ImageProvider,
@@ -209,7 +215,9 @@ class _MainPageState extends State<MainPage> {
                         ),
                         Text(
                           LoginStatus.instance.loggedIn
-                              ? name ?? 'Người dùng'
+                              ? ((profile != null && name != '')
+                                  ? name ?? 'Người dùng'
+                                  : 'Người dùng')
                               : 'Đăng nhập/ Đăng ký',
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -298,7 +306,8 @@ class _MainPageState extends State<MainPage> {
                   CupertinoPageRoute(
                     builder: (context) => const SupportPage(),
                   ),
-                );              },
+                );
+              },
               title: 'Hỗ trợ',
               icon: Icons.support_agent,
             ),
@@ -327,6 +336,11 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
       ),
+      onDrawerChanged: (isOpen) {
+        if (isOpen) {
+          _getProfile();
+        }
+      },
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           color: Colors.white,

@@ -58,8 +58,8 @@ class _AccountPageState extends State<AccountPage> {
           if (jsonResponse['success'] == true) {
             setState(() {
               profile = jsonResponse['profile'];
-              name = profile?['name'];
-              image = profile?['image'];
+              name = profile!['name'];
+              image = profile!['image'];
             });
           } else {
             print('Failed to load user');
@@ -166,12 +166,9 @@ class _AccountPageState extends State<AccountPage> {
                                 fit: BoxFit.cover,
                                 image: profile != null && image != ''
                                     ? (image!.startsWith('http')
-                                            ? NetworkImage(image!)
-                                            : FileImage(File(image!))
-                                                as ImageProvider) ??
-                                        const AssetImage(
-                                                'assets/images/avatar_default.png')
-                                            as ImageProvider
+                                        ? NetworkImage(image!)
+                                        : FileImage(File(image!))
+                                            as ImageProvider)
                                     : const AssetImage(
                                             'assets/images/avatar_default.png')
                                         as ImageProvider,
@@ -186,7 +183,9 @@ class _AccountPageState extends State<AccountPage> {
                               children: [
                                 // Display user name
                                 TextQuicksand(
-                                  name ?? 'Tên người dùng',
+                                  (profile != null && name != '')
+                                      ? name ?? 'Tên người dùng'
+                                      : 'Người dùng',
                                   color: Colors.black,
                                   fontSize: 22,
                                   fontWeight: FontWeight.w700,

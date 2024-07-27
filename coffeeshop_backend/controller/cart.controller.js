@@ -62,3 +62,16 @@ exports.getAllCarts = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.deleteCartsByUser = async (req, res, next) => {
+  try {
+    const { id: userId } = req.params;
+    await CartService.deleteCartsByUser(userId);
+    res.json({
+      success: true,
+      message: "All products deleted successfully from cart",
+    });
+  } catch (err) {
+    next(err);
+  }
+};

@@ -1,8 +1,14 @@
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CardPayment extends StatefulWidget {
-  const CardPayment({super.key});
+  int getPayment;
+
+  CardPayment({
+    super.key,
+    required this.getPayment,
+  });
 
   @override
   State<CardPayment> createState() => _CardPaymentState();
@@ -13,7 +19,7 @@ class _CardPaymentState extends State<CardPayment> {
   bool isCheckedMomo = false;
   bool isCheckedVisa = false;
   bool isCheckedAtm = false;
-  bool isCheckedCash = false;
+  bool isCheckedCash = true;
 
   void uncheckAll() {
     isCheckedZalo = false;
@@ -23,6 +29,10 @@ class _CardPaymentState extends State<CardPayment> {
     isCheckedCash = false;
   }
 
+  void getCheck() {
+    
+  }
+  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -102,6 +112,7 @@ class _CardPaymentState extends State<CardPayment> {
                       setState(() {
                         uncheckAll();
                         isCheckedMomo = !isCheckedMomo;
+                        widget.getPayment = 1;
                       });
                     },
                   ),
@@ -151,6 +162,7 @@ class _CardPaymentState extends State<CardPayment> {
                       setState(() {
                         uncheckAll();
                         isCheckedAtm = !isCheckedAtm;
+                        widget.getPayment = 2;
                       });
                     },
                   ),
@@ -200,6 +212,7 @@ class _CardPaymentState extends State<CardPayment> {
                       setState(() {
                         uncheckAll();
                         isCheckedCash = !isCheckedCash;
+                        widget.getPayment = 3;
                       });
                     },
                   ),

@@ -38,13 +38,17 @@ class _CardMenuState extends State<CardMenu> {
         if (jsonResponse['success'] == true) {
           var cart = jsonResponse['carts'];
           setState(() {
-            _hasCart = cart != null;
+            _hasCart = cart != null && cart.isNotEmpty;
           });
+        } else {
+          _hasCart = false;
         }
       } else {
         print('Failed to get profile');
+        _hasCart = false;
       }
     } catch (e) {
+      _hasCart = false;
       print('Error checking profile: $e');
     }
   }
@@ -56,7 +60,7 @@ class _CardMenuState extends State<CardMenu> {
       'productid': widget.product['_id'],
       'userid': userID,
       'size': 'Lớn',
-      'total': widget.product['price'],
+      'total': widget.product['price'] + 10000,
       'quantity': 1,
       'sugar': '100%',
       'ice': '100%',
@@ -91,7 +95,7 @@ class _CardMenuState extends State<CardMenu> {
       'productid': widget.product['_id'],
       'userid': userID,
       'size': 'Lớn',
-      'total': widget.product['price'],
+      'total': widget.product['price'] + 10000,
       'quantity': 1,
       'sugar': '100%',
       'ice': '100%',
@@ -122,8 +126,8 @@ class _CardMenuState extends State<CardMenu> {
             Uri updateCartUrl = Uri.parse(updateCart + existingCartItem['_id']);
             var updateCartData = {
               'quantity': existingCartItem['quantity'] + 1,
-              'total':
-                  widget.product['price'] * (existingCartItem['quantity'] + 1),
+              'total': (widget.product['price'] + 10000) *
+                  (existingCartItem['quantity'] + 1),
             };
             var updateCartResponse = await http.put(updateCartUrl,
                 headers: {"Content-Type": "application/json"},
@@ -271,7 +275,11 @@ class _CardMenuState extends State<CardMenu> {
                                 MaterialPageRoute(
                                   builder: (context) => const CartPage(),
                                 ),
-                              );
+                              ).then((value) {
+                                if (value == true) {
+                                  checkCart();
+                                }
+                              });
                             },
                           )),
                     ],

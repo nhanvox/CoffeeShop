@@ -88,7 +88,7 @@ class _CartPageState extends State<CartPage> {
             leading: Padding(
               padding: const EdgeInsets.only(left: 20),
               child: IconButton(
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () => Navigator.pop(context, true),
                 icon: const Icon(Icons.arrow_back),
                 iconSize: 36,
               ),
@@ -171,7 +171,10 @@ class _CartPageState extends State<CartPage> {
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => const PaymentPage(),
+                      builder: (context) => PaymentPage(
+                          cartsList: cartsList!,
+                          totalQuantity: totalQuantity,
+                          totalPrice: totalPrice),
                     ),
                   );
                 } else {
