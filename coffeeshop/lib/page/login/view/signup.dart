@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:coffeeshop/mainpage.dart';
 import 'package:coffeeshop/page/login/view/components/montserrat.dart';
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/login/view/loginscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -168,21 +169,17 @@ class _SignupState extends State<Signup> {
                               ),
                               const SizedBox(height: 20),
                               // Email field
-                              const Text(
+                              const TextQuicksand(
                                 'Email',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                  fontFamily: 'Quicksand',
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
                               ),
-                              const SizedBox(height: 10),
                               TextField(
                                 controller: emailController,
-                                style: const TextStyle(
+                                style: GoogleFonts.getFont(
+                                  'Quicksand',
                                   fontSize: 20,
-                                  fontFamily: 'Quicksand',
                                   height: 1.5,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -193,15 +190,16 @@ class _SignupState extends State<Signup> {
                                     Icons.email,
                                     color: Color(0xFFFF725E),
                                   ),
-                                  errorStyle:
-                                      const TextStyle(color: Colors.red),
+                                  errorStyle: GoogleFonts.getFont('Quicksand',
+                                      color: Colors.red),
                                   errorText: _isNotValidate
                                       ? "Email không hợp lệ!"
                                       : null,
                                   hintText: 'Nhập email',
-                                  hintStyle: const TextStyle(
+                                  hintStyle: GoogleFonts.getFont(
+                                    'Quicksand',
                                     fontSize: 18,
-                                    fontWeight: FontWeight.w400,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12.0),
@@ -210,23 +208,20 @@ class _SignupState extends State<Signup> {
                               ),
                               const SizedBox(height: 10),
                               // Password field
-                              const Text(
+                              const TextQuicksand(
                                 'Mật khẩu',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                  fontFamily: 'Quicksand',
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
                               ),
                               const SizedBox(height: 10),
                               TextField(
                                 controller: passwordController,
                                 obscureText:
                                     _obscurePassword, // Sử dụng biến trạng thái
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontFamily: 'Quicksand',
+                                style: GoogleFonts.getFont(
+                                  'Quicksand',
+                                  fontSize: 18,
                                   height: 1.5,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -237,15 +232,16 @@ class _SignupState extends State<Signup> {
                                     Icons.lock,
                                     color: Color(0xFFFF725E),
                                   ),
-                                  errorStyle:
-                                      const TextStyle(color: Colors.red),
+                                  errorStyle: GoogleFonts.getFont('Quicksand',
+                                      color: Colors.red),
                                   errorText: _isNotValidate
                                       ? "Mật khẩu không hợp lệ!"
                                       : null,
                                   hintText: 'Nhập mật khẩu',
-                                  hintStyle: const TextStyle(
+                                  hintStyle: GoogleFonts.getFont(
+                                    'Quicksand',
                                     fontSize: 18,
-                                    fontWeight: FontWeight.w400,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                   suffixIcon: IconButton(
                                     icon: Icon(
@@ -267,23 +263,20 @@ class _SignupState extends State<Signup> {
 
                               const SizedBox(height: 10),
                               // Confirm Password field
-                              const Text(
+                              const TextQuicksand(
                                 'Nhập lại mật khẩu',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                  fontFamily: 'Quicksand',
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
                               ),
                               const SizedBox(height: 10),
                               TextField(
                                 controller: confirmPasswordController,
                                 obscureText:
                                     _obscureConfirmPassword, // Sử dụng biến trạng thái
-                                style: const TextStyle(
+                                style: GoogleFonts.getFont(
+                                  'Quicksand',
                                   fontSize: 20,
-                                  fontFamily: 'Quicksand',
                                   height: 1.5,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -294,8 +287,8 @@ class _SignupState extends State<Signup> {
                                     Icons.lock,
                                     color: Color(0xFFFF725E),
                                   ),
-                                  errorStyle:
-                                      const TextStyle(color: Colors.red),
+                                  errorStyle: GoogleFonts.getFont('Quicksand',
+                                      color: Colors.red),
                                   errorText: _isNotValidate
                                       ? "Mật khẩu không trùng khớp"
                                       : null,
@@ -326,12 +319,10 @@ class _SignupState extends State<Signup> {
                               const SizedBox(height: 5),
                               if (_errorMessage != null) ...[
                                 const SizedBox(height: 10),
-                                Text(
+                                TextQuicksand(
                                   _errorMessage!,
-                                  style: const TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 14,
-                                  ),
+                                  color: Colors.red,
+                                  fontSize: 14,
                                 ),
                               ],
                               const SizedBox(
@@ -346,20 +337,17 @@ class _SignupState extends State<Signup> {
                                   },
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 16.0, horizontal: 32.0),
+                                        vertical: 12.0, horizontal: 32.0),
                                     backgroundColor: const Color(0xFF2A4261),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
                                   ),
-                                  child: Text(
+                                  child: const TextQuicksand(
                                     'TIẾP THEO',
-                                    style: GoogleFonts.getFont(
-                                      'Montserrat',
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),
@@ -379,12 +367,10 @@ class _SignupState extends State<Signup> {
                                     Padding(
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Text(
+                                      child: TextQuicksand(
                                         'Hoặc',
-                                        style: TextStyle(
-                                          color: Color(0xFF9C9A9A),
-                                          fontSize: 16,
-                                        ),
+                                        color: Colors.grey,
+                                        fontSize: 16,
                                       ),
                                     ),
                                     Expanded(
@@ -403,14 +389,11 @@ class _SignupState extends State<Signup> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Text(
+                                    const TextQuicksand(
                                       'Đã có tài khoản, ',
-                                      style: TextStyle(
-                                        color: Color(0xFF9C9A9A),
-                                        fontSize: 15,
-                                        fontFamily: 'Quicksand',
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                      color: Color(0xFF9C9A9A),
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                     Transform.translate(
                                       offset: const Offset(-12, 0),
@@ -423,14 +406,11 @@ class _SignupState extends State<Signup> {
                                                     const Loginscreen()),
                                           );
                                         },
-                                        child: const Text(
+                                        child: const TextQuicksand(
                                           'đăng nhập tại đây',
-                                          style: TextStyle(
-                                            color: Color(0xFF0B0B0B),
-                                            fontSize: 15,
-                                            fontFamily: 'Quicksand',
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                          color: Color(0xFF0B0B0B),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                     )
@@ -475,10 +455,10 @@ class _BuildCurrentState extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            const TextMonserats(
+            const TextQuicksand(
               'Nhập email',
               color: Colors.black,
-              fontSize: 12,
+              fontSize: 13,
               fontWeight: FontWeight.w500,
             ),
           ],
@@ -499,10 +479,10 @@ class _BuildCurrentState extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              const TextMonserats(
+              const TextQuicksand(
                 'Xác nhận',
                 color: Colors.black,
-                fontSize: 12,
+                fontSize: 13,
                 fontWeight: FontWeight.w500,
               ),
             ],
@@ -522,10 +502,10 @@ class _BuildCurrentState extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            const TextMonserats(
+            const TextQuicksand(
               'Hoàn thành',
               color: Colors.black,
-              fontSize: 12,
+              fontSize: 13,
               fontWeight: FontWeight.w500,
             ),
           ],
@@ -541,36 +521,32 @@ class _BuildLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Image(
+        Image(
           image: AssetImage('assets/icon/khongngot1.png'),
           width: 120,
           height: 120,
         ),
-        const SizedBox(width: 25),
+        SizedBox(width: 25),
         Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'NGỌT CÀ PHÊ',
-              style: GoogleFonts.getFont(
-                'Montserrat',
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 34,
-                fontWeight: FontWeight.w500,
+                fontSize: 38,
+                fontFamily: 'SVN-Whimsy',
               ),
             ),
-            Text(
+            TextQuicksand(
               'Chào mừng quay trở lại!',
-              style: GoogleFonts.getFont(
-                'Montserrat',
-                color: const Color(0xFFFF725E),
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
+              color: Color(0xFFFF725E),
+              fontSize: 21,
+              fontWeight: FontWeight.w500,
             ),
           ],
         ),

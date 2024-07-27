@@ -1,10 +1,9 @@
 import 'dart:convert';
-
-import 'package:coffeeshop/page/login/view/components/quicksand.dart';
-import 'package:coffeeshop/page/product/cartpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
+import 'package:coffeeshop/page/product/cartpage.dart';
 
 import '../../config/config.dart';
 import 'view/card_best_seller.dart';
@@ -27,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   List? categorieslist;
   List? bestSellersList;
   List? newsList;
+
   @override
   void initState() {
     super.initState();
@@ -177,9 +177,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          //Tìm kiếm sản phẩm
+          // Tìm kiếm sản phẩm
           const SliverToBoxAdapter(child: SearchView()),
-          //Danh mục sản phẩm
+          // Danh mục sản phẩm
           SliverToBoxAdapter(
             child: Column(
               children: [
@@ -231,68 +231,63 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          //Sản phẩm best seller
-          Expanded(
-            child: SliverToBoxAdapter(
-              child: Container(
-                width: 370,
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  color: const Color(0xFFFF725E),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+          // Sản phẩm best seller
+          SliverToBoxAdapter(
+            child: Container(
+              width: 370,
+              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              clipBehavior: Clip.antiAlias,
+              decoration: ShapeDecoration(
+                color: const Color(0xFF2A4261),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextQuicksand(
-                            'Best seller',
+              ),
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextQuicksand(
+                          'Best seller',
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                          height: 0,
+                        ),
+                        Text(
+                          'Xem tất cả',
+                          style: TextStyle(
                             color: Colors.white,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600,
-                            height: 0,
+                            fontSize: 14,
+                            fontFamily: 'Quicksand',
+                            fontWeight: FontWeight.w400,
+                            height: 0.10,
+                            letterSpacing: 0.56,
                           ),
-                          Text(
-                            'Xem tất cả',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontFamily: 'Quicksand',
-                              fontWeight: FontWeight.w400,
-                              height: 0.10,
-                              letterSpacing: 0.56,
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
-                    SingleChildScrollView(
-                      // padding: const EdgeInsets.all(20),
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          if (bestSellersList != null &&
-                              bestSellersList!.isNotEmpty)
-                            ...bestSellersList!.map((productsbestseller) =>
-                                CardBestSeller(product: productsbestseller)),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        if (bestSellersList != null &&
+                            bestSellersList!.isNotEmpty)
+                          ...bestSellersList!.map((productsbestseller) =>
+                              CardBestSeller(product: productsbestseller)),
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
           ),
-          //Sản phẩm mới
+          // Sản phẩm mới
           SliverToBoxAdapter(
             child: Column(
               children: [
@@ -331,11 +326,11 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          //Tin tức - Sự kiện
-          const SliverToBoxAdapter(
+          // Tin tức - Sự kiện
+          SliverToBoxAdapter(
             child: Column(
               children: [
-                Padding(
+                const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -359,17 +354,65 @@ class _HomePageState extends State<HomePage> {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CardNews(
-                        image: 'assets/images/news/news_1.png',
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 200,
+                            height: 100,
+                            margin: const EdgeInsets.only(left: 14, bottom: 8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                              image: const DecorationImage(
+                                image:
+                                    AssetImage('assets/images/news/news_1.png'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 14),
+                            child: TextQuicksand(
+                              'Các loại trà nổi tiếng nhất',
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
-                      CardNews(
-                        image: 'assets/images/news/news_2.png',
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 200,
+                            height: 100,
+                            margin: const EdgeInsets.only(left: 20, bottom: 8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                              image: const DecorationImage(
+                                image:
+                                    AssetImage('assets/images/news/news_2.png'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 20),
+                            child: TextQuicksand(
+                              'Hộp thư góp ý dịch vụ',
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                )
+                ),
+                const SizedBox(height: 20)
               ],
             ),
           ),

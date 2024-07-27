@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/login/view/fogotpasswork.dart';
 import 'package:coffeeshop/page/login/view/signup.dart';
 import 'package:flutter/material.dart';
@@ -104,36 +105,41 @@ class _LoginscreenState extends State<Loginscreen> {
                   decoration: const BoxDecoration(color: Color(0xFF2A4261)),
                   child: Column(
                     children: [
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Image(
+                          Image(
                             image: AssetImage('assets/icon/khongngot1.png'),
                             width: 120,
                             height: 120,
                           ),
-                          const SizedBox(width: 25),
+                          SizedBox(width: 25),
                           Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'NGỌT CÀ PHÊ',
-                                style: GoogleFonts.getFont(
-                                  'Montserrat',
+                                style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 34,
-                                  fontWeight: FontWeight.w500,
+                                  fontSize: 38,
+                                  fontFamily: 'SVN-Whimsy',
                                 ),
                               ),
-                              Text(
+                              // Text(
+                              //   'Chào mừng quay trở lại!',
+                              //   style: TextStyle(
+                              //     fontFamily: 'SVN-Appleberry',
+                              //     color: Color(0xFFFF725E),
+                              //     fontSize: 26,
+                              //     fontWeight: FontWeight.w500,
+                              //   ),
+                              // ),
+                              TextQuicksand(
                                 'Chào mừng quay trở lại!',
-                                style: GoogleFonts.getFont(
-                                  'Montserrat',
-                                  color: const Color(0xFFFF725E),
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                color: Color(0xFFFF725E),
+                                fontSize: 21,
+                                fontWeight: FontWeight.w500,
                               ),
                             ],
                           )
@@ -159,21 +165,17 @@ class _LoginscreenState extends State<Loginscreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              const TextQuicksand(
                                 'Email',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontFamily: 'Quicksand',
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
                               ),
                               const SizedBox(height: 10),
                               TextField(
                                 controller: emailController,
-                                style: const TextStyle(
+                                style: GoogleFonts.getFont('Quicksand',
                                     fontSize: 20,
-                                    fontFamily: 'Quicksand',
                                     height: 1.5,
                                     fontWeight: FontWeight.w500),
                                 decoration: InputDecoration(
@@ -192,23 +194,19 @@ class _LoginscreenState extends State<Loginscreen> {
                                 ),
                               ),
                               const SizedBox(height: 30),
-                              const Text(
+                              const TextQuicksand(
                                 'Mật khẩu',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontFamily: 'Quicksand',
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
                               ),
                               const SizedBox(height: 10),
                               TextField(
                                 controller: passwordController,
                                 obscureText:
                                     _obscureText, // Sử dụng biến trạng thái
-                                style: const TextStyle(
+                                style: GoogleFonts.getFont('Quicksand',
                                     fontSize: 20,
-                                    fontFamily: 'Quicksand',
                                     height: 1.5,
                                     fontWeight: FontWeight.w500),
                                 decoration: InputDecoration(
@@ -217,7 +215,8 @@ class _LoginscreenState extends State<Loginscreen> {
                                   prefixIcon: const Icon(Icons.lock,
                                       color: Color(0xFFFF725E)),
                                   hintText: 'Nhập mật khẩu',
-                                  hintStyle: const TextStyle(
+                                  hintStyle: GoogleFonts.getFont(
+                                    'Quicksand',
                                     fontSize: 18,
                                     fontWeight: FontWeight.w400,
                                   ),
@@ -260,14 +259,11 @@ class _LoginscreenState extends State<Loginscreen> {
                                             });
                                           },
                                         ),
-                                        const Text(
+                                        const TextQuicksand(
                                           'Lưu tài khoản',
-                                          style: TextStyle(
-                                            color: Color(0xFFB5B5B5),
-                                            fontSize: 15,
-                                            fontFamily: 'Quicksand',
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                          color: Colors.grey,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
                                         ),
                                       ],
                                     ),
@@ -281,26 +277,21 @@ class _LoginscreenState extends State<Loginscreen> {
                                         },
                                       );
                                     },
-                                    child: const Text(
+                                    child: const TextQuicksand(
                                       'Quên mật khẩu',
-                                      style: TextStyle(
-                                        color: Color.fromARGB(255, 72, 70, 70),
-                                        fontSize: 15,
-                                        fontFamily: 'Quicksand',
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                      color: Color.fromARGB(255, 72, 70, 70),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                               if (_errorMessage != null) ...[
                                 const SizedBox(height: 10),
-                                Text(
+                                TextQuicksand(
                                   _errorMessage!,
-                                  style: const TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 14,
-                                  ),
+                                  color: Colors.red,
+                                  fontSize: 14,
                                 ),
                               ],
                               const SizedBox(height: 16),
@@ -312,19 +303,16 @@ class _LoginscreenState extends State<Loginscreen> {
                                   },
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 16.0, horizontal: 32.0),
+                                        vertical: 12.0, horizontal: 32.0),
                                     backgroundColor: const Color(0xFF2A4261),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
                                   ),
-                                  child: Text(
-                                    'ĐĂNG NHẬP',
-                                    style: GoogleFonts.montserrat(
-                                        fontSize: 21,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600),
-                                  ),
+                                  child: const TextQuicksand('ĐĂNG NHẬP',
+                                      fontSize: 24,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700),
                                 ),
                               ),
                               const SizedBox(height: 10),
@@ -343,12 +331,10 @@ class _LoginscreenState extends State<Loginscreen> {
                                     Padding(
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Text(
+                                      child: TextQuicksand(
                                         'Hoặc',
-                                        style: TextStyle(
-                                          color: Color(0xFF9C9A9A),
-                                          fontSize: 16,
-                                        ),
+                                        color: Color(0xFF9C9A9A),
+                                        fontSize: 16,
                                       ),
                                     ),
                                     Expanded(
@@ -405,14 +391,11 @@ class _LoginscreenState extends State<Loginscreen> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Text(
+                                    const TextQuicksand(
                                       'Chưa có tài khoản, ',
-                                      style: TextStyle(
-                                        color: Color(0xFF9C9A9A),
-                                        fontSize: 15,
-                                        fontFamily: 'Quicksand',
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                      color: Color(0xFF9C9A9A),
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                     Transform.translate(
                                       offset: const Offset(-12, 0),
@@ -425,14 +408,11 @@ class _LoginscreenState extends State<Loginscreen> {
                                                     const Signup()),
                                           );
                                         },
-                                        child: const Text(
+                                        child: const TextQuicksand(
                                           'đăng ký tại đây',
-                                          style: TextStyle(
-                                            color: Color(0xFF0B0B0B),
-                                            fontSize: 15,
-                                            fontFamily: 'Quicksand',
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                          color: Color(0xFF0B0B0B),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                     )
