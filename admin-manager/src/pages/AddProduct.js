@@ -11,7 +11,7 @@ const AddProduct = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.post('http://192.168.175.111:3000/products', { name, price, description, categoryid });
+            await axios.post('http://192.168.1.123:3000/products', { name, price, description, categoryid });
             alert('Product added successfully');
         } catch (error) {
             console.error('Error adding product:', error);

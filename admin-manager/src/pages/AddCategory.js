@@ -10,7 +10,7 @@ const AddCategory = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.post('http://192.168.175.111:3000/category', { name });
+            await axios.post('http://192.168.1.123:3000/category', { name });
             alert('Category added successfully');
             navigate('/categories');
         } catch (error) {

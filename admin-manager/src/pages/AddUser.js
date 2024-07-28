@@ -12,7 +12,7 @@ const AddUser = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.post('http://192.168.175.111:3000/register', { email, password });
+            await axios.post('http://192.168.1.123:3000/register', { email, password });
             alert('User added successfully');
             setEmail('');
             setPassword('');
