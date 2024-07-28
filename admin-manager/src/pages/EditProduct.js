@@ -12,7 +12,7 @@ const EditProduct = () => {
   const [categoryid, setCategoryId] = useState('');
 
   useEffect(() => {
-    axios.get(`http://192.168.1.123:3000/products/${id}`)
+    axios.get(`http://192.168.175.111:3000/products/${id}`)
       .then(response => {
         const product = response.data;
         setName(product.name);
@@ -26,7 +26,7 @@ const EditProduct = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.put(`http://192.168.1.123:3000/products/${id}`, { name, price, description, categoryid });
+      await axios.put(`http://192.168.175.111:3000/products/${id}`, { name, price, description, categoryid });
       alert('Product updated successfully');
       navigate('/products');
     } catch (error) {
