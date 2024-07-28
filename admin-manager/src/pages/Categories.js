@@ -12,7 +12,7 @@ const Categories = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://192.168.175.111:3000/getallcategory')
+        axios.get('http://192.168.1.123:3000/getallcategory')
             .then(response => {
                 if (response.data && Array.isArray(response.data.categories)) {
                     setCategories(response.data.categories);
@@ -34,7 +34,7 @@ const Categories = () => {
 
     const handleDelete = (id) => {
         // Gọi API để xóa category
-        axios.delete(`http://192.168.175.111:3000/category/${id}`)
+        axios.delete(`http://192.168.1.123:3000/category/${id}`)
             .then(response => {
                 setCategories(categories.filter(category => category._id !== id));
             })
