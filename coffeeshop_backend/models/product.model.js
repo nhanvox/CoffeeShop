@@ -9,7 +9,7 @@ const productSchema = new Schema({
     image: { type: String },
     categoryid: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
     isBestSeller: { type: Boolean, default: false },
-    isNewProduct: { type: Boolean, default: false }
+    isNewProduct: { type: Boolean, default: true }
 }, { timestamps: true });
 
 const Product = db.model('Product', productSchema);

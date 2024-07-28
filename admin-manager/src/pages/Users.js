@@ -16,7 +16,7 @@ const Users = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://192.168.1.123:3000/getallusers')
+        axios.get('http://192.168.175.111:3000/getallusers')
             .then(response => {
                 setUsers(response.data);
                 setLoading(false);
@@ -50,7 +50,7 @@ const Users = () => {
     };
 
     const handleDelete = () => {
-        axios.delete(`http://192.168.1.123:3000/deleteuser/${userToDelete}`)
+        axios.delete(`http://192.168.175.111:3000/deleteuser/${userToDelete}`)
             .then(response => {
                 setUsers(users.filter(user => user._id !== userToDelete));
                 setOpenConfirmDialog(false);
