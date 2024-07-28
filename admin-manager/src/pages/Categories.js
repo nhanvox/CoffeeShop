@@ -40,7 +40,7 @@ const Categories = () => {
     };
 
     const handleDelete = () => {
-        axios.delete(`http://192.168.175.111:3000/category/${categoryToDelete}`)
+        axios.delete(`http://192.168.1.123:3000/category/${categoryToDelete}`)
             .then(response => {
                 setCategories(categories.filter(category => category._id !== categoryToDelete));
                 setOpenConfirmDialog(false);
