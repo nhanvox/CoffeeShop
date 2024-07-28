@@ -5,16 +5,16 @@ import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
     return (
-        <div style={{ width: '200px' }}>
+        <div style={{ height: '100vh', width: '220px', backgroundColor: '#171717', position: 'sticky', top: 0 }}>
             <List>
                 <ListItem button component={Link} to="/users">
-                    <ListItemText primary="Users" />
+                    <ListItemText primary="Người dùng" style={{ color: '#ffffff' }} />
                 </ListItem>
                 <ListItem button component={Link} to="/products">
-                    <ListItemText primary="Products" />
+                    <ListItemText primary="Sản phẩm" style={{ color: '#ffffff' }} />
                 </ListItem>
                 <ListItem button component={Link} to="/categories">
-                    <ListItemText primary="Categories" />
+                    <ListItemText primary="Thể loại" style={{ color: '#ffffff' }} />
                 </ListItem>
             </List>
         </div>

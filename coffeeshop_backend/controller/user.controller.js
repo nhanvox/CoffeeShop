@@ -2,14 +2,18 @@ const UserServices = require("../services/user.service.js");
 
 exports.register = async (req, res, next) => {
   try {
-    console.log("---req body---", req.body);
     const { email, password } = req.body;
     const duplicate = await UserServices.getUserByEmail(email);
     if (duplicate) {
-      throw new Error(`UserName ${email}, Already Registered`);
+      return res.status(400).json({ message: `Username ${email} is already registered` });
+    }
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+    if (password.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters long" });
     }
     const response = await UserServices.registerUser(email, password);
-
     res.json({ status: true, success: "User registered successfully" });
   } catch (err) {
     console.log("---> err -->", err);

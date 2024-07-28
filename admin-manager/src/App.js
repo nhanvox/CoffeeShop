@@ -10,16 +10,18 @@ const App = () => {
   return (
     <div>
       <Header />
-      <Container>
-        <Grid container spacing={3}>
-          <Grid item xs={3}>
+      <div className="main-container">
+        <Grid container >
+          <Grid item xs={2}>
             <Sidebar />
           </Grid>
           <Grid item xs={9}>
-            <AppRouter />
+            <Container>
+              <AppRouter />
+            </Container>
           </Grid>
         </Grid>
-      </Container>
+      </div>
     </div>
   );
 };

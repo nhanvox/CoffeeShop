@@ -32,7 +32,18 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.main-container {
+  display: flex;
+  padding: 0;
+  margin: 0;
+}
+
+.MuiGrid-root {
+  padding: 0 !important;
 }
