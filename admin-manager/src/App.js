@@ -1,6 +1,6 @@
 // src/App.js
 import React from 'react';
-import { Container, Grid } from '@mui/material';
+import { Container, Grid, Box } from '@mui/material';
 import Header from './components/Header.js';
 import Sidebar from './components/Sidebar.js';
 import AppRouter from './Router.js';
@@ -8,21 +8,17 @@ import './styles/App.css';
 
 const App = () => {
   return (
-    <div>
-      <Header />
-      <div className="main-container">
-        <Grid container >
-          <Grid item xs={2}>
-            <Sidebar />
-          </Grid>
-          <Grid item xs={9}>
-            <Container>
-              <AppRouter />
-            </Container>
-          </Grid>
-        </Grid>
-      </div>
-    </div>
+    <Box display="flex">
+      <Box width="20%">
+        <Sidebar />
+      </Box>
+      <Box width="100%" display="flex" flexDirection="column">
+        <Header />
+        <Container>
+          <AppRouter />
+        </Container>
+      </Box>
+    </Box>
   );
 };
 
