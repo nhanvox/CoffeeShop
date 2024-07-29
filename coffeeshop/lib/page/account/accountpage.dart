@@ -8,8 +8,11 @@ import 'package:coffeeshop/page/login/view/loginscreen.dart';
 import 'package:coffeeshop/page/product/view/productfavouritepage.dart';
 import 'package:coffeeshop/page/tutorial/tutorial.dart';
 import 'package:coffeeshop/page/voucher/voucher_page.dart';
+import 'package:coffeeshop/theme.dart';
+import 'package:coffeeshop/theme_setting_cubit/theme_setting_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import '../../config/authservice.dart';
@@ -101,6 +104,9 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = context.select(
+        (ThemeSettingCubit cubit) => cubit.state.brightness == Brightness.dark);
+    final textColor = isDarkMode ? Colors.white : Colors.black;
     return Container(
       decoration: const BoxDecoration(color: Color(0xFFFFFEF2)),
       child: CustomScrollView(
@@ -187,7 +193,7 @@ class _AccountPageState extends State<AccountPage> {
                                   (profile != null && name != '')
                                       ? name ?? 'Tên người dùng'
                                       : 'Người dùng',
-                                  color: Colors.black,
+                                  color: textColor,
                                   fontSize: 22,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -326,12 +332,10 @@ class _AccountPageState extends State<AccountPage> {
                             Navigator.push(
                               context,
                               CupertinoPageRoute(
-                                builder: (context) =>
-                                    const VoucherPage(),
+                                builder: (context) => const VoucherPage(),
                               ),
                             );
                           },
-
                         ),
                       ],
                     ),
@@ -400,10 +404,12 @@ class _AccountPageState extends State<AccountPage> {
                             'Giới thiệu',
                             style: _textStyle(),
                           ),
-                          leading: const Icon(
-                            Icons.error,
-                            size: 30,
-                            color: Color(0xFFFF725E),
+                          leading: CupertinoSwitch(
+                            value: context.watch<ThemeSettingCubit>().state ==
+                                AppTheme.blackTheme,
+                            onChanged: (value) {
+                              context.read<ThemeSettingCubit>().toggleTheme();
+                            },
                           ),
                         ),
                         _buildDivider(),

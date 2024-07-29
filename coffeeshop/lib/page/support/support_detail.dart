@@ -1,4 +1,6 @@
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SupportDetailPage extends StatefulWidget {
   const SupportDetailPage({super.key});
@@ -13,26 +15,32 @@ class SupportDetailPageState extends State<SupportDetailPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFEF2),
       appBar: AppBar(
-        title: const Text(
-          'Ngọt Cà Phê',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+        title: const TextQuicksand(
+          'NGỌT CÀ PHÊ',
+          color: Colors.black,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
         ),
         centerTitle: true,
         backgroundColor: const Color(0xFFFFFEF2),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(
+            size: 36,
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.black),
+            icon: const Icon(
+              Icons.more_vert,
+              color: Colors.black,
+              size: 22,
+            ),
             onPressed: () {},
           ),
         ],
@@ -54,7 +62,8 @@ class SupportDetailPageState extends State<SupportDetailPage> {
                   isSentByMe: true,
                 ),
                 ChatMessage(
-                  message: 'Vâng, bạn hãy vào ứng dụng, tìm "Cà phê Arabica", chọn 1kg, và nhấn "Thanh toán". Cần hỗ trợ thêm gì không ạ?',
+                  message:
+                      'Vâng, bạn hãy vào ứng dụng, tìm "Cà phê Arabica", chọn 1kg, và nhấn "Thanh toán". Cần hỗ trợ thêm gì không ạ?',
                   time: '10:30 AM',
                   isSentByMe: false,
                 ),
@@ -72,7 +81,8 @@ class SupportDetailPageState extends State<SupportDetailPage> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 50.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 50.0),
             child: Row(
               children: [
                 Expanded(
@@ -92,13 +102,15 @@ class SupportDetailPageState extends State<SupportDetailPage> {
                     ),
                     child: Row(
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
                             child: TextField(
                               decoration: InputDecoration(
                                 hintText: 'Gửi yêu cầu hỗ trợ',
-                                hintStyle: TextStyle(fontSize: 18),
+                                hintStyle: GoogleFonts.getFont('Quicksand',
+                                    fontSize: 18, fontWeight: FontWeight.w600),
                                 border: InputBorder.none,
                               ),
                             ),
@@ -120,7 +132,8 @@ class SupportDetailPageState extends State<SupportDetailPage> {
                               ],
                             ),
                             child: IconButton(
-                              icon: const Icon(Icons.send, color: Color(0xFF006C4B)),
+                              icon: const Icon(Icons.send,
+                                  color: Color(0xFF006C4B)),
                               onPressed: () {
                                 // Add functionality to send message
                               },
@@ -143,7 +156,7 @@ class SupportDetailPageState extends State<SupportDetailPage> {
 class DateSeparator extends StatelessWidget {
   final String date;
 
-  const DateSeparator({required this.date});
+  const DateSeparator({super.key, required this.date});
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +165,8 @@ class DateSeparator extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         date,
-        style: const TextStyle(color: Colors.grey, fontSize: 14.0),
+        style: GoogleFonts.getFont('Quicksand',
+            color: Colors.grey, fontSize: 16.0),
       ),
     );
   }
@@ -164,6 +178,7 @@ class ChatMessage extends StatelessWidget {
   final bool isSentByMe;
 
   const ChatMessage({
+    super.key,
     required this.message,
     required this.time,
     required this.isSentByMe,
@@ -183,20 +198,16 @@ class ChatMessage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            TextQuicksand(
               message,
-              style: TextStyle(
-                color: isSentByMe ? Colors.black : Colors.white,
-                fontSize: 16.0,
-              ),
+              color: isSentByMe ? Colors.black : Colors.white,
+              fontSize: 18.0,
             ),
             const SizedBox(height: 4.0),
-            Text(
+            TextQuicksand(
               time,
-              style: TextStyle(
-                color: isSentByMe ? Colors.black54 : Colors.white70,
-                fontSize: 12.0,
-              ),
+              color: isSentByMe ? Colors.black54 : Colors.white70,
+              fontSize: 12.0,
             ),
           ],
         ),

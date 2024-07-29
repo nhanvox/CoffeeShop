@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:coffeeshop/page/home/view/drawer_tile.dart';
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/support/support_page.dart';
+import 'package:coffeeshop/theme_setting_cubit/theme_setting_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
@@ -152,15 +154,23 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = context.select(
+        (ThemeSettingCubit cubit) => cubit.state.brightness == Brightness.dark);
+    final colornav =
+        isDarkMode ? const Color(0xFFFFFEF2) : const Color(0xFFFFFEF2);
+    final colornavmenu =
+        isDarkMode ? const Color(0xff2A4261) : const Color(0xFFFFFEF2);
+    final colornavmenu1 =
+        isDarkMode ? const Color(0xff17273B) : const Color(0xff2A4261);
     return Scaffold(
       key: _scaffoldKey,
       drawer: Drawer(
-        backgroundColor: const Color(0xFFFFFEF2),
+        backgroundColor: colornavmenu,
         child: Column(
           children: [
             DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Color(0xFF2A4261),
+              decoration: BoxDecoration(
+                color: colornavmenu1,
               ),
               child: Row(
                 children: [
@@ -342,17 +352,17 @@ class _MainPageState extends State<MainPage> {
         }
       },
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: colornav,
           boxShadow: [
             BoxShadow(
-              color: Color(0x3F000000),
+              color: colornav,
               blurRadius: 24,
-              offset: Offset(0, 5),
+              offset: const Offset(0, 5),
               spreadRadius: 0,
             )
           ],
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
           ),
