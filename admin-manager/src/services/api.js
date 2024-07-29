@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://192.168.1.119:3000",
+    baseURL: 'http://192.168.1.121:3000',
 });
 
 export const getUsers = () => api.get("/getAllUsers");

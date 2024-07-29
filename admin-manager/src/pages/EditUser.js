@@ -9,28 +9,24 @@ const EditUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    axios
-      .get(`http://192.168.1.119:3000/getuserinfobyid/${id}`)
-      .then((response) => {
-        setEmail(response.data.email);
-      })
-      .catch((error) => console.error("Error fetching user:", error));
-  }, [id]);
+    useEffect(() => {
+        axios.get(`http://192.168.1.121:3000/getuserinfobyid/${id}`)
+            .then(response => {
+                setEmail(response.data.email);
+            })
+            .catch(error => console.error('Error fetching user:', error));
+    }, [id]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      await axios.put(`http://192.168.1.119:3000/updateuser/${id}`, {
-        email,
-        password,
-      });
-      alert("User updated successfully");
-      navigate("/users");
-    } catch (error) {
-      console.error("Error updating user:", error);
-    }
-  };
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            await axios.put(`http://192.168.1.121:3000/updateuser/${id}`, { email, password });
+            alert('User updated successfully');
+            navigate('/users');
+        } catch (error) {
+            console.error('Error updating user:', error);
+        }
+    };
 
   return (
     <div>
