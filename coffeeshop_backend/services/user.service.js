@@ -97,6 +97,10 @@ class UserServices {
       throw err;
     }
   }
+
+  static async getTotalUsers() {
+    return await UserModel.countDocuments();
+  }
 }
 
 module.exports = UserServices;

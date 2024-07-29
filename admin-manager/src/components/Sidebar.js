@@ -35,7 +35,7 @@ const Sidebar = () => {
                 <ListItem
                     button
                     component={Link}
-                    to="/dashboard"
+                    to="/"
                     sx={{
                         backgroundColor: isActive('/dashboard') ? '#e4f2fd' : 'transparent',
                         '&:hover': { backgroundColor: '#e4f2fd' },
