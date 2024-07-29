@@ -1,12 +1,12 @@
 // src/pages/EditCategory.js
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
 
 const EditCategory = () => {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const [name, setName] = useState('');
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
 
     useEffect(() => {
         axios.get(`http://192.168.1.121:3000/category/${id}`)
@@ -27,21 +27,21 @@ const EditCategory = () => {
         }
     };
 
-    return (
-        <div>
-            <h1>Edit Category</h1>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Name"
-                    required
-                />
-                <button type="submit">Update Category</button>
-            </form>
-        </div>
-    );
+  return (
+    <div>
+      <h1>Edit Category</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Name"
+          required
+        />
+        <button type="submit">Update Category</button>
+      </form>
+    </div>
+  );
 };
 
 export default EditCategory;

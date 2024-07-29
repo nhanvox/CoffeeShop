@@ -26,6 +26,7 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
+  String selectedStatus = 'Chờ Xác Nhận';
   String? userName;
   String? name;
   String? image;
@@ -313,6 +314,10 @@ class _AccountPageState extends State<AccountPage> {
                                 builder: (context) =>
                                     const OrderHistoryWidget(),
                               ),
+                              // CupertinoPageRoute(
+                              //   builder: (context) => OrderHistoryWidget(
+                              //       initialStatus: selectedStatus),
+                              // ),
                             );
                           },
                         ),

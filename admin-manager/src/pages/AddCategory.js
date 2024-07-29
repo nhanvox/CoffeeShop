@@ -12,8 +12,8 @@ import {
 } from '@mui/material';
 
 const AddCategory = () => {
-    const [name, setName] = useState('');
-    const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();

@@ -1,3 +1,4 @@
+// src/pages/Categories.js
 import React, { useEffect, useState } from 'react';
 import {
   Button, IconButton, CircularProgress, Dialog, DialogActions,
