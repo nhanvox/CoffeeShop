@@ -121,7 +121,7 @@ class _CardOrderProductState extends State<CardOrderProduct> {
                                 style: GoogleFonts.getFont(
                                   'Quicksand',
                                   color: Colors.black,
-                                  fontSize: 20,
+                                  fontSize: 17,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -130,6 +130,9 @@ class _CardOrderProductState extends State<CardOrderProduct> {
                         ],
                       ),
                     ),
+                    const SizedBox(
+                      width: 10,
+                    )
                   ],
                 ),
               ),

@@ -1,3 +1,4 @@
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/order/card_order.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -35,19 +36,19 @@ class OrderInfoWidgetState extends State<OrderInfoWidget> {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFEF2),
       appBar: AppBar(
-        title: const Text(
-          'Thông tin đơn hàng',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 24,
-            fontFamily: 'Quicksand',
-            fontWeight: FontWeight.w500,
-          ),
+        title: const TextQuicksand(
+          'THÔNG TIN ĐƠN HÀNG',
+          color: Colors.black,
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
         ),
         centerTitle: true,
         backgroundColor: const Color(0xFFFFFEF2),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(
+            Icons.arrow_back,
+            size: 34,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -82,12 +83,10 @@ class OrderInfoWidgetState extends State<OrderInfoWidget> {
                 children: [
                   Icon(Icons.location_pin),
                   SizedBox(width: 8), // Khoảng cách giữa biểu tượng và văn bản
-                  Text(
+                  TextQuicksand(
                     "Thông tin nhận hàng",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20,
                   ),
                 ],
               ),
@@ -97,9 +96,18 @@ class OrderInfoWidgetState extends State<OrderInfoWidget> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.order['name']),
-                  Text(widget.order['phoneNumber']),
-                  Text(widget.order['address']),
+                  TextQuicksand(
+                    widget.order['name'],
+                    fontSize: 16,
+                  ),
+                  TextQuicksand(
+                    widget.order['phoneNumber'],
+                    fontSize: 16,
+                  ),
+                  TextQuicksand(
+                    widget.order['address'],
+                    fontSize: 16,
+                  ),
                 ],
               ),
               const SizedBox(
@@ -112,25 +120,22 @@ class OrderInfoWidgetState extends State<OrderInfoWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text("Tổng tiền hàng", style: TextStyle(fontSize: 14)),
-                  Text(
+                  const TextQuicksand("Tổng tiền hàng", fontSize: 18),
+                  TextQuicksand(
                     formatCurrency.format(allPrice),
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
+                    fontSize: 18,
                   ),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text("Phí vận chuyển",
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                  const TextQuicksand("Phí vận chuyển",
+                      fontSize: 18, fontWeight: FontWeight.w600),
                   Text(
                     formatCurrency.format(widget.order['deliverycharges']),
                     style: const TextStyle(
-                      fontSize: 14,
+                      fontSize: 18,
                     ),
                   ),
                 ],
@@ -138,15 +143,13 @@ class OrderInfoWidgetState extends State<OrderInfoWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text("Thành tiền",
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                  Text(
+                  const TextQuicksand("Thành tiền",
+                      fontSize: 18, fontWeight: FontWeight.w600),
+                  TextQuicksand(
                     formatCurrency.format(widget.order['totalsum']),
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    color: Colors.red,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
                   ),
                 ],
               ),
@@ -156,12 +159,10 @@ class OrderInfoWidgetState extends State<OrderInfoWidget> {
                 children: [
                   Icon(Icons.credit_card),
                   SizedBox(width: 8), // Khoảng cách giữa biểu tượng và văn bản
-                  Text(
+                  TextQuicksand(
                     "Phương thức thanh toán",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
                 ],
               ),
@@ -169,20 +170,23 @@ class OrderInfoWidgetState extends State<OrderInfoWidget> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.order['paymentMethod']),
+                  TextQuicksand(
+                    widget.order['paymentMethod'],
+                    fontSize: 18,
+                  ),
                 ],
               ),
-              const SizedBox(height: 7),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text("Thời gian hoàn thành",
-                      style: TextStyle(fontSize: 14)),
-                  Text(
+                  const TextQuicksand(
+                    "Thời gian hoàn thành",
+                    fontSize: 18,
+                  ),
+                  TextQuicksand(
                     formattedOrderDate,
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
+                    fontSize: 18,
+                    color: Colors.green,
                   ),
                 ],
               ),
@@ -195,15 +199,17 @@ class OrderInfoWidgetState extends State<OrderInfoWidget> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFFF725E),
                       padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 16),
+                          vertical: 8, horizontal: 16),
                       minimumSize: const Size(110, 41),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
                     ),
-                    child: const Text(
+                    child: const TextQuicksand(
                       'Đánh giá',
-                      style: TextStyle(fontSize: 14, color: Colors.white),
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
