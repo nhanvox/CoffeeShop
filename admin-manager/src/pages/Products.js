@@ -1,6 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, Card, CardActions, CardContent, CardMedia, IconButton, Typography, Grid, CircularProgress, TextField, MenuItem, Select, FormControl } from '@mui/material';
+import { 
+    Button, 
+    Card, 
+    CardActions, 
+    CardContent, 
+    CardMedia, 
+    IconButton, 
+    Typography, 
+    Grid, 
+    CircularProgress, 
+    TextField, 
+    MenuItem, 
+    Select, 
+    FormControl 
+} from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,41 +28,45 @@ const Products = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://192.168.1.173:3000/products')
-            .then(response => {
+        const fetchProducts = async () => {
+            try {
+                const response = await axios.get('http://192.168.1.173:3000/products');
                 if (response.data && Array.isArray(response.data.products)) {
                     setProducts(response.data.products);
                 } else {
                     setError('Invalid response format');
                 }
-                setLoading(false);
-            })
-            .catch(error => {
+            } catch (error) {
                 setError('Error fetching products');
+            } finally {
                 setLoading(false);
-            });
+            }
+        };
 
-        axios.get('http://192.168.1.173:3000/getallcategory')
-            .then(response => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('http://192.168.1.173:3000/getallcategory');
                 if (response.data && Array.isArray(response.data.categories)) {
                     setCategories(response.data.categories);
                 } else {
                     setError('Invalid response format');
                 }
-            })
-            .catch(error => {
+            } catch (error) {
                 setError('Error fetching categories');
-            });
+            }
+        };
+
+        fetchProducts();
+        fetchCategories();
     }, []);
 
-    const handleDelete = (id) => {
-        axios.delete(`http://192.168.1.173:3000/products/${id}`)
-            .then(response => {
-                setProducts(products.filter(product => product._id !== id));
-            })
-            .catch(error => {
-                setError('Error deleting product');
-            });
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`http://192.168.1.173:3000/products/${id}`);
+            setProducts(products.filter(product => product._id !== id));
+        } catch (error) {
+            setError('Error deleting product');
+        }
     };
 
     const handleSearchChange = (event) => {
@@ -112,7 +130,10 @@ const Products = () => {
                         }}
                         InputProps={{ sx: { height: '39px', fontFamily: 'Montserrat, sans-serif' } }}
                     />
-                    <FormControl variant="outlined" sx={{ height: '39px', width: '200px', fontFamily: 'Montserrat, sans-serif' }}>
+                    <FormControl 
+                        variant="outlined" 
+                        sx={{ height: '39px', width: '200px', fontFamily: 'Montserrat, sans-serif', backgroundColor: 'white' }} // Background color added here
+                    >
                         <Select
                             value={selectedCategory}
                             onChange={handleCategoryChange}
@@ -121,7 +142,7 @@ const Products = () => {
                             sx={{ height: '39px', fontFamily: 'Montserrat, sans-serif' }}
                         >
                             <MenuItem value="" sx={{ fontFamily: 'Montserrat, sans-serif' }}>
-                                <em>All</em>
+                                <em>Tất cả</em>
                             </MenuItem>
                             {categories.map(category => (
                                 <MenuItem key={category._id} value={category._id} sx={{ fontFamily: 'Montserrat, sans-serif' }}>

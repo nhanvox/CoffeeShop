@@ -96,12 +96,12 @@ const Dashboard = () => {
                     </Paper>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
-                    <Paper elevation={3} style={{ padding: '20px' }}>
+                    <Paper elevation={3} style={{ paddingTop: '20px', paddingBottom: '20px', paddingLeft:'10px',paddingRight:'10px' }}>
                         <Typography variant="h6" gutterBottom>
                             Tổng doanh thu
                         </Typography>
                         <Typography variant="h4">
-                            ${stats.totalRevenue.toLocaleString()}
+                            {stats.totalRevenue.toLocaleString() + ' VNĐ'}
                         </Typography>
                     </Paper>
                 </Grid>

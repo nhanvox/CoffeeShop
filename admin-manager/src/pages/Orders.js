@@ -83,6 +83,10 @@ const Orders = () => {
         (statusFilter === '' || order.status === statusFilter)
     );
 
+    const formatPrice = (price) => {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' VNĐ';
+    };
+
     if (loading) {
         return <div><CircularProgress /></div>; // Display loading state
     }
@@ -152,7 +156,7 @@ const Orders = () => {
                                 <TableCell sx={{ fontFamily: 'Montserrat, sans-serif' }}>{order.phoneNumber}</TableCell>
                                 <TableCell sx={{ fontFamily: 'Montserrat, sans-serif' }}>{order.address}</TableCell>
                                 <TableCell sx={{ fontFamily: 'Montserrat, sans-serif' }}>{order.quantitysum}</TableCell>
-                                <TableCell sx={{ fontFamily: 'Montserrat, sans-serif' }}>{order.totalsum}</TableCell>
+                                <TableCell sx={{ fontFamily: 'Montserrat, sans-serif' }}>{formatPrice(order.totalsum)}</TableCell>
                                 <TableCell sx={{ fontFamily: 'Montserrat, sans-serif' }}>{order.status}</TableCell>
                                 <TableCell sx={{ fontFamily: 'Montserrat, sans-serif' }}>{new Date(order.orderDate).toLocaleDateString()}</TableCell>
                                 <TableCell sx={{ fontFamily: 'Montserrat, sans-serif' }}>
