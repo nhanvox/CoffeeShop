@@ -71,12 +71,12 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     int totalQuantity = 0;
-    num totalPrice = 0;
+    num allPrice = 0;
 
     if (cartsList != null) {
       for (var cart in cartsList!) {
         totalQuantity += cart['quantity'] as int;
-        totalPrice += cart['total'] as num;
+        allPrice += cart['total'] as num;
       }
     }
     return Scaffold(
@@ -152,7 +152,7 @@ class _CartPageState extends State<CartPage> {
                 ),
                 Text(
                   NumberFormat.simpleCurrency(locale: 'vi_VN', name: 'VND')
-                      .format(totalPrice),
+                      .format(allPrice),
                   style: GoogleFonts.getFont(
                     'Quicksand',
                     color: Colors.red,
@@ -174,7 +174,7 @@ class _CartPageState extends State<CartPage> {
                       builder: (context) => PaymentPage(
                           cartsList: cartsList!,
                           totalQuantity: totalQuantity,
-                          totalPrice: totalPrice),
+                          allPrice: allPrice),
                     ),
                   );
                 } else {
