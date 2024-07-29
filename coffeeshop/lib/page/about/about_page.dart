@@ -16,15 +16,18 @@ class AboutPageState extends State<AboutPage> {
       backgroundColor: const Color(0xFFFFFEF2),
       appBar: AppBar(
         title: const TextQuicksand(
-          'Về chúng tôi',
+          'VỀ CHÚNG TÔI',
           color: Colors.black,
           fontSize: 24,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w700,
         ),
         centerTitle: true,
         backgroundColor: const Color(0xFFFFFEF2),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(
+            Icons.arrow_back,
+            size: 36,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -40,7 +43,7 @@ class AboutPageState extends State<AboutPage> {
               child: TextQuicksand(
                 'Ngọt Cà Phê sẽ là nơi mọi người xích lại gần nhau, sẻ chia thân tình bên những tách cà phê.',
                 fontSize: 17,
-                fontWeight: FontWeight.normal,
+                fontWeight: FontWeight.w600,
                 color: Colors.black,
                 textAlign: TextAlign.center,
               ),
@@ -69,18 +72,27 @@ class AboutPageState extends State<AboutPage> {
       items: imageUrls.map((imageUrl) {
         return Builder(
           builder: (BuildContext context) {
-            return Container(
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.symmetric(horizontal: 5.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover,
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 11.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x3F000000),
+                      blurRadius: 6,
+                      offset: Offset(5, 5),
+                      spreadRadius: 2,
+                    ),
+                  ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             );
@@ -95,10 +107,13 @@ class AboutPageState extends State<AboutPage> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Card(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        color: const Color(0xffFF725E),
-        elevation: 5,
+            borderRadius: BorderRadius.circular(10),
+            side: const BorderSide(
+              color: Color(0xffFF725E),
+              width: 1,
+            )),
+        color: const Color(0xFFFFFEF2),
+        elevation: 10,
         child: const Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(
@@ -108,18 +123,21 @@ class AboutPageState extends State<AboutPage> {
                 'Giới thiệu',
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                // color: Colors.white,
+                color: Color(0xff2A4261),
               ),
               Divider(
-                color: Colors.yellow,
+                color: Color(0xffFF725E),
                 thickness: 3,
                 endIndent: 270,
               ),
               TextQuicksand(
                 'Ngọt Cà Phê không chỉ nổi tiếng với các loại cà phê tuyệt hảo mà còn với thực đơn bánh ngọt phong phú, hấp dẫn.\n\n'
                 'Khách hàng có thể thưởng thức các loại bánh ngọt được chế biến tỉ mỉ kết hợp hoàn hảo với tách cà phê nóng hổi. Với phong cách phục vụ tận tình, chuyên nghiệp, cam kết mang đến cho khách hàng những trải nghiệm tuyệt vời nhất, từ chất lượng đồ uống đến không gian và dịch vụ.',
-                fontSize: 18,
-                color: Colors.white,
+                fontSize: 19,
+                textAlign: TextAlign.justify,
+                // color: Colors.white,
+                color: Color(0xff2A4261),
               ),
             ],
           ),

@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/product/cartpage.dart';
+import 'package:coffeeshop/theme_setting_cubit/theme_setting_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
@@ -116,13 +118,19 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = context.select(
+        (ThemeSettingCubit cubit) => cubit.state.brightness == Brightness.dark);
+    final colorbg =
+        isDarkMode ? const Color(0xff2A4261) : const Color(0xFFFFFEF2);
+    final colortext = isDarkMode ? Colors.white : Colors.black;
+    final colorbtn = isDarkMode ? Colors.white : Colors.black;
     return Container(
-      decoration: const BoxDecoration(color: Color(0xFFFFFEF2)),
+      decoration: BoxDecoration(color: colorbg),
       child: CustomScrollView(
         slivers: [
           SliverAppBar(
-            backgroundColor: const Color(0xFFFFFEF2),
-            surfaceTintColor: const Color(0xFFFFFEF2),
+            backgroundColor: colorbg,
+            surfaceTintColor: colorbg,
             actions: [
               Container(
                 margin: const EdgeInsets.only(right: 30),
@@ -167,7 +175,7 @@ class _MenuPageState extends State<MenuPage> {
               'MENU',
               style: GoogleFonts.getFont(
                 'Quicksand',
-                color: Colors.black,
+                color: colortext,
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
               ),
@@ -178,17 +186,18 @@ class _MenuPageState extends State<MenuPage> {
           const SliverToBoxAdapter(child: SearchView()),
           SliverToBoxAdapter(
             child: Container(
-              color: const Color(0xFFFFFEF2),
+              color: colorbg,
               child: Column(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TextQuicksand(
                           'Danh mục sản phẩm',
-                          color: Colors.black,
+                          color: colortext,
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                           height: 0,
@@ -251,13 +260,23 @@ class ItemsMN extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = context.select(
+        (ThemeSettingCubit cubit) => cubit.state.brightness == Brightness.dark);
+    final colorbtnclick =
+        isDarkMode ? const Color(0xFFFFFEF2) : const Color(0xfff2a4261);
+    final colorbtnnoclick =
+        isDarkMode ? const Color(0xff17273B) : const Color(0xfffe3e3e3);
+
+    final colortextclick =
+        isDarkMode ? const Color(0xfff2a4261) : const Color(0xfffffffff);
+    final colortextnoclick =
+        isDarkMode ? const Color(0xfffffffff) : const Color(0xfff2a4261);
     return Container(
       margin: const EdgeInsets.only(right: 10),
       child: TextButton(
         style: TextButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-          backgroundColor:
-              isSelected ? const Color(0xFF2A4261) : const Color(0xFFE3E3E3),
+          backgroundColor: isSelected ? colorbtnclick : colorbtnnoclick,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -268,7 +287,7 @@ class ItemsMN extends StatelessWidget {
           textAlign: TextAlign.center,
           style: GoogleFonts.getFont(
             'Quicksand',
-            color: isSelected ? Colors.white : Colors.black,
+            color: isSelected ? colortextclick : colortextnoclick,
             fontSize: 16,
             fontWeight: FontWeight.w600,
             height: 0,

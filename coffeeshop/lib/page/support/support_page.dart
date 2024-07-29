@@ -1,3 +1,4 @@
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/support/support_detail.dart';
 import 'package:flutter/material.dart';
 
@@ -14,18 +15,20 @@ class SupportPageState extends State<SupportPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFEF2),
       appBar: AppBar(
-        title: const Text(
-          'Hỗ trợ',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+        title: const TextQuicksand(
+          'HỖ TRỢ',
+          color: Colors.black,
+          fontSize: 24,
+          fontWeight: FontWeight.w700,
         ),
         centerTitle: true,
         backgroundColor: const Color(0xFFFFFEF2),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(
+            size: 36,
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -68,20 +71,18 @@ class SupportPageState extends State<SupportPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        TextQuicksand(
                           'Ngọt Cà Phê',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
                         ),
                         SizedBox(height: 8.0),
-                        Text(
-                          'Rất vui được giúp bạn. Chúc bạn m...',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
+                        TextQuicksand(
+                          'Rất vui được giúp bạn. Chúc bạn một ngày mới tốt lành.',
+                          maxLine: 1,
+                          overflow: TextOverflow.ellipsis,
+                          fontSize: 16,
+                          color: Colors.grey,
                         ),
                         SizedBox(height: 8.0),
                         Row(
@@ -92,12 +93,10 @@ class SupportPageState extends State<SupportPage> {
                               color: Colors.grey,
                             ),
                             SizedBox(width: 4.0),
-                            Text(
+                            TextQuicksand(
                               '15 phút trước',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey,
-                              ),
+                              fontSize: 14,
+                              color: Colors.grey,
                             ),
                           ],
                         ),

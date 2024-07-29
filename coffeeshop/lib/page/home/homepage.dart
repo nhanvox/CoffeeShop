@@ -1,14 +1,14 @@
 import 'dart:convert';
+import 'package:coffeeshop/theme_setting_cubit/theme_setting_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/product/cartpage.dart';
-
 import '../../config/config.dart';
 import 'view/card_best_seller.dart';
 import 'view/card_new_products.dart';
-import 'view/card_news.dart';
 import 'view/item_product_portfolio.dart';
 import 'view/searchview.dart';
 
@@ -122,12 +122,20 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = context.select(
+        (ThemeSettingCubit cubit) => cubit.state.brightness == Brightness.dark);
+    final Colorbg =
+        isDarkMode ? const Color(0xff2A4261) : const Color(0xFFFFFEF2);
+    final Colorbgbst =
+        isDarkMode ? const Color(0xFF17273B) : const Color(0xff2A4261);
+    final Colortext = isDarkMode ? Colors.white : const Color(0xff2A4261);
+
     return Container(
-      decoration: const BoxDecoration(color: Color(0xFFFFFEF2)),
+      decoration: BoxDecoration(color: Colorbg),
       child: CustomScrollView(
         slivers: [
           SliverAppBar(
-            backgroundColor: const Color(0xFFFFFEF2),
+            backgroundColor: Colorbg,
             actions: [
               Container(
                 margin: const EdgeInsets.only(right: 30),
@@ -193,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                         'Danh mục sản phẩm',
                         style: GoogleFonts.getFont(
                           'Quicksand',
-                          color: Colors.black,
+                          color: Colortext,
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                         ),
@@ -202,9 +210,9 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           widget.changePage(1);
                         },
-                        child: const TextQuicksand(
+                        child: TextQuicksand(
                           'Xem tất cả',
-                          color: Colors.black,
+                          color: Colortext,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           height: 0.10,
@@ -239,7 +247,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               clipBehavior: Clip.antiAlias,
               decoration: ShapeDecoration(
-                color: const Color(0xFF2A4261),
+                color: Colorbgbst,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -291,21 +299,22 @@ class _HomePageState extends State<HomePage> {
           SliverToBoxAdapter(
             child: Column(
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextQuicksand(
                         'Sản phẩm mới',
-                        color: Colors.black,
+                        color: Colortext,
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
                       TextQuicksand(
                         'Xem tất cả',
                         textAlign: TextAlign.right,
-                        color: Colors.black,
+                        color: Colortext,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),
@@ -330,21 +339,22 @@ class _HomePageState extends State<HomePage> {
           SliverToBoxAdapter(
             child: Column(
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextQuicksand(
                         'Tin tức - sự kiện',
-                        color: Colors.black,
+                        color: Colortext,
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
                       TextQuicksand(
                         'Xem tất cả',
                         textAlign: TextAlign.right,
-                        color: Colors.black,
+                        color: Colortext,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),
@@ -371,11 +381,11 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 14),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 14),
                             child: TextQuicksand(
                               'Các loại trà nổi tiếng nhất',
-                              color: Colors.black,
+                              color: Colortext,
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                             ),
@@ -398,11 +408,11 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 20),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20),
                             child: TextQuicksand(
                               'Hộp thư góp ý dịch vụ',
-                              color: Colors.black,
+                              color: Colortext,
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                             ),
