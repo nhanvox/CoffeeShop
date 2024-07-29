@@ -91,7 +91,15 @@ class OrderHistoryWidgetState extends State<OrderHistoryWidget> {
             : ListView.builder(
                 itemCount: orders?.length ?? 0,
                 itemBuilder: (context, index) {
-                  var order = orders![index];
+                  // Sort orders by date in descending order
+                  List sortedOrders = List.from(orders!);
+                  sortedOrders.sort((a, b) {
+                    DateTime dateA = DateTime.parse(a['orderDate']);
+                    DateTime dateB = DateTime.parse(b['orderDate']);
+                    return dateB.compareTo(dateA);
+                  });
+
+                  var order = sortedOrders[index];
                   var firstItemOrder = order['itemorders'].isNotEmpty
                       ? order['itemorders'][0]
                       : null;
