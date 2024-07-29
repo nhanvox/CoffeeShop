@@ -9,7 +9,7 @@ const EditCategory = () => {
     const [name, setName] = useState('');
 
     useEffect(() => {
-        axios.get(`http://192.168.175.111:3000/category/${id}`)
+        axios.get(`http://192.168.1.121:3000/category/${id}`)
             .then(response => {
                 setName(response.data.name);
             })
@@ -19,7 +19,7 @@ const EditCategory = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.put(`http://192.168.175.111:3000/category/${id}`, { name });
+            await axios.put(`http://192.168.1.121:3000/category/${id}`, { name });
             alert('Category updated successfully');
             navigate('/categories');
         } catch (error) {
