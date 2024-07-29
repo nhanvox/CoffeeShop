@@ -84,7 +84,18 @@ const Products = () => {
                 Danh sách sản phẩm
             </Typography>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', fontFamily: 'Montserrat, sans-serif' }}>
-                <Button variant="contained" color="primary" onClick={() => navigate('/add-product')} sx={{ fontFamily: 'Montserrat, sans-serif' }}>
+                <Button 
+                    variant="contained" 
+                    onClick={() => navigate('/add-product')} 
+                    sx={{ 
+                        fontFamily: 'Montserrat, sans-serif', 
+                        backgroundColor: '#3366ff', // Màu nền mới
+                        color: '#ffffff', // Màu văn bản
+                        '&:hover': {
+                            backgroundColor: '#254db3' // Màu nền khi hover
+                        }
+                    }}
+                >
                     Thêm sản phẩm
                 </Button>
                 <div style={{ display: 'flex', gap: '10px', fontFamily: 'Montserrat, sans-serif' }}>

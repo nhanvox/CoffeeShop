@@ -33,7 +33,7 @@ const EditProduct = () => {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        axios.get(`http://192.168.1.173:3000/products/${id}`)
+        axios.get(`http://192.168.1.121:3000/products/${id}`)
             .then(response => {
                 const product = response.data.product;
                 setName(product.name || '');
@@ -46,7 +46,7 @@ const EditProduct = () => {
             })
             .catch(error => console.error('Error fetching product:', error));
 
-        axios.get('http://192.168.1.173:3000/getallcategory')
+        axios.get('http://192.168.1.121:3000/getallcategory')
             .then(response => {
                 if (response.data && Array.isArray(response.data.categories)) {
                     setCategories(response.data.categories);
@@ -71,7 +71,7 @@ const EditProduct = () => {
         event.preventDefault();
         if (validate()) {
             try {
-                await axios.put(`http://192.168.1.173:3000/products/${id}`, { name, price, description, categoryid, image, isBestSeller, isNewProduct });
+                await axios.put(`http://192.168.1.121:3000/products/${id}`, { name, price, description, categoryid, image, isBestSeller, isNewProduct });
                 alert('Product updated successfully');
                 navigate('/products');
             } catch (error) {
