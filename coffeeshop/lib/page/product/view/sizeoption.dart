@@ -1,5 +1,7 @@
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
+import 'package:coffeeshop/theme_setting_cubit/theme_setting_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SizeOption extends StatelessWidget {
   final String label;
@@ -19,6 +21,9 @@ class SizeOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = context.select(
+        (ThemeSettingCubit cubit) => cubit.state.brightness == Brightness.dark);
+    final textColor = isDarkMode ? Colors.white : Colors.black;
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -45,7 +50,7 @@ class SizeOption extends StatelessWidget {
           TextQuicksand(
             label,
             fontSize: 16,
-            color: Colors.black,
+            color: textColor,
             fontWeight: FontWeight.w600,
           ),
         ],

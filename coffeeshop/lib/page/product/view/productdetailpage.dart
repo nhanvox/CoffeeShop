@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/product/cartpage.dart';
 import 'package:coffeeshop/page/product/view/sizeoption.dart';
+import 'package:coffeeshop/theme_setting_cubit/theme_setting_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -368,6 +370,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = context.select(
+        (ThemeSettingCubit cubit) => cubit.state.brightness == Brightness.dark);
+    final textColor = isDarkMode ? Colors.white : Colors.black;
+    final colorbg =
+        isDarkMode ? const Color(0xff2A4261) : const Color(0xFFFFFEF2);
+
     final formatCurrency =
         NumberFormat.simpleCurrency(locale: 'vi_VN', name: 'VND');
 
@@ -379,11 +387,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFFEF2),
+      backgroundColor: colorbg,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            backgroundColor: const Color(0xFFFFFEF2),
+            backgroundColor: colorbg,
             leading: Padding(
               padding: const EdgeInsets.only(left: 20),
               child: IconButton(
@@ -396,7 +404,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             centerTitle: true,
             title: TextQuicksand(
               widget.product['name'],
-              color: Colors.black,
+              color: textColor,
               fontSize: 24,
               fontWeight: FontWeight.w600,
               height: 0,
@@ -499,7 +507,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.getFont(
                       'Quicksand',
-                      color: Colors.black,
+                      color: textColor,
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
@@ -509,7 +517,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     textAlign: TextAlign.justify,
                     style: GoogleFonts.getFont(
                       'Quicksand',
-                      color: Colors.black,
+                      color: textColor,
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
@@ -535,12 +543,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ],
             ),
           )),
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
               child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 35, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 5),
             child: TextQuicksand(
               'Chọn kích cỡ',
-              color: Colors.black,
+              color: textColor,
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
@@ -582,12 +590,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ),
           ),
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
               child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 35, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 5),
             child: TextQuicksand(
               'Đường',
-              color: Colors.black,
+              color: textColor,
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
@@ -672,12 +680,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ),
           ),
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
               child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 0),
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 0),
             child: TextQuicksand(
               'Đá',
-              color: Colors.black,
+              color: textColor,
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
