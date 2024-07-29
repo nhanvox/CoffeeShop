@@ -10,7 +10,7 @@ const EditUser = () => {
     const [password, setPassword] = useState('');
 
     useEffect(() => {
-        axios.get(`http://192.168.175.111:3000/getuserinfobyid/${id}`)
+        axios.get(`http://192.168.1.173:3000/getuserinfobyid/${id}`)
             .then(response => {
                 setEmail(response.data.email);
             })
@@ -20,7 +20,7 @@ const EditUser = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.put(`http://192.168.175.111:3000/updateuser/${id}`, { email, password });
+            await axios.put(`http://192.168.1.173:3000/updateuser/${id}`, { email, password });
             alert('User updated successfully');
             navigate('/users');
         } catch (error) {

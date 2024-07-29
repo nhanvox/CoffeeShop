@@ -8,18 +8,18 @@ import './styles/App.css';
 
 const App = () => {
   return (
-    <Box display="flex">
+    <Box display="flex"sx={{ backgroundColor: '#f0f0f0'}}>
       <Box width="20%">
         <Sidebar />
       </Box>
-      <Box width="100%" display="flex" flexDirection="column">
+      <Box width="100%" height="100%" display="flex" flexDirection="column">
         <Header />
-        <Container>
+        <Container sx={{ backgroundColor: '#f0f0f0', minHeight: '100vh',minWidth:'100vh', paddingTop: '20px' }}>
           <AppRouter />
         </Container>
       </Box>
     </Box>
-  );
+  );  
 };
 
 export default App;
