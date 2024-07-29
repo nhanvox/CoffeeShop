@@ -213,7 +213,7 @@ class OrderHistoryWidgetState extends State<OrderHistoryWidget> {
                               ),
                             ],
                           ),
-                          const Divider(thickness: 1),
+                          const Divider(thickness: 1, color: Colors.grey),
                           const Center(
                             child: TextQuicksand(
                               "Xem thêm",
@@ -222,12 +222,12 @@ class OrderHistoryWidgetState extends State<OrderHistoryWidget> {
                               color: Colors.grey,
                             ),
                           ),
-                          const Divider(thickness: 1),
+                          const Divider(thickness: 1, color: Colors.grey),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               TextQuicksand("${order['quantitysum']} sản phẩm",
-                                  fontSize: 16),
+                                  fontSize: 17),
                               RichText(
                                 text: TextSpan(
                                   children: [

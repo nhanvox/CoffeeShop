@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/login/view/fogotpasswork.dart';
 import 'package:coffeeshop/page/login/view/signup.dart';
+import 'package:coffeeshop/theme_setting_cubit/theme_setting_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -92,6 +94,16 @@ class _LoginscreenState extends State<Loginscreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = context.select(
+        (ThemeSettingCubit cubit) => cubit.state.brightness == Brightness.dark);
+    final textColor = isDarkMode ? Colors.white : Colors.black;
+    final colorbg =
+        isDarkMode ? const Color(0xff2A4261) : const Color(0xFFFFFEF2);
+    final colorbg2 =
+        isDarkMode ? const Color(0xff17273B) : const Color(0xff2A4261);
+    final colorbg3 =
+        isDarkMode ? const Color(0xff17273B) : const Color(0xffffffff);
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -102,7 +114,7 @@ class _LoginscreenState extends State<Loginscreen> {
                   width: double.infinity,
                   alignment: Alignment.topCenter,
                   padding: const EdgeInsets.only(top: 70),
-                  decoration: const BoxDecoration(color: Color(0xFF2A4261)),
+                  decoration: BoxDecoration(color: colorbg2),
                   child: Column(
                     children: [
                       const Row(
@@ -151,9 +163,9 @@ class _LoginscreenState extends State<Loginscreen> {
                         constraints: BoxConstraints(
                           minHeight: MediaQuery.of(context).size.height - 280,
                         ),
-                        decoration: const ShapeDecoration(
-                          color: Color(0xFFFFFEF2),
-                          shape: RoundedRectangleBorder(
+                        decoration: ShapeDecoration(
+                          color: colorbg,
+                          shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(55),
                                 topLeft: Radius.circular(55)),
@@ -165,9 +177,9 @@ class _LoginscreenState extends State<Loginscreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const TextQuicksand(
+                              TextQuicksand(
                                 'Email',
-                                color: Colors.black,
+                                color: textColor,
                                 fontSize: 20,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -180,7 +192,7 @@ class _LoginscreenState extends State<Loginscreen> {
                                     fontWeight: FontWeight.w500),
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: Colors.white,
+                                  fillColor: colorbg3,
                                   prefixIcon: const Icon(Icons.email,
                                       color: Color(0xFFFF725E)),
                                   hintText: 'Nhập email',
@@ -194,9 +206,9 @@ class _LoginscreenState extends State<Loginscreen> {
                                 ),
                               ),
                               const SizedBox(height: 30),
-                              const TextQuicksand(
+                              TextQuicksand(
                                 'Mật khẩu',
-                                color: Colors.black,
+                                color: textColor,
                                 fontSize: 20,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -211,7 +223,7 @@ class _LoginscreenState extends State<Loginscreen> {
                                     fontWeight: FontWeight.w500),
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: Colors.white,
+                                  fillColor: colorbg3,
                                   prefixIcon: const Icon(Icons.lock,
                                       color: Color(0xFFFF725E)),
                                   hintText: 'Nhập mật khẩu',
@@ -277,9 +289,9 @@ class _LoginscreenState extends State<Loginscreen> {
                                         },
                                       );
                                     },
-                                    child: const TextQuicksand(
+                                    child: TextQuicksand(
                                       'Quên mật khẩu',
-                                      color: Color.fromARGB(255, 72, 70, 70),
+                                      color: textColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -304,7 +316,7 @@ class _LoginscreenState extends State<Loginscreen> {
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 12.0, horizontal: 32.0),
-                                    backgroundColor: const Color(0xFF2A4261),
+                                    backgroundColor: colorbg2,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
@@ -408,9 +420,9 @@ class _LoginscreenState extends State<Loginscreen> {
                                                     const Signup()),
                                           );
                                         },
-                                        child: const TextQuicksand(
+                                        child: TextQuicksand(
                                           'đăng ký tại đây',
-                                          color: Color(0xFF0B0B0B),
+                                          color: textColor,
                                           fontSize: 15,
                                           fontWeight: FontWeight.w600,
                                         ),
