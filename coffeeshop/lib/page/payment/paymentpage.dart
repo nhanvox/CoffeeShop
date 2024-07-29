@@ -230,8 +230,8 @@ class _PaymentPageState extends State<PaymentPage> {
                         )
                       ],
                     ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 20),
                     child: Column(
                       children: [
                         Row(

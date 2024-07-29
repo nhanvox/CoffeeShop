@@ -1,3 +1,4 @@
+import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -42,51 +43,49 @@ class _CardOrderState extends State<CardOrder> {
                 children: [
                   Image.network(
                     itemorder['productid']['image'],
-                    width: 80,
-                    height: 80,
+                    width: 100,
+                    height: 100,
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        TextQuicksand(
                           itemorder['productid']['name'],
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
                         const SizedBox(height: 5),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              itemorder['size'],
-                              style: const TextStyle(fontSize: 14),
+                            TextQuicksand(
+                              'Size (${itemorder['size']})',
+                              fontSize: 14,
                             ),
-                            Text(
-                              itemorder['sugar'],
-                              style: const TextStyle(fontSize: 14),
+                            TextQuicksand(
+                              'Đường (${itemorder['sugar']})',
+                              fontSize: 14,
                             ),
-                            Text(
-                              itemorder['ice'],
-                              style: const TextStyle(fontSize: 14),
+                            TextQuicksand(
+                              'Đá (${itemorder['ice']})',
+                              fontSize: 14,
                             ),
-                            Text(
+                            TextQuicksand(
                               'x${itemorder['quantity']}',
-                              style: const TextStyle(fontSize: 14),
+                              fontSize: 14,
                             ),
                           ],
                         ),
-                        const SizedBox(height: 5),
+                        const SizedBox(height: 15),
                         Align(
                           alignment: Alignment.centerRight,
                           child: Text(
                             formatCurrency
                                 .format(orderprice * itemorder['quantity']),
                             style: const TextStyle(
-                              fontSize: 14,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Colors.red,
                             ),
