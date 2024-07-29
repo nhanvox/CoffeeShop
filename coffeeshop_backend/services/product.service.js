@@ -32,6 +32,9 @@ class ProductService {
     static async getNewProducts() {
         return await Product.find({ isNewProduct: true });
     }
+    static async getTotalProducts() {
+        return await Product.countDocuments();
+    }
 }
 
 module.exports = ProductService;

@@ -1,4 +1,3 @@
-// src/pages/Categories.js
 import React, { useEffect, useState } from 'react';
 import {
   Button, IconButton, CircularProgress, Dialog, DialogActions,
@@ -19,7 +18,7 @@ const Categories = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://192.168.1.121:3000/getallcategory')
+    axios.get('http://192.168.1.173:3000/getallcategory')
       .then(response => {
         if (response.data && Array.isArray(response.data.categories)) {
           setCategories(response.data.categories);
@@ -45,7 +44,7 @@ const Categories = () => {
   };
 
   const handleDelete = () => {
-    axios.delete(`http://192.168.1.121:3000/category/${categoryToDelete}`)
+    axios.delete(`http://192.168.1.173:3000/category/${categoryToDelete}`)
       .then(response => {
         setCategories(categories.filter(category => category._id !== categoryToDelete));
         setOpenConfirmDialog(false);
@@ -82,7 +81,18 @@ const Categories = () => {
     <div style={{ fontFamily: 'Montserrat, sans-serif' }}>
       <h1>Danh sách thể loại</h1>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px', gap: '20px' }}>
-        <Button sx={{ fontFamily: 'Montserrat, sans-serif' }} variant="contained" color="primary" onClick={() => navigate('/add-category')}>
+        <Button 
+          sx={{ 
+            fontFamily: 'Montserrat, sans-serif',
+            backgroundColor: '#3366ff', // Màu nền mới
+            color: '#ffffff', // Màu văn bản
+            '&:hover': {
+              backgroundColor: '#254db3' // Màu nền khi hover
+            }
+          }} 
+          variant="contained" 
+          onClick={() => navigate('/add-category')}
+        >
           Thêm thể loại
         </Button>
         <TextField
@@ -91,7 +101,7 @@ const Categories = () => {
           value={search}
           onChange={handleSearchChange}
           style={{ marginLeft: 'auto' }}
-          sx={{ 
+          sx={{
             backgroundColor: 'white',
             '& .MuiInputLabel-root': { fontSize: '12px', textAlign: 'center', top: '-4px', fontFamily: 'Montserrat, sans-serif' },
             '& .MuiOutlinedInput-root': { fontFamily: 'Montserrat, sans-serif' },
@@ -104,7 +114,7 @@ const Categories = () => {
         <Table sx={{ fontFamily: 'Montserrat, sans-serif' }}>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontFamily: 'Montserrat, sans-serif',textAlign: 'center',width: '100px' }}>ID</TableCell>
+              <TableCell sx={{ fontFamily: 'Montserrat, sans-serif', textAlign: 'center', width: '100px' }}>ID</TableCell>
               <TableCell sx={{ fontFamily: 'Montserrat, sans-serif' }}>Name</TableCell>
               <TableCell sx={{ fontFamily: 'Montserrat, sans-serif', textAlign: 'right', width: '100px' }}>Edit</TableCell>
               <TableCell sx={{ fontFamily: 'Montserrat, sans-serif', textAlign: 'center', width: '100px' }}>Delete</TableCell>
@@ -113,7 +123,7 @@ const Categories = () => {
           <TableBody>
             {filteredCategories.map((category, index) => (
               <TableRow key={category._id}>
-                <TableCell sx={{ fontFamily: 'Montserrat, sans-serif',textAlign: 'center' }}>{index + 1}</TableCell>
+                <TableCell sx={{ fontFamily: 'Montserrat, sans-serif', textAlign: 'center' }}>{index + 1}</TableCell>
                 <TableCell sx={{ fontFamily: 'Montserrat, sans-serif' }}>{category.name}</TableCell>
                 <TableCell sx={{ textAlign: 'right', width: '100px' }}>
                   <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(category._id)} sx={{ color: 'black', fontFamily: 'Montserrat, sans-serif' }}>

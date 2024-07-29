@@ -14,7 +14,7 @@ const Products = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://192.168.1.121:3000/products')
+        axios.get('http://192.168.1.173:3000/products')
             .then(response => {
                 if (response.data && Array.isArray(response.data.products)) {
                     setProducts(response.data.products);
@@ -28,7 +28,7 @@ const Products = () => {
                 setLoading(false);
             });
 
-        axios.get('http://192.168.1.121:3000/getallcategory')
+        axios.get('http://192.168.1.173:3000/getallcategory')
             .then(response => {
                 if (response.data && Array.isArray(response.data.categories)) {
                     setCategories(response.data.categories);
@@ -42,7 +42,7 @@ const Products = () => {
     }, []);
 
     const handleDelete = (id) => {
-        axios.delete(`http://192.168.1.121:3000/products/${id}`)
+        axios.delete(`http://192.168.1.173:3000/products/${id}`)
             .then(response => {
                 setProducts(products.filter(product => product._id !== id));
             })
@@ -84,7 +84,18 @@ const Products = () => {
                 Danh sách sản phẩm
             </Typography>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', fontFamily: 'Montserrat, sans-serif' }}>
-                <Button variant="contained" color="primary" onClick={() => navigate('/add-product')} sx={{ fontFamily: 'Montserrat, sans-serif' }}>
+                <Button 
+                    variant="contained" 
+                    onClick={() => navigate('/add-product')} 
+                    sx={{ 
+                        fontFamily: 'Montserrat, sans-serif', 
+                        backgroundColor: '#3366ff', // Màu nền mới
+                        color: '#ffffff', // Màu văn bản
+                        '&:hover': {
+                            backgroundColor: '#254db3' // Màu nền khi hover
+                        }
+                    }}
+                >
                     Thêm sản phẩm
                 </Button>
                 <div style={{ display: 'flex', gap: '10px', fontFamily: 'Montserrat, sans-serif' }}>

@@ -32,7 +32,7 @@ const AddProduct = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://192.168.1.121:3000/getallcategory')
+        axios.get('http://192.168.1.173:3000/getallcategory')
             .then(response => {
                 if (response.data && Array.isArray(response.data.categories)) {
                     setCategories(response.data.categories);
@@ -57,7 +57,7 @@ const AddProduct = () => {
         event.preventDefault();
         if (validate()) {
             try {
-                await axios.post('http://192.168.1.121:3000/products', { name, price, description, categoryid, image, isBestSeller, isNewProduct });
+                await axios.post('http://192.168.1.173:3000/products', { name, price, description, categoryid, image, isBestSeller, isNewProduct });
                 alert('Product added successfully');
                 navigate('/products');
             } catch (error) {
@@ -75,7 +75,7 @@ const AddProduct = () => {
     };
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 5, fontFamily: 'Montserrat, sans-serif' }}>
+        <Container maxWidth="lg" sx={{ mt: 1, fontFamily: 'Montserrat, sans-serif' }}>
             <Paper elevation={3} sx={{ p: 3, fontFamily: 'Montserrat, sans-serif' }}>
                 <Typography variant="h5" component="h1" align="left" sx={{ mb: 3, fontFamily: 'Montserrat, sans-serif', fontWeight: 'bold' }}>
                     Thêm sản phẩm
@@ -203,8 +203,15 @@ const AddProduct = () => {
                         <Button
                             type="submit"
                             variant="contained"
-                            color="primary"
-                            sx={{ width: '150px', fontFamily: 'Montserrat, sans-serif' }}
+                            sx={{ 
+                                width: '150px', 
+                                fontFamily: 'Montserrat, sans-serif',
+                                backgroundColor: '#3366ff', // Màu nền mới
+                                color: '#ffffff', // Màu văn bản
+                                '&:hover': {
+                                    backgroundColor: '#254db3' // Màu nền khi hover
+                                }
+                            }}
                         >
                             Thêm mới
                         </Button>

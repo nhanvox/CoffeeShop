@@ -130,3 +130,13 @@ exports.deleteUser = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getTotalUsers = async (req, res) => {
+  try {
+    const totalUsers = await UserServices.getTotalUsers();
+    res.json({ totalUsers });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching total users', error });
+  }
+};
+

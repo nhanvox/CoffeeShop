@@ -75,3 +75,11 @@ exports.getNewProducts = async (req, res, next) => {
         next(err);
     }
 };
+exports.getTotalProducts = async (req, res) => {
+    try {
+      const totalProducts = await ProductService.getTotalProducts();
+      res.json({ totalProducts });
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching total products', error });
+    }
+  };
