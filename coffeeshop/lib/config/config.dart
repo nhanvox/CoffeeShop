@@ -35,3 +35,4 @@ const addOrder = '${url}order';
 const getOrders = '${url}order/';
 const getOdersByUser = '${url}ordersbyuser/';
 const getAllOrders = '${url}ordersbyuser/';
+const getOrdersByStatus = '${url}status/';

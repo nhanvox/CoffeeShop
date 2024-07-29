@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class CardPayment extends StatefulWidget {
-  int getPayment;
+  final Function(int) onPaymentMethodSelected;
+  int selectedPaymentMethod;
 
   CardPayment({
     super.key,
-    required this.getPayment,
+    required this.selectedPaymentMethod,
+    required this.onPaymentMethodSelected,
   });
 
   @override
@@ -21,6 +23,12 @@ class _CardPaymentState extends State<CardPayment> {
   bool isCheckedAtm = false;
   bool isCheckedCash = true;
 
+  @override
+  void initState() {
+    super.initState();
+    updatePaymentChecks();
+  }
+
   void uncheckAll() {
     isCheckedZalo = false;
     isCheckedMomo = false;
@@ -29,10 +37,22 @@ class _CardPaymentState extends State<CardPayment> {
     isCheckedCash = false;
   }
 
-  void getCheck() {
-    
+  void updatePaymentChecks() {
+    isCheckedZalo = widget.selectedPaymentMethod == 0;
+    isCheckedMomo = widget.selectedPaymentMethod == 1;
+    isCheckedAtm = widget.selectedPaymentMethod == 2;
+    isCheckedCash = widget.selectedPaymentMethod == 3;
   }
-  
+
+  void selectPaymentMethod(int method) {
+    setState(() {
+      uncheckAll();
+      widget.selectedPaymentMethod = method;
+      widget.onPaymentMethodSelected(method);
+      updatePaymentChecks();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -109,11 +129,7 @@ class _CardPaymentState extends State<CardPayment> {
                     ),
                     iconSize: 30,
                     onPressed: () {
-                      setState(() {
-                        uncheckAll();
-                        isCheckedMomo = !isCheckedMomo;
-                        widget.getPayment = 1;
-                      });
+                      selectPaymentMethod(1);
                     },
                   ),
                 ),
@@ -159,11 +175,7 @@ class _CardPaymentState extends State<CardPayment> {
                     ),
                     iconSize: 30,
                     onPressed: () {
-                      setState(() {
-                        uncheckAll();
-                        isCheckedAtm = !isCheckedAtm;
-                        widget.getPayment = 2;
-                      });
+                      selectPaymentMethod(2);
                     },
                   ),
                 ),
@@ -209,11 +221,7 @@ class _CardPaymentState extends State<CardPayment> {
                     ),
                     iconSize: 30,
                     onPressed: () {
-                      setState(() {
-                        uncheckAll();
-                        isCheckedCash = !isCheckedCash;
-                        widget.getPayment = 3;
-                      });
+                      selectPaymentMethod(3);
                     },
                   ),
                 ),

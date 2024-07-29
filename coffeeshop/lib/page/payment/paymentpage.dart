@@ -11,31 +11,38 @@ import 'package:intl/intl.dart';
 import 'view/card_order_product.dart';
 import 'view/card_info.dart';
 import 'view/card_payment.dart';
-import 'view/card_total.dart';
 import 'view/card_voucher.dart';
 import 'package:http/http.dart' as http;
 
 class PaymentPage extends StatefulWidget {
   final List cartsList;
   final int totalQuantity;
-  final num totalPrice;
+  final num allPrice;
   const PaymentPage(
       {super.key,
       required this.cartsList,
       required this.totalQuantity,
-      required this.totalPrice});
+      required this.allPrice});
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
 }
 
 class _PaymentPageState extends State<PaymentPage> {
+  Map<String, dynamic>? profile;
   bool isLoading = false;
   List? ordersList;
+  int selectedPaymentMethod = 3;
+  String? name;
+  String? phoneNumber;
+  String? address;
+  num deliverycharges = 10000;
+  num totalPrice = 0;
+
   @override
   void initState() {
     super.initState();
-    _getOrdersByUser();
+    _getProfile();
   }
 
   String getPaymentText(int payment) {
@@ -51,38 +58,30 @@ class _PaymentPageState extends State<PaymentPage> {
     }
   }
 
-  void _getOrdersByUser() async {
-    String? userID = LoginStatus.instance.userID;
-    if (userID == null) {
-      print('User is not logged in');
-      return;
-    }
-    Uri url = Uri.parse(getOdersByUser + userID);
+  void _getProfile() async {
+    if (LoginStatus.instance.loggedIn) {
+      final userId = LoginStatus.instance.userID;
+      if (userId != null) {
+        final url = '$getProfileByUser$userId';
+        final response = await http.get(
+          Uri.parse(url),
+          headers: {"Content-Type": "application/json"},
+        );
 
-    try {
-      var response =
-          await http.get(url, headers: {"Content-Type": "application/json"});
-
-      if (response.statusCode == 200) {
-        var jsonResponse = jsonDecode(response.body);
-        print('Response JSON: $jsonResponse'); // Log the entire response
-
-        if (jsonResponse['success'] == true &&
-            jsonResponse.containsKey('orders')) {
-          setState(() {
-            ordersList = jsonResponse['orders'];
-          });
-        } else {
-          setState(() {
-            ordersList = [];
-          });
-          print('No orders found for this user.');
+        if (response.statusCode == 200) {
+          final jsonResponse = jsonDecode(response.body);
+          if (jsonResponse['success'] == true) {
+            setState(() {
+              profile = jsonResponse['profile'];
+              name = profile!['name'];
+              phoneNumber = profile!['phoneNumber'];
+              address = profile!['address'];
+            });
+          } else {
+            print('Failed to load user');
+          }
         }
-      } else {
-        print('Failed to load orders with status code: ${response.statusCode}');
       }
-    } catch (e) {
-      print('An error occurred while fetching orders: $e');
     }
   }
 
@@ -106,21 +105,24 @@ class _PaymentPageState extends State<PaymentPage> {
 
     List itemOrders = widget.cartsList.map((cart) {
       return {
-        "cartid": cart["id"], // Thay thế bằng trường id thực tế của giỏ hàng
-        "productid":
-            cart["productid"], // Thay thế bằng trường id thực tế của sản phẩm
+        "productid": cart["productid"],
+        "size": cart["size"],
+        "sugar": cart["sugar"],
+        "ice": cart["ice"],
+        "quantity": cart["quantity"],
       };
     }).toList();
-    int getPayment = 0;
-    String textPayment = getPaymentText(getPayment);
 
     var orderData = {
       "userid": userID,
       "itemorders": itemOrders,
       "quantitysum": widget.totalQuantity,
-      "totalsum": widget.totalPrice,
-      "address": "Quần què",
-      "paymentMethod": textPayment,
+      "totalsum": totalPrice,
+      "phoneNumber": phoneNumber,
+      "name": name,
+      "address": address,
+      "deliverycharges": deliverycharges,
+      "paymentMethod": getPaymentText(selectedPaymentMethod),
     };
 
     try {
@@ -161,11 +163,26 @@ class _PaymentPageState extends State<PaymentPage> {
     }
   }
 
+  void handleInfoChanged(
+      String newPhoneNumber, String newName, String newAddress) {
+    setState(() {
+      phoneNumber = newPhoneNumber;
+      name = newName;
+      address = newAddress;
+    });
+  }
+
+  void handlePaymentMethodSelected(int method) {
+    setState(() {
+      selectedPaymentMethod = method;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final formatCurrency =
-    //     NumberFormat.simpleCurrency(locale: 'vi_VN', name: 'VND');
-    int getPayment = 0;
+    totalPrice = widget.allPrice + deliverycharges;
+    final formatCurrency =
+        NumberFormat.simpleCurrency(locale: 'vi_VN', name: 'VND');
     return Scaffold(
       backgroundColor: const Color(0xFFFFFEF2),
       body: CustomScrollView(
@@ -262,12 +279,102 @@ class _PaymentPageState extends State<PaymentPage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: CardPayment(
-                    getPayment: getPayment,
+                    selectedPaymentMethod: selectedPaymentMethod,
+                    onPaymentMethodSelected: handlePaymentMethodSelected,
                   ))),
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
               child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: CardTotal())),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: Container(
+              height: 190,
+              decoration: ShapeDecoration(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                shadows: const [
+                  BoxShadow(
+                    color: Color(0x3F000000),
+                    blurRadius: 4,
+                    offset: Offset(0, 4),
+                    spreadRadius: 0,
+                  )
+                ],
+              ),
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextQuicksand(
+                        'Tổng cộng (${widget.totalQuantity} sản phẩm)',
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const TextQuicksand(
+                        'Thành tiền',
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      Text(
+                        formatCurrency.format(widget.allPrice),
+                        style: GoogleFonts.getFont(
+                          'Quicksand',
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const TextQuicksand(
+                        'Phí giao hàng',
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      TextQuicksand(
+                        formatCurrency.format(deliverycharges),
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const TextQuicksand(
+                        'Số tiền thanh toán',
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      TextQuicksand(
+                        formatCurrency.format(totalPrice),
+                        color: const Color(0xffff725e),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )),
         ],
       ),
       bottomNavigationBar: Container(
@@ -295,8 +402,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                 ),
                 Text(
-                  NumberFormat.simpleCurrency(locale: 'vi_VN', name: 'VND')
-                      .format(widget.totalPrice),
+                  formatCurrency.format(totalPrice),
                   style: GoogleFonts.getFont(
                     'Quicksand',
                     color: const Color(0xFFFF8675),
