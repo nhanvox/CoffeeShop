@@ -1,4 +1,3 @@
-// src/pages/Categories.js
 import React, { useEffect, useState } from 'react';
 import {
   Button, IconButton, CircularProgress, Dialog, DialogActions,
@@ -82,7 +81,18 @@ const Categories = () => {
     <div style={{ fontFamily: 'Montserrat, sans-serif' }}>
       <h1>Danh sách thể loại</h1>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px', gap: '20px' }}>
-        <Button sx={{ fontFamily: 'Montserrat, sans-serif' }} variant="contained" color="primary" onClick={() => navigate('/add-category')}>
+        <Button 
+          sx={{ 
+            fontFamily: 'Montserrat, sans-serif',
+            backgroundColor: '#3366ff', // Màu nền mới
+            color: '#ffffff', // Màu văn bản
+            '&:hover': {
+              backgroundColor: '#254db3' // Màu nền khi hover
+            }
+          }} 
+          variant="contained" 
+          onClick={() => navigate('/add-category')}
+        >
           Thêm thể loại
         </Button>
         <TextField

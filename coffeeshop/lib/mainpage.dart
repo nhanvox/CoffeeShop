@@ -157,7 +157,7 @@ class _MainPageState extends State<MainPage> {
     final isDarkMode = context.select(
         (ThemeSettingCubit cubit) => cubit.state.brightness == Brightness.dark);
     final colornav =
-        isDarkMode ? const Color(0xFFFFFEF2) : const Color(0xFFFFFEF2);
+        isDarkMode ? const Color(0xffffff3d7) : const Color(0xfffffffff);
     final colornavmenu =
         isDarkMode ? const Color(0xff2A4261) : const Color(0xFFFFFEF2);
     final colornavmenu1 =
@@ -353,14 +353,13 @@ class _MainPageState extends State<MainPage> {
       },
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: colornav,
           boxShadow: [
             BoxShadow(
               color: colornav,
               blurRadius: 24,
               offset: const Offset(0, 5),
               spreadRadius: 0,
-            )
+            ),
           ],
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
@@ -376,64 +375,62 @@ class _MainPageState extends State<MainPage> {
             type: BottomNavigationBarType.shifting,
             showSelectedLabels: false,
             showUnselectedLabels: false,
+            selectedItemColor: const Color(0xFF2A4261),
+            unselectedItemColor: const Color(0xFF2A4261),
             onTap: (index) {
               setState(() {
                 currentPage = index;
               });
             },
             currentIndex: currentPage,
-            items: const [
+            items: [
               BottomNavigationBarItem(
-                icon: Icon(
+                icon: const Icon(
                   Icons.home_outlined,
-                  color: Color(0xFF2A4261),
                   size: 33,
                 ),
-                activeIcon: Icon(
+                activeIcon: const Icon(
                   Icons.home,
-                  color: Color(0xFF2A4261),
                   size: 33,
                 ),
                 label: '',
+                backgroundColor: colornav, // Đặt màu nền cho mục này
               ),
               BottomNavigationBarItem(
-                icon: Icon(
+                icon: const Icon(
                   Icons.window_outlined,
-                  color: Color(0xFF2A4261),
                   size: 30,
                 ),
-                activeIcon: Icon(
+                activeIcon: const Icon(
                   Icons.window_rounded,
-                  color: Color(0xFF2A4261),
                   size: 30,
                 ),
                 label: '',
+                backgroundColor: colornav, //t màu nền cho mục này
               ),
               BottomNavigationBarItem(
-                icon: Icon(
+                icon: const Icon(
                   Icons.notifications_outlined,
-                  color: Color(0xFF2A4261),
                   size: 33,
                 ),
-                activeIcon: Icon(
+                activeIcon: const Icon(
                   Icons.notifications,
-                  color: Color(0xFF2A4261),
                   size: 33,
                 ),
                 label: '',
+                backgroundColor: colornav, // Đặt màu nền cho mục này
               ),
               BottomNavigationBarItem(
-                icon: Icon(
+                icon: const Icon(
                   Icons.account_circle_outlined,
-                  color: Color(0xFF2A4261),
                   size: 30,
                 ),
-                activeIcon: Icon(
+                activeIcon: const Icon(
                   Icons.account_circle,
-                  color: Color(0xFF2A4261),
                   size: 30,
                 ),
                 label: '',
+                backgroundColor: colornav, // Đặt màu nền cho mục này
               ),
             ],
           ),

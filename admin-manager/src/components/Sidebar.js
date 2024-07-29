@@ -1,3 +1,5 @@
+// src/components/Sidebar.js
+
 import React from 'react';
 import { List, ListItem, ListItemText, ListItemIcon, Box } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
@@ -5,7 +7,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import CategoryIcon from '@mui/icons-material/Category';
 import InventoryIcon from '@mui/icons-material/Inventory'; 
 import GroupIcon from '@mui/icons-material/Group';  
-import ListAltIcon from '@mui/icons-material/ListAlt';  
+import ListAltIcon from '@mui/icons-material/ListAlt'; 
 
 const Sidebar = () => {
     const location = useLocation();
@@ -18,96 +20,102 @@ const Sidebar = () => {
         <Box
             sx={{
                 height: '100vh',
-                backgroundColor: '#FFFEF2',
+                backgroundColor: '#FFFfff',
                 position: 'sticky',
                 top: 0,
                 width: '260px',
-                color: '#000000'
+                color: '#000000',
+                fontFamily: 'Montserrat, sans-serif'
             }}
         >
             <div style={{ padding: '20px', textAlign: 'center', borderBottom: '1px solid #FFFEF2' }}>
-                <h2 style={{ color: '#000000' }}>CoffeeShop</h2>
+                <h2 style={{ color: '#00000', fontFamily: 'Montserrat, sans-serif' }}>CoffeeShop</h2>
             </div>
-            <List>
+            <List sx={{ fontFamily: 'Montserrat, sans-serif' }}>
                 <ListItem
                     button
                     component={Link}
                     to="/"
                     sx={{
-                        backgroundColor: isActive('/') ? '#FF725E' : 'transparent',
-                        '&:hover': { backgroundColor: '#FF725E' },
+                        backgroundColor: isActive('/dashboard') ? '#e4f2fd' : 'transparent',
+                        '&:hover': { backgroundColor: '#e4f2fd' },
                         cursor: 'pointer',
-                        color: '#000000'
+                        color: '#3366ff',
+                        fontFamily: 'Montserrat, sans-serif'
                     }}
                 >
                     <ListItemIcon>
-                        <DashboardIcon sx={{ color: '#000000' }} />
+                        <DashboardIcon sx={{ color: '#3366ff' }} />
                     </ListItemIcon>
-                    <ListItemText primary="Dashboard" />
+                    <ListItemText primary="Dashboard" sx={{ fontFamily: 'Montserrat, sans-serif' }} />
                 </ListItem>
                 <ListItem
                     button
                     component={Link}
                     to="/users"
                     sx={{
-                        backgroundColor: isActive('/users') ? '#FF725E' : 'transparent',
-                        '&:hover': { backgroundColor: '#FF725E' },
+                        backgroundColor: isActive('/users') ? '#e4f2fd' : 'transparent',
+                        '&:hover': { backgroundColor: '#e4f2fd' },
                         cursor: 'pointer',
-                        color: '#000000'
+                        color: '#3366ff',
+                        fontFamily: 'Montserrat, sans-serif'
                     }}
                 >
                     <ListItemIcon>
-                        <GroupIcon sx={{ color: '#000000' }} />
+                        <GroupIcon sx={{ color: '#3366ff' }} />
                     </ListItemIcon>
-                    <ListItemText primary="Users" />
+                    <ListItemText primary="Users" sx={{ fontFamily: 'Montserrat, sans-serif' }} />
                 </ListItem>
                 <ListItem
                     button
                     component={Link}
                     to="/products"
                     sx={{
-                        backgroundColor: isActive('/products') ? '#FF725E' : 'transparent',
-                        '&:hover': { backgroundColor: '#FF725E' },
+                        backgroundColor: isActive('/products') ? '#e4f2fd' : 'transparent',
+                        '&:hover': { backgroundColor: '#e4f2fd' },
                         cursor: 'pointer',
-                        color: '#000000'
+                        color: '#3366ff',
+                        fontFamily: 'Montserrat, sans-serif'
                     }}
                 >
                     <ListItemIcon>
-                        <InventoryIcon sx={{ color: '#000000' }} />
+                        <InventoryIcon sx={{ color: '#3366ff' }} />
                     </ListItemIcon>
-            <ListItemText primary="Products" />
+                    <ListItemText primary="Products" sx={{ fontFamily: 'Montserrat, sans-serif' }} />
                 </ListItem>
                 <ListItem
                     button
                     component={Link}
                     to="/categories"
                     sx={{
-                        backgroundColor: isActive('/categories') ? '#FF725E' : 'transparent',
-                        '&:hover': { backgroundColor: '#FF725E' },
+                        backgroundColor: isActive('/categories') ? '#e4f2fd' : 'transparent',
+                        '&:hover': { backgroundColor: '#e4f2fd' },
                         cursor: 'pointer',
-                        color: '#000000'
+                        color: '#3366ff',
+                        fontFamily: 'Montserrat, sans-serif'
                     }}
                 >
                     <ListItemIcon>
-                        <CategoryIcon sx={{ color: '#000000' }} />
+                        <CategoryIcon sx={{ color: '#3366ff' }} />
                     </ListItemIcon>
-                    <ListItemText primary="Categories" />
+                    <ListItemText primary="Categories" sx={{ fontFamily: 'Montserrat, sans-serif' }} />
                 </ListItem>
                 <ListItem
                     button
                     component={Link}
                     to="/orders"
                     sx={{
-                        backgroundColor: isActive('/orders') ? '#FF725E' : 'transparent',
-                        '&:hover': { backgroundColor: '#FF725E' },
+                        backgroundColor: isActive('/orders') ? '#e4f2fd' : 'transparent',
+                        '&:hover': { backgroundColor: '#e4f2fd' },
                         cursor: 'pointer',
-                        color: '#000000'
+                        color: '#3366ff',
+                        fontFamily: 'Montserrat, sans-serif'
                     }}
                 >
                     <ListItemIcon>
-                        <ListAltIcon sx={{ color: '#000000' }} />
+                        <ListAltIcon sx={{ color: '#3366ff' }} />
                     </ListItemIcon>
-                    <ListItemText primary="Orders" />
+                    <ListItemText primary="Orders" sx={{ fontFamily: 'Montserrat, sans-serif' }} />
                 </ListItem>
             </List>
         </Box>

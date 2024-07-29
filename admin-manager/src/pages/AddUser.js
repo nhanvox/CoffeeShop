@@ -72,7 +72,8 @@ const AddUser = () => {
                     </FormControl>
                     <FormControl fullWidth margin="normal" sx={{ mb: 2 }}>
                         <TextField
-                            label="Mật khẩu"
+                            label="
+                            Mật khẩu"
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -90,8 +91,15 @@ const AddUser = () => {
                         <Button
                             type="submit"
                             variant="contained"
-                            color="primary"
-                            sx={{ width: '150px', fontFamily: 'Montserrat, sans-serif' }}
+                            sx={{ 
+                                width: '150px', 
+                                fontFamily: 'Montserrat, sans-serif',
+                                backgroundColor: '#3366ff', // Màu nền mới
+                                color: '#ffffff', // Màu văn bản
+                                '&:hover': {
+                                    backgroundColor: '#254db3' // Màu nền khi hover
+                                }
+                            }}
                         >
                             Thêm mới
                         </Button>

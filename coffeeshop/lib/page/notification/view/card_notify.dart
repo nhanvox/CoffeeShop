@@ -1,6 +1,8 @@
 import 'package:coffeeshop/model/notify.dart';
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
+import 'package:coffeeshop/theme_setting_cubit/theme_setting_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CardNotify extends StatelessWidget {
@@ -9,6 +11,9 @@ class CardNotify extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = context.select(
+        (ThemeSettingCubit cubit) => cubit.state.brightness == Brightness.dark);
+    final colortext = isDarkMode ? Colors.white : Colors.black;
     return GestureDetector(
       onTap: () {},
       child: Container(
@@ -45,14 +50,14 @@ class CardNotify extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.getFont(
                       'Quicksand',
-                      color: Colors.black,
+                      color: colortext,
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   TextQuicksand(
                     notify.datetime,
-                    color: Colors.black,
+                    color: colortext,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),

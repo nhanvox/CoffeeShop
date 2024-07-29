@@ -75,7 +75,7 @@ const AddProduct = () => {
     };
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 5, fontFamily: 'Montserrat, sans-serif' }}>
+        <Container maxWidth="lg" sx={{ mt: 1, fontFamily: 'Montserrat, sans-serif' }}>
             <Paper elevation={3} sx={{ p: 3, fontFamily: 'Montserrat, sans-serif' }}>
                 <Typography variant="h5" component="h1" align="left" sx={{ mb: 3, fontFamily: 'Montserrat, sans-serif', fontWeight: 'bold' }}>
                     Thêm sản phẩm
@@ -203,8 +203,15 @@ const AddProduct = () => {
                         <Button
                             type="submit"
                             variant="contained"
-                            color="primary"
-                            sx={{ width: '150px', fontFamily: 'Montserrat, sans-serif' }}
+                            sx={{ 
+                                width: '150px', 
+                                fontFamily: 'Montserrat, sans-serif',
+                                backgroundColor: '#3366ff', // Màu nền mới
+                                color: '#ffffff', // Màu văn bản
+                                '&:hover': {
+                                    backgroundColor: '#254db3' // Màu nền khi hover
+                                }
+                            }}
                         >
                             Thêm mới
                         </Button>

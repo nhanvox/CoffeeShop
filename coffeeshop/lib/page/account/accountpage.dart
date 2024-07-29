@@ -108,8 +108,12 @@ class _AccountPageState extends State<AccountPage> {
     final isDarkMode = context.select(
         (ThemeSettingCubit cubit) => cubit.state.brightness == Brightness.dark);
     final textColor = isDarkMode ? Colors.white : Colors.black;
+    final colorbg =
+        isDarkMode ? const Color(0xff2A4261) : const Color(0xFFFFFEF2);
+    final colorbg2 =
+        isDarkMode ? const Color(0xff17273B) : const Color(0xFFFFFEF2);
     return Container(
-      decoration: const BoxDecoration(color: Color(0xFFFFFEF2)),
+      decoration: BoxDecoration(color: colorbg),
       child: CustomScrollView(
         slivers: [
           // Header
@@ -132,8 +136,8 @@ class _AccountPageState extends State<AccountPage> {
                     boxShadow: [
                       BoxShadow(
                         color: Color(0x3F000000),
-                        blurRadius: 4,
-                        offset: Offset(0, 4),
+                        blurRadius: 15,
+                        offset: Offset(0, 40),
                         spreadRadius: 0,
                       ),
                     ],
@@ -147,7 +151,7 @@ class _AccountPageState extends State<AccountPage> {
                     width: 360,
                     height: 110,
                     decoration: ShapeDecoration(
-                      color: const Color(0xFFFFF2D8),
+                      color: colorbg2,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
                       ),
@@ -202,7 +206,7 @@ class _AccountPageState extends State<AccountPage> {
                                   LoginStatus.instance.loggedIn
                                       ? userName ?? 'Người dùng'
                                       : 'Đăng nhập/ Đăng ký',
-                                  color: const Color(0x991B1B1B),
+                                  color: textColor,
                                   fontSize: 17,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -224,10 +228,10 @@ class _AccountPageState extends State<AccountPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const TextQuicksand(
+                  TextQuicksand(
                     'Tài khoản',
                     textAlign: TextAlign.center,
-                    color: Colors.black,
+                    color: textColor,
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
                   ),
@@ -236,7 +240,7 @@ class _AccountPageState extends State<AccountPage> {
                     width: double.infinity,
                     margin: const EdgeInsets.only(top: 10),
                     decoration: ShapeDecoration(
-                      color: const Color(0xFFFFF2D8),
+                      color: colorbg2,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -356,10 +360,10 @@ class _AccountPageState extends State<AccountPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const TextQuicksand(
+                  TextQuicksand(
                     'Other',
                     textAlign: TextAlign.center,
-                    color: Colors.black,
+                    color: textColor,
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
                   ),
@@ -368,7 +372,7 @@ class _AccountPageState extends State<AccountPage> {
                     width: double.infinity,
                     margin: const EdgeInsets.only(top: 10),
                     decoration: ShapeDecoration(
-                      color: const Color(0xFFFFF2D8),
+                      color: colorbg2,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -406,7 +410,7 @@ class _AccountPageState extends State<AccountPage> {
                         // About
                         ListTile(
                           title: Text(
-                            'Giới thiệu',
+                            'Chế độ màu tối',
                             style: _textStyle(),
                           ),
                           leading: CupertinoSwitch(
@@ -446,9 +450,12 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   TextStyle _textStyle() {
+    final isDarkMode = context.select(
+        (ThemeSettingCubit cubit) => cubit.state.brightness == Brightness.dark);
+    final textColor = isDarkMode ? Colors.white : Colors.black;
     return GoogleFonts.getFont(
       'Quicksand',
-      color: Colors.black,
+      color: textColor,
       fontSize: 19,
       fontWeight: FontWeight.w700,
       height: 0.07,

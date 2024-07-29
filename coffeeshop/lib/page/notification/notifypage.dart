@@ -1,6 +1,8 @@
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/notification/view/card_notify.dart';
+import 'package:coffeeshop/theme_setting_cubit/theme_setting_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../model/notify.dart';
 
@@ -49,20 +51,26 @@ class _NotifyPageState extends State<NotifyPage> {
   ];
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = context.select(
+        (ThemeSettingCubit cubit) => cubit.state.brightness == Brightness.dark);
+    final colorbg =
+        isDarkMode ? const Color(0xff2A4261) : const Color(0xFFFFFEF2);
+    final colortext = isDarkMode ? Colors.white : Colors.black;
+    final coloricon = isDarkMode ? Colors.white : Colors.black;
     return Container(
-      decoration: const BoxDecoration(color: Color(0xFFFFFEF2)),
+      decoration: BoxDecoration(color: colorbg),
       child: CustomScrollView(
         slivers: [
           SliverAppBar(
-            backgroundColor: const Color(0xFFFFFEF2),
-            surfaceTintColor: const Color(0xFFFFFEF2),
+            backgroundColor: colorbg,
+            surfaceTintColor: colorbg,
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.more_vert,
-                      color: Colors.black,
+                      color: coloricon,
                       size: 33,
                     ),
                     onPressed: () {}),
@@ -85,9 +93,9 @@ class _NotifyPageState extends State<NotifyPage> {
               ),
             ),
             centerTitle: true,
-            title: const TextQuicksand(
+            title: TextQuicksand(
               'THÔNG BÁO',
-              color: Colors.black,
+              color: coloricon,
               fontSize: 24,
               fontWeight: FontWeight.w700,
               height: 0,
@@ -102,9 +110,9 @@ class _NotifyPageState extends State<NotifyPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (todayNotifications.isNotEmpty) ...[
-                    const TextQuicksand(
+                    TextQuicksand(
                       'Hôm nay',
-                      color: Colors.black,
+                      color: colortext,
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
                     ),
@@ -121,10 +129,10 @@ class _NotifyPageState extends State<NotifyPage> {
                     const SizedBox(
                         height: 20), // Thêm khoảng cách giữa các phần
                   ],
-                  const TextQuicksand(
+                  TextQuicksand(
                     'Trong tuần',
                     textAlign: TextAlign.center,
-                    color: Colors.black,
+                    color: colortext,
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                   ),
