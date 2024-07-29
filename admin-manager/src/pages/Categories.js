@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Button, IconButton, CircularProgress, Dialog, DialogActions,
   DialogContent, DialogContentText, DialogTitle, TextField, Table, TableBody,
-  TableCell, TableContainer, TableHead, TableRow, Paper
+  TableCell, TableContainer, TableHead, TableRow, Paper, Typography
 } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 import axios from 'axios';
@@ -78,8 +78,10 @@ const Categories = () => {
   }
 
   return (
-    <div style={{ fontFamily: 'Montserrat, sans-serif' }}>
-      <h1>Danh sách thể loại</h1>
+    <div>
+      <Typography variant="h4" component="h1" sx={{ mb: 3, fontFamily: 'Montserrat, sans-serif' }}>
+        Danh sách thể loại
+      </Typography>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px', gap: '20px' }}>
         <Button 
           sx={{ 
@@ -115,7 +117,7 @@ const Categories = () => {
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontFamily: 'Montserrat, sans-serif', textAlign: 'center', width: '100px' }}>ID</TableCell>
-              <TableCell sx={{ fontFamily: 'Montserrat, sans-serif' }}>Name</TableCell>
+              <TableCell sx={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 'normal' }}>Thể loại</TableCell>
               <TableCell sx={{ fontFamily: 'Montserrat, sans-serif', textAlign: 'right', width: '100px' }}>Edit</TableCell>
               <TableCell sx={{ fontFamily: 'Montserrat, sans-serif', textAlign: 'center', width: '100px' }}>Delete</TableCell>
             </TableRow>
@@ -124,7 +126,7 @@ const Categories = () => {
             {filteredCategories.map((category, index) => (
               <TableRow key={category._id}>
                 <TableCell sx={{ fontFamily: 'Montserrat, sans-serif', textAlign: 'center' }}>{index + 1}</TableCell>
-                <TableCell sx={{ fontFamily: 'Montserrat, sans-serif' }}>{category.name}</TableCell>
+                <TableCell sx={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 'normal' }}>{category.name}</TableCell>
                 <TableCell sx={{ textAlign: 'right', width: '100px' }}>
                   <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(category._id)} sx={{ color: 'black', fontFamily: 'Montserrat, sans-serif' }}>
                     <Edit />
@@ -148,12 +150,12 @@ const Categories = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <IconButton aria-label="edit" onClick={handleCloseConfirmDialog} sx={{ color: 'yellow', fontFamily: 'Montserrat, sans-serif' }}>
-            <Edit />
-          </IconButton>
-          <IconButton aria-label="delete" onClick={handleDelete} sx={{ color: 'red', fontFamily: 'Montserrat, sans-serif' }}>
-            <Delete />
-          </IconButton>
+          <Button onClick={handleCloseConfirmDialog} sx={{ color: 'grey', fontFamily: 'Montserrat, sans-serif' }}>
+            Cancel
+          </Button>
+          <Button onClick={handleDelete} sx={{ color: 'red', fontFamily: 'Montserrat, sans-serif' }}>
+            Delete
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -47,7 +47,7 @@ const Sidebar = () => {
                     <ListItemIcon>
                         <DashboardIcon sx={{ color: '#3366ff' }} />
                     </ListItemIcon>
-                    <ListItemText primary="Dashboard" sx={{ fontFamily: 'Montserrat, sans-serif' }} />
+                    <ListItemText primary="Thống kê" sx={{ fontFamily: 'Montserrat, sans-serif' }} />
                 </ListItem>
                 <ListItem
                     button
@@ -64,7 +64,7 @@ const Sidebar = () => {
                     <ListItemIcon>
                         <GroupIcon sx={{ color: '#3366ff' }} />
                     </ListItemIcon>
-                    <ListItemText primary="Users" sx={{ fontFamily: 'Montserrat, sans-serif' }} />
+                    <ListItemText primary="Người dùng" sx={{ fontFamily: 'Montserrat, sans-serif' }} />
                 </ListItem>
                 <ListItem
                     button
@@ -81,7 +81,7 @@ const Sidebar = () => {
                     <ListItemIcon>
                         <InventoryIcon sx={{ color: '#3366ff' }} />
                     </ListItemIcon>
-                    <ListItemText primary="Products" sx={{ fontFamily: 'Montserrat, sans-serif' }} />
+                    <ListItemText primary="Sản phẩm" sx={{ fontFamily: 'Montserrat, sans-serif' }} />
                 </ListItem>
                 <ListItem
                     button
@@ -98,7 +98,7 @@ const Sidebar = () => {
                     <ListItemIcon>
                         <CategoryIcon sx={{ color: '#3366ff' }} />
                     </ListItemIcon>
-                    <ListItemText primary="Categories" sx={{ fontFamily: 'Montserrat, sans-serif' }} />
+                    <ListItemText primary="Danh mục sản phẩm" sx={{ fontFamily: 'Montserrat, sans-serif' }} />
                 </ListItem>
                 <ListItem
                     button
@@ -115,7 +115,7 @@ const Sidebar = () => {
                     <ListItemIcon>
                         <ListAltIcon sx={{ color: '#3366ff' }} />
                     </ListItemIcon>
-                    <ListItemText primary="Orders" sx={{ fontFamily: 'Montserrat, sans-serif' }} />
+                    <ListItemText primary="Đơn hàng" sx={{ fontFamily: 'Montserrat, sans-serif' }} />
                 </ListItem>
             </List>
         </Box>
