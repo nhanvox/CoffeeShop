@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -67,7 +66,7 @@ class _CardOrderProductState extends State<CardOrderProduct> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.cart['productid']['name'],
+                            '${widget.cart['productid']['name']} (${widget.cart['size']})',
                             textAlign: TextAlign.left,
                             style: GoogleFonts.getFont(
                               'Quicksand',
@@ -79,7 +78,7 @@ class _CardOrderProductState extends State<CardOrderProduct> {
                           Row(
                             children: [
                               Text(
-                                widget.cart['sugar'],
+                                'Đường: ${widget.cart['sugar']},',
                                 textAlign: TextAlign.left,
                                 style: GoogleFonts.getFont(
                                   'Quicksand',
@@ -92,7 +91,7 @@ class _CardOrderProductState extends State<CardOrderProduct> {
                                 width: 20,
                               ),
                               Text(
-                                widget.cart['ice'],
+                                'Đá: ${widget.cart['ice']}',
                                 textAlign: TextAlign.left,
                                 style: GoogleFonts.getFont(
                                   'Quicksand',

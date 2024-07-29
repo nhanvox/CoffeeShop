@@ -33,24 +33,6 @@ class SupportPageState extends State<SupportPage> {
             Navigator.pop(context);
           },
         ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 30),
-            width: 40,
-            height: 40,
-            decoration: const ShapeDecoration(
-              color: Color(0xFFFF725E),
-              shape: OvalBorder(),
-            ),
-            child: IconButton(
-              icon: const Icon(
-                Icons.shopping_bag,
-                color: Colors.white,
-              ),
-              onPressed: () {},
-            ),
-          ),
-        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
