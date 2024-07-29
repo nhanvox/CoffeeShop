@@ -32,7 +32,7 @@ const AddProduct = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://192.168.1.121:3000/getallcategory')
+        axios.get('http://192.168.1.173:3000/getallcategory')
             .then(response => {
                 if (response.data && Array.isArray(response.data.categories)) {
                     setCategories(response.data.categories);
@@ -57,7 +57,7 @@ const AddProduct = () => {
         event.preventDefault();
         if (validate()) {
             try {
-                await axios.post('http://192.168.1.121:3000/products', { name, price, description, categoryid, image, isBestSeller, isNewProduct });
+                await axios.post('http://192.168.1.173:3000/products', { name, price, description, categoryid, image, isBestSeller, isNewProduct });
                 alert('Product added successfully');
                 navigate('/products');
             } catch (error) {

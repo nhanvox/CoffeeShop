@@ -12,13 +12,13 @@ import {
 } from '@mui/material';
 
 const AddCategory = () => {
-  const [name, setName] = useState("");
-  const navigate = useNavigate();
+    const [name, setName] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.post('http://192.168.1.121:3000/category', { name });
+            await axios.post('http://192.168.1.173:3000/category', { name });
             alert('Category added successfully');
             navigate('/categories');
         } catch (error) {

@@ -32,9 +32,9 @@ const Sidebar = () => {
                 <ListItem
                     button
                     component={Link}
-                    to="/dashboard"
+                    to="/"
                     sx={{
-                        backgroundColor: isActive('/dashboard') ? '#FF725E' : 'transparent',
+                        backgroundColor: isActive('/') ? '#FF725E' : 'transparent',
                         '&:hover': { backgroundColor: '#FF725E' },
                         cursor: 'pointer',
                         color: '#000000'

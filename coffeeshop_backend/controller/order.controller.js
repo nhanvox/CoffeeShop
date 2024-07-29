@@ -58,3 +58,38 @@ exports.getOrdersByStatus = async (req, res, next) => {
     next(err);
   }
 };
+exports.updateStatus = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    const updatedOrder = await OrderService.updateStatus(id, status);
+    res.status(200).json(updatedOrder);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating order status", error });
+  }
+};
+exports.getTotalRevenue = async (req, res) => {
+  try {
+    const totalRevenue = await OrderService.getTotalRevenue();
+    res.json({ totalRevenue });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching total revenue', error });
+  }
+};
+exports.getTotalOrders = async (req, res) => {
+  try {
+    const totalOrders = await OrderService.getTotalOrders();
+    res.json({ totalOrders });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching total orders', error });
+  }
+};
+exports.getOrderStatusCounts = async (req, res) => {
+  try {
+    const statusCounts = await OrderService.getOrderStatusCounts();
+    res.json(statusCounts);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching order status counts', error });
+  }
+};

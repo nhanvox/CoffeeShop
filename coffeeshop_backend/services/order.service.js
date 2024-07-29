@@ -23,6 +23,31 @@ class OrderService {
   static async getOrdersByStatus(status) {
     return await Order.find({ status });
   }
+
+  static async updateStatus(id, status) {
+    const order = await Order.findById(id);
+    if (!order) {
+      throw new Error("Order not found");
+    }
+    order.status = status;
+    return await order.save();
+  }
+  static async getTotalRevenue() {
+    const totalRevenue = await Order.aggregate([
+      { $match: { status: "Hoàn Thành" } },
+      { $group: { _id: null, total: { $sum: '$totalsum' } } }
+    ]);
+
+    return totalRevenue[0] ? totalRevenue[0].total : 0;
+  }
+  static async getTotalOrders() {
+    return await Order.countDocuments();
+  }
+  static async getOrderStatusCounts() {
+    return await Order.aggregate([
+      { $group: { _id: "$status", count: { $sum: 1 } } }
+    ]);
+  }
 }
 
 module.exports = OrderService;
