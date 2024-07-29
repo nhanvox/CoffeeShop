@@ -29,24 +29,6 @@ class AboutPageState extends State<AboutPage> {
             Navigator.pop(context);
           },
         ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 30),
-            width: 40,
-            height: 40,
-            decoration: const ShapeDecoration(
-              color: Color(0xFFFF725E),
-              shape: OvalBorder(),
-            ),
-            child: IconButton(
-              icon: const Icon(
-                Icons.shopping_bag,
-                color: Colors.white,
-              ),
-              onPressed: () {},
-            ),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -131,7 +113,7 @@ class AboutPageState extends State<AboutPage> {
               Divider(
                 color: Colors.yellow,
                 thickness: 3,
-                endIndent: 270, 
+                endIndent: 270,
               ),
               TextQuicksand(
                 'Ngọt Cà Phê không chỉ nổi tiếng với các loại cà phê tuyệt hảo mà còn với thực đơn bánh ngọt phong phú, hấp dẫn.\n\n'

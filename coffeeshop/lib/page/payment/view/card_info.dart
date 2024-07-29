@@ -1,31 +1,78 @@
+import 'dart:convert';
+
 import 'package:coffeeshop/page/login/view/components/quicksand.dart';
 import 'package:coffeeshop/page/payment/view/change_info.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import '../../../config/config.dart';
+import '../../../config/login_status.dart';
 
 class CardInfo extends StatefulWidget {
-  const CardInfo({super.key});
+  const CardInfo({
+    super.key,
+  });
 
   @override
   State<CardInfo> createState() => _CardInfoState();
 }
 
 class _CardInfoState extends State<CardInfo> {
+  String? name;
+  String? phoneNumber;
+  String? address;
+  Map<String, dynamic>? profile;
+
+  @override
+  void initState() {
+    super.initState();
+    _getProfile();
+  }
+
+  void _getProfile() async {
+    if (LoginStatus.instance.loggedIn) {
+      final userId = LoginStatus.instance.userID;
+      if (userId != null) {
+        final url = '$getProfileByUser$userId';
+        final response = await http.get(
+          Uri.parse(url),
+          headers: {"Content-Type": "application/json"},
+        );
+
+        if (response.statusCode == 200) {
+          final jsonResponse = jsonDecode(response.body);
+          if (jsonResponse['success'] == true) {
+            setState(() {
+              profile = jsonResponse['profile'];
+              name = profile!['name'];
+
+              phoneNumber = profile!['phoneNumber'];
+              address = profile!['address'];
+            });
+          } else {
+            print('Failed to load user');
+          }
+        }
+      }
+    }
+  }
+
   void _openIconButtonPressed() {
     showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        context: context,
-        isScrollControlled: true,
-        isDismissible: true,
-        builder: (BuildContext context) {
-          return DraggableScrollableSheet(
-              initialChildSize: 0.8, //set this as you want
-//set this as you want
-              expand: true,
-              builder: (context, scrollController) {
-                return const ChangeInfo(); //whatever you're returning, does not have to be a Container
-              });
-        });
+      backgroundColor: Colors.transparent,
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.8,
+          expand: true,
+          builder: (context, scrollController) {
+            return const ChangeInfo();
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -62,6 +109,7 @@ class _CardInfoState extends State<CardInfo> {
                 ),
                 Container(width: 40),
                 TextButton(
+                  //onPressed: () {},
                   onPressed: _openIconButtonPressed,
                   child: const TextQuicksand(
                     'Thay đổi',
@@ -72,22 +120,28 @@ class _CardInfoState extends State<CardInfo> {
                 ),
               ],
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextQuicksand(
-                  'Nguyễn Văn A | 0987654321',
+                  name ?? 'Tên người dùng',
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+                TextQuicksand(
+                  phoneNumber ?? 'Số điện thoại',
                   color: Colors.black,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
               ],
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextQuicksand(
-                  '231/b, ql27, Tp. Hồ Chí Minh, Việt Nam',
+                  address ?? 'Địa chỉ',
                   color: Colors.black,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
